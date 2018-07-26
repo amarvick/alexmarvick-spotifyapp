@@ -20,7 +20,15 @@ class App extends Component {
       nowPlaying: { 
         name: 'Not Checked', 
         artist: '',
+        type: '',
         albumArt: '' 
+      },
+      favoriteArtists: {
+        artist: '',
+        artistId: ''
+      },
+      favoriteArtistsSongs: {
+        songs: []
       }
     }
     console.log(params);
@@ -33,11 +41,29 @@ class App extends Component {
           nowPlaying: {
             name: response.item.name,
             artist: response.item.artists[0].name,
+            type: response.item.type,
             albumArt: response.item.album.images[0].url
           }
         })
       })
   }
+
+  getFavoriteArtists() {
+    spotifyApi.getMyTopArtists()
+      .then((response) => {
+        this.setState({
+          favoriteArtists: {
+            artist: response.items[0].name,
+            artistId: response.items[0].id
+          }
+        })
+        alert(this.state.favoriteArtists.artist)
+      })
+  }
+
+  // getFavoriteArtistsSongs() {
+  //   spotifyAPi.get
+  // }
 
   getHashParams() {
     var hashParams = {};
@@ -54,15 +80,26 @@ class App extends Component {
       <div className='App'>
         <a href='http://localhost:8888'> Login to Spotify </a>
         <div>
-          { this.state.nowPlaying.artist } - { this.state.nowPlaying.name }
+          { this.state.nowPlaying.artist } - { this.state.nowPlaying.name } <br/>
+          Key: { this.state.nowPlaying.type }
         </div>
         <div>
           <img src={ this.state.nowPlaying.albumArt } style={{ height: 150 }}/>
         </div>
 
+        <div>
+          Favorite Artist: { this.state.favoriteArtists.artist }
+        </div>
+
         { this.state.loggedIn &&
           <button onClick={() => this.getNowPlaying()}>
             Check Now Playing
+          </button>
+        }
+
+        { this.state.loggedIn &&
+          <button onClick={() => this.getFavoriteArtists()}>
+            Check Favorite Artists
           </button>
         }
       </div>
