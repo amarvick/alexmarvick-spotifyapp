@@ -4,4 +4,12 @@
 
 div, button {
   margin: 10px;
+  text-align: center;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  display: inline-block;
+  text-align: left;
 }
