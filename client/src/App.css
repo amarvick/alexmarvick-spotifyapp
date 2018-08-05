@@ -1,3 +1,7 @@
+body {
+  background-color: #777777;
+}
+
 .App {
   text-align: center;
 }
@@ -12,4 +16,15 @@ ul {
   padding: 0;
   display: inline-block;
   text-align: left;
+}
+
+#modal {
+  width: 60%;
+  background-color: #444444;
+  border-color: 2px solid #bbbbbb;
+  color: #bbbbbb;
+  border-radius: 5px;
+
+  padding: 30px;
+  margin: 0px auto;
 }
