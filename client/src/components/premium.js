@@ -1,7 +1,8 @@
 import Spotify from 'spotify-web-api-js';
 import React, { Component } from 'react';
 import axios from 'axios';
-import './App.css';
+
+import ModalGreeting from './modalgreeting';
 
 const spotifyApi = new Spotify();
 
@@ -17,10 +18,8 @@ class Premium extends Component {
 
     this.state = { 
       accesstoken: token,
-      loggedIn: true,
       loggedInUser: {
-        userId: '',
-        userProduct: ''
+        userId: ''
       },
       favoriteArtists: {
         artist: '',
@@ -61,8 +60,7 @@ class Premium extends Component {
     .then((response) => {
       this.setState({
         loggedInUser: {
-          userId: response.id,
-          userProduct: response.product
+          userId: response.id
         }
       })
     })
@@ -207,38 +205,16 @@ class Premium extends Component {
 
   render() {
     return (
-      <div className='App'>
-        { !this.state.loggedIn &&
-          <a href='http://localhost:8888'>Login to Spotify</a>
-        }
+      <div className='Premium'>
 
-        { this.state.loggedIn &&
-          <div>
-            Favorite Artist: { this.state.favoriteArtists.artist }
-          </div>
-        }
+        <button onClick={() => this.checkState()}>Check State</button>
 
-        { this.state.loggedIn && this.state.loggedInUser.userProduct === 'premium' &&
-          <div id="modal">
-            <h1>Welcome to Marvify!</h1>
-            <p>Hello, Spotify User! Thank you for taking the time to play my game. This is a 10 question quiz to see how well you know your favorite artist's top songs!</p>
-            <p>As soon as you click 'play', your spotify account will immediately create a playlist of your top artist's favorite songs. You will be prompted 10 questions, one by one, 
-              giving you ten seconds to determine the song. If you guess incorrectly or run out of time, the question will
-              be flagged as incorrect. Otherwise, it will be correct.
-            </p>
-
-            <p>
-              PLEASE NOTE: You must take this quiz in one sitting! If you attempt to click away from the screen or open up your playlist, you will automatically score a 0/10.
-              Additionally, if you attempt to pause the song in the middle of any question, that question will be marked as wrong.
-            </p>
-            <p>Once you are finished, you will receive your results. Good luck!</p>
-
-            <button onClick={() => this.startGame()}>
-              PLAY NOW!
-            </button>
-          </div>
-        }
-
+        <div id="modal">
+          <ModalGreeting/>
+          <button onClick={() => this.startGame()}>
+            PLAY NOW!
+          </button>
+        </div>
       </div>
     )
   }

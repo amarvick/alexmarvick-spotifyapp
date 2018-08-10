@@ -1,12 +1,11 @@
 import Spotify from 'spotify-web-api-js';
 import React, { Component } from 'react';
-import axios from 'axios';
 
-import NonPremium from './nonPremium';
-import Premium from './premium';
-import Login from './login';
+import NonPremium from './components/nonPremium';
+import Premium from './components/premium';
+import Login from './components/login';
 
-import './App.css';
+import './stylesheets/App.css';
 
 const spotifyApi = new Spotify();
 
@@ -21,52 +20,37 @@ class App extends Component {
     }
 
     this.state = { 
-      accesstoken: token,
       loggedIn: token ? true : false,
       loggedInUser: {
-        userId: '',
         userProduct: ''
-      },
-      favoriteArtists: {
-        artist: '',
-        artistId: ''
-      },
-      favoriteArtistsSongs: {
-        songUriToName: [],
-        songUris: [],
-        songNames: []
-      },
-      questionNumber: 1
+      }
     }
-    console.log(params);
   }
- 
-  // Retrieving the access token needed for POST requests
+
+  // Retrieving the access token needed to get user credentials
   getHashParams() {
     var hashParams = {};
     var e, r = /([^&;=]+)=?([^&;]*)/g,
         q = window.location.hash.substring(1);
     while ( e = r.exec(q)) {
-       hashParams[e[1]] = decodeURIComponent(e[2]);
+        hashParams[e[1]] = decodeURIComponent(e[2]);
     }
     return hashParams;
   }
 
-  // Get logged in user + favorite artist.. Maybe combine the three functions used together?
   componentDidMount() {
-    this.getUser()
+    this.getUserProduct()
   }
 
   checkState() {
     console.log(this.state)
   }
 
-  getUser() {
+  getUserProduct() {
     spotifyApi.getMe()
     .then((response) => {
       this.setState({
         loggedInUser: {
-          userId: response.id,
           userProduct: response.product
         }
       })
@@ -76,6 +60,7 @@ class App extends Component {
   render() {
     return (
       <div className='App'>
+      
         { !this.state.loggedIn &&
           <Login/>
         }
