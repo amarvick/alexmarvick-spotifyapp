@@ -42,10 +42,6 @@ class App extends Component {
     this.getUserProduct()
   }
 
-  checkState() {
-    console.log(this.state)
-  }
-
   getUserProduct() {
     spotifyApi.getMe()
     .then((response) => {
@@ -60,7 +56,7 @@ class App extends Component {
   render() {
     return (
       <div className='App'>
-      
+
         { !this.state.loggedIn &&
           <Login/>
         }

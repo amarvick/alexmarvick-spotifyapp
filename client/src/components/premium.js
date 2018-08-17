@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 import ModalGreeting from './modalgreeting';
+import QuestionTemplate from './questiontemplate';
 
 const spotifyApi = new Spotify();
 
@@ -30,7 +31,11 @@ class Premium extends Component {
         songUris: [],
         songNames: []
       },
-      questionNumber: 1
+      gameStarted: false,
+      questionNumber: 1,
+      noOfCorrect: 0,
+      noOfMissed: 0,
+      questions: []
     }
   }
  
@@ -46,13 +51,15 @@ class Premium extends Component {
   }
 
   // Get logged in user + favorite artist.. Maybe combine the three functions used together?
-  componentDidMount() {
-    this.getUser()
-    this.getFavoriteArtist()
+  componentWillMount() {
+    var user = this.getUser()
+    var artists = this.getFavoriteArtist()
+    this.setState({ artists: artists })
   }
 
   checkState() {
     console.log(this.state)
+    // this.renderQuestion(this.state)
   }
 
   getUser() {
@@ -87,17 +94,26 @@ class Premium extends Component {
         var theSongUriToName = []
         var theSongUri = []
         var theSongName = []
+
+        // Maps Song URI with Name so they are in the same order when generating playlist.
         for (var i = 0; i < 10; i++) {
-          theSongUri.push(response.tracks[i].uri); // + '---' + response.tracks[i].name);
-          // theSongNames.push(response.tracks[i].name);
+          theSongUriToName.push(response.tracks[i].uri + '---' + response.tracks[i].name);
         }
-        this.shuffle(theSongUri)
+        this.shuffle(theSongUriToName)
+
+        for (var i = 0; i < 10; i++) {
+          theSongUri.push(theSongUriToName[i].substr(0, theSongUriToName[i].indexOf('---')))
+          theSongName.push(theSongUriToName[i].substr(theSongUriToName[i].indexOf('---') + 3, theSongUriToName[i].length - 1))
+        }
+
         this.setState({
           favoriteArtistsSongs: {
-            songUri: theSongUri,
+            songUris: theSongUri,
             songNames: theSongName
           }
         })
+
+        this.generateQuestions()
       })
   }
 
@@ -121,10 +137,10 @@ class Premium extends Component {
     return tracksArray;
   }
 
-
   // STARTING THE GAME:
   startGame() {
     document.getElementById('modal').style.display = 'none'
+    this.state.gameStarted = true
     this.postPlaylist(this.state.loggedInUser.userId, this.state.favoriteArtistsSongs.songUris)
   }
 
@@ -148,13 +164,14 @@ class Premium extends Component {
         this.addTracksToPlaylist(playlistId, allSongs, uri);
       })
       .catch((error) => {
-        alert('ERROR! ' + error)
+        alert('ERROR CREATING PLAYLIST: ' + error)
         console.log(error)
       })
   }
 
   // Then... add tracks initially received to newly created playlist
   addTracksToPlaylist(newPlaylistId, allSongs, contextUri) {
+    console.log(allSongs);
     axios({
       url: 'https://api.spotify.com/v1/users/' + this.state.loggedInUser.userId + '/playlists/' + newPlaylistId + '/tracks/',
       method: "POST",
@@ -193,17 +210,65 @@ class Premium extends Component {
         console.log(response)
       })
       .catch((error) => {
-        alert(error)
         console.log(error)
       })
-    // this.generateQuestion()
   }
 
-  generateQuestion() {
-    var options = [];
+  // AM - Will definitely want to review. This works, however!
+  generateQuestions() {
+    for (var i = 0; i < 10; i++) {
+      var multChoiceOpts = []
+      var noQuestionInserted = []
+
+      // Add correct answer
+      multChoiceOpts.push(this.state.favoriteArtistsSongs.songNames[i]);
+      noQuestionInserted.push(i); 
+
+      // Add remaining three possible selections
+      for (var j = 0; j < 3; j++) {
+        var index = Math.floor(Math.random() * 10)
+        if (!noQuestionInserted.includes(index)) {
+          // If answer isn't in array already, include it
+          noQuestionInserted.push(i)
+          multChoiceOpts.push(this.state.favoriteArtistsSongs.songNames[index])
+        } else {
+          // redo iteration - this is probably not the best way of doing this, but for now OK
+          j--;
+        }
+      }
+      this.shuffle(multChoiceOpts);
+      this.state.questions.push(multChoiceOpts);
+    }
+  }
+
+  renderQuestion(i) {
+    return (
+      <QuestionTemplate 
+        questionAnswers = { this.state.questions[i] }
+      />
+    )
   }
 
   render() {
+    let questionView;
+      if (this.state.questions.length > 0) {
+        questionView = (
+          <div>
+            { this.renderQuestion(0) }
+            { this.renderQuestion(1) }
+            { this.renderQuestion(2) }
+            { this.renderQuestion(3) }
+            { this.renderQuestion(4) }
+            { this.renderQuestion(5) }
+            { this.renderQuestion(6) }
+            { this.renderQuestion(7) }
+            { this.renderQuestion(8) }
+            { this.renderQuestion(9) }
+          </div>
+        );
+      }
+    
+    // console.log(questionView);
     return (
       <div className='Premium'>
 
@@ -214,6 +279,10 @@ class Premium extends Component {
           <button onClick={() => this.startGame()}>
             PLAY NOW!
           </button>
+
+          <br/>
+
+          { questionView }
         </div>
       </div>
     )
