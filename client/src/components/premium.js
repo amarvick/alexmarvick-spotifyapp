@@ -52,9 +52,8 @@ class Premium extends Component {
 
   // Get logged in user + favorite artist.. Maybe combine the three functions used together?
   componentWillMount() {
-    var user = this.getUser()
-    var artists = this.getFavoriteArtist()
-    this.setState({ artists: artists })
+    this.getUser()
+    this.getFavoriteArtist()
   }
 
   checkState() {
@@ -87,7 +86,7 @@ class Premium extends Component {
       })
   }
 
-  // Alex, TO DO - probably a better way to map song uris to names. Look to see if there is a function that does this.
+  // Alex, TO DO - probably a better way to map song uris to names. Look to see if there is a function that does this. Maybe put in an object? Find key/value pairs? I don't know, brainstorm...
   getFavoriteArtistsSongs(artistId, US) {
     spotifyApi.getArtistTopTracks(artistId, US)
       .then((response) => {
@@ -113,7 +112,11 @@ class Premium extends Component {
           }
         })
 
-        this.generateQuestions()
+        var theQuestions = this.generateQuestions()
+
+        this.setState({
+          questions: theQuestions
+        })
       })
   }
 
@@ -214,7 +217,7 @@ class Premium extends Component {
       })
   }
 
-  // AM - Will definitely want to review. This works, however!
+  // AM - Will definitely want to review. Do/While loop is probably a better idea... forgot about those :D
   generateQuestions() {
     for (var i = 0; i < 10; i++) {
       var multChoiceOpts = []
@@ -239,6 +242,8 @@ class Premium extends Component {
       this.shuffle(multChoiceOpts);
       this.state.questions.push(multChoiceOpts);
     }
+
+    return this.state.questions;
   }
 
   renderQuestion(i) {
@@ -251,7 +256,7 @@ class Premium extends Component {
 
   render() {
     let questionView;
-      if (this.state.questions.length > 0) {
+      if (this.state.questions != null && this.state.questions.length > 0) {
         questionView = (
           <div>
             { this.renderQuestion(0) }
@@ -281,7 +286,9 @@ class Premium extends Component {
           </button>
 
           <br/>
+        </div>
 
+        <div id="questionView">
           { questionView }
         </div>
       </div>
