@@ -31,8 +31,6 @@ class Premium extends Component {
         songUris: [],
         songNames: []
       },
-      gameStarted: false,
-      questionNumber: 1,
       noOfCorrect: 0,
       noOfMissed: 0,
       questions: []
@@ -54,11 +52,6 @@ class Premium extends Component {
   componentWillMount() {
     this.getUser()
     this.getFavoriteArtist()
-  }
-
-  checkState() {
-    console.log(this.state)
-    // this.renderQuestion(this.state)
   }
 
   getUser() {
@@ -100,10 +93,12 @@ class Premium extends Component {
         }
         this.shuffle(theSongUriToName)
 
-        for (var i = 0; i < 10; i++) {
-          theSongUri.push(theSongUriToName[i].substr(0, theSongUriToName[i].indexOf('---')))
-          theSongName.push(theSongUriToName[i].substr(theSongUriToName[i].indexOf('---') + 3, theSongUriToName[i].length - 1))
+        for (var j = 0; j < 10; j++) {
+          theSongUri.push(theSongUriToName[j].substr(0, theSongUriToName[j].indexOf('---')))
+          theSongName.push(theSongUriToName[j].substr(theSongUriToName[j].indexOf('---') + 3, theSongUriToName[j].length - 1))
         }
+
+        // AM - later, combine these setState functions
 
         this.setState({
           favoriteArtistsSongs: {
@@ -142,9 +137,10 @@ class Premium extends Component {
 
   // STARTING THE GAME:
   startGame() {
-    document.getElementById('modal').style.display = 'none'
-    this.state.gameStarted = true
     this.postPlaylist(this.state.loggedInUser.userId, this.state.favoriteArtistsSongs.songUris)
+
+    document.getElementById('modal').style.display = 'none'
+    document.getElementById('questionView1').style.display = 'inline-block'
   }
 
   // Will create private playlist on user's spotify account
@@ -188,7 +184,7 @@ class Premium extends Component {
     })
       .then((response) => {
         console.log(response);
-        this.playPlaylist(newPlaylistId, contextUri)
+        this.playPlaylist(contextUri)
       })
       .catch((error) => {
         alert(error)
@@ -198,7 +194,7 @@ class Premium extends Component {
   }
 
   // Then... play the playlist to get started
-  playPlaylist(newPlaylistId, contextUri) {
+  playPlaylist(contextUri) {
     axios({
       url: 'https://api.spotify.com/v1/me/player/play',
       method: "PUT",
@@ -217,11 +213,12 @@ class Premium extends Component {
       })
   }
 
-  // AM - Will definitely want to review. Do/While loop is probably a better idea... forgot about those :D
+  // Generates each question
   generateQuestions() {
     for (var i = 0; i < 10; i++) {
       var multChoiceOpts = []
       var noQuestionInserted = []
+      var isQuestionInserted
 
       // Add correct answer
       multChoiceOpts.push(this.state.favoriteArtistsSongs.songNames[i]);
@@ -229,14 +226,15 @@ class Premium extends Component {
 
       // Add remaining three possible selections
       for (var j = 0; j < 3; j++) {
-        var index = Math.floor(Math.random() * 10)
-        if (!noQuestionInserted.includes(index)) {
-          // If answer isn't in array already, include it
-          noQuestionInserted.push(i)
-          multChoiceOpts.push(this.state.favoriteArtistsSongs.songNames[index])
-        } else {
-          // redo iteration - this is probably not the best way of doing this, but for now OK
-          j--;
+        isQuestionInserted = false;
+        while(!isQuestionInserted) {
+          var index = Math.floor(Math.random() * 9)
+          
+          if (!noQuestionInserted.includes(index)) {
+            noQuestionInserted.push(index)
+            multChoiceOpts.push(this.state.favoriteArtistsSongs.songNames[index])
+            isQuestionInserted = true;
+          } 
         }
       }
       this.shuffle(multChoiceOpts);
@@ -246,41 +244,68 @@ class Premium extends Component {
     return this.state.questions;
   }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   renderQuestion(i) {
     return (
       <QuestionTemplate 
         questionAnswers = { this.state.questions[i] }
+        correctResponse = { this.state.favoriteArtistsSongs.songNames[i] }
+        questionNumber = { i + 1 }
       />
     )
   }
 
+
+
+
+
+
+
+
+
+
+
+
+
   render() {
-    let questionView;
+    // AM todo - figure out a better way to organize this. For now, it is OK, but change later
+    let questionView1, questionView2, questionView3, questionView4, questionView5, questionView6, questionView7, questionView8, questionView9, questionView10;
+
+      // AM - Make these divs the classes, then the ones in questiontemplate.js the ids? (not high priority right now)
       if (this.state.questions != null && this.state.questions.length > 0) {
-        questionView = (
-          <div>
-            { this.renderQuestion(0) }
-            { this.renderQuestion(1) }
-            { this.renderQuestion(2) }
-            { this.renderQuestion(3) }
-            { this.renderQuestion(4) }
-            { this.renderQuestion(5) }
-            { this.renderQuestion(6) }
-            { this.renderQuestion(7) }
-            { this.renderQuestion(8) }
-            { this.renderQuestion(9) }
-          </div>
-        );
+        questionView1 = ( <div id="questionView1"> { this.renderQuestion(0) } </div> );
+        questionView2 = ( <div id="questionView2"> { this.renderQuestion(1) } </div> );
+        questionView3 = ( <div id="questionView3"> { this.renderQuestion(2) } </div> );
+        questionView4 = ( <div id="questionView4"> { this.renderQuestion(3) } </div> );
+        questionView5 = ( <div id="questionView5"> { this.renderQuestion(4) } </div> );
+        questionView6 = ( <div id="questionView6"> { this.renderQuestion(5) } </div> );
+        questionView7 = ( <div id="questionView7"> { this.renderQuestion(6) } </div> );
+        questionView8 = ( <div id="questionView8"> { this.renderQuestion(7) } </div> );
+        questionView9 = ( <div id="questionView9"> { this.renderQuestion(8) } </div> );
+        questionView10 = ( <div id="questionView10"> { this.renderQuestion(9) } </div> );
       }
     
     // console.log(questionView);
     return (
       <div className='Premium'>
 
-        <button onClick={() => this.checkState()}>Check State</button>
-
         <div id="modal">
-          <ModalGreeting/>
+          <ModalGreeting
+            username = { this.state.loggedInUser.userId }
+          />
           <button onClick={() => this.startGame()}>
             PLAY NOW!
           </button>
@@ -288,9 +313,18 @@ class Premium extends Component {
           <br/>
         </div>
 
-        <div id="questionView">
-          { questionView }
-        </div>
+        {/* AM todo - figure out a better way to organize this. For now, it is OK, but change later */}
+        { questionView1 }
+        { questionView2 }
+        { questionView3 }
+        { questionView4 }
+        { questionView5 }
+        { questionView6 }
+        { questionView7 }
+        { questionView8 }
+        { questionView9 }
+        { questionView10 }
+        
       </div>
     )
   }
