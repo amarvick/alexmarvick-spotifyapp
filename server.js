@@ -8,10 +8,18 @@
  */
 
 var express = require('express');
+var app = express();
 var request = require('request');
 var cors = require('cors');
 var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
+
+var port = process.env.PORT || 8888;
+const server = require('http').Server(app);
+
+server.listen(port, function() {
+    console.log('App running on port ' + port);
+})
 
 var client_id = 'cbd995e92f6a41679d8fe86b239bbbcf';
 var client_secret = '450dae33d7674ca8a425224b82bc66c1';
@@ -151,6 +159,3 @@ app.get('/refresh_token', function(req, res) {
     }
   });
 });
-
-console.log('Listening on 8888');
-app.listen(8888);
