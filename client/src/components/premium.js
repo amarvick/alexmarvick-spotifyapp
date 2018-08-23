@@ -244,20 +244,6 @@ class Premium extends Component {
     return this.state.questions;
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   renderQuestion(i) {
     return (
       <QuestionTemplate 
@@ -267,18 +253,6 @@ class Premium extends Component {
       />
     )
   }
-
-
-
-
-
-
-
-
-
-
-
-
 
   render() {
     // AM todo - figure out a better way to organize this. For now, it is OK, but change later
