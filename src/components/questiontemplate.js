@@ -36,9 +36,9 @@ class QuestionTemplate extends Component {
 
   checkAnswer(userResponse) {
     if (this.props.correctResponse == userResponse) {
-      alert('CORRECT!');
+      this.props.onCorrectAnswer();
     } else {
-      alert('HAHA! Incorrect!');
+      this.props.onIncorrectAnswer();
     }
     
     // Go to next question
@@ -52,6 +52,7 @@ class QuestionTemplate extends Component {
       document.getElementById('questionView' + questionNo.toString()).style.display = 'inline-block'
     } else {
       // Stop playlist, count score
+      this.props.getScore();
       this.stopPlaylist();
     }
   }

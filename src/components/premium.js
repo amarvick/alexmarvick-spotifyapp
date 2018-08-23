@@ -36,7 +36,7 @@ class Premium extends Component {
       questions: []
     }
   }
- 
+
   // Retrieving the access token needed for POST requests
   getHashParams() {
     var hashParams = {};
@@ -98,7 +98,7 @@ class Premium extends Component {
           theSongName.push(theSongUriToName[j].substr(theSongUriToName[j].indexOf('---') + 3, theSongUriToName[j].length - 1))
         }
 
-        // AM - later, combine these setState functions
+        // AM - later, combine these setState functions?
 
         this.setState({
           favoriteArtistsSongs: {
@@ -250,15 +250,38 @@ class Premium extends Component {
         questionAnswers = { this.state.questions[i] }
         correctResponse = { this.state.favoriteArtistsSongs.songNames[i] }
         questionNumber = { i + 1 }
+        onCorrectAnswer = {this.onCorrectAnswer}
+        onIncorrectAnswer = {this.onIncorrectAnswer}
+        getScore = {this.getScore}
       />
     )
+  }
+
+  onCorrectAnswer() {
+    alert('CORRECT!');
+    // var total = this.state.noOfCorrect + 1
+    // this.setState({
+    //   noOfCorrect: total
+    // })
+  }
+
+  onIncorrectAnswer() {
+    alert('INCORRECT ANSWER :(');
+    // var total = this.state.noOfMissed + 1
+    // this.setState({
+    //   noOfMissed: total
+    // })
+  }
+
+  getScore() {
+    alert('YOUR SCORE: ' + this.state.noOfCorrect + '/10')
   }
 
   render() {
     // AM todo - figure out a better way to organize this. For now, it is OK, but change later
     let questionView1, questionView2, questionView3, questionView4, questionView5, questionView6, questionView7, questionView8, questionView9, questionView10;
 
-      // AM - Make these divs the classes, then the ones in questiontemplate.js the ids? (not high priority right now)
+      // AM - Make one of these render at a time. Don't use CSS/JS to update the question each time. It works, but do this process via React
       if (this.state.questions != null && this.state.questions.length > 0) {
         questionView1 = ( <div id="questionView1"> { this.renderQuestion(0) } </div> );
         questionView2 = ( <div id="questionView2"> { this.renderQuestion(1) } </div> );
