@@ -115,7 +115,7 @@ choosePort(HOST, DEFAULT_PORT)
 
 const client_id = 'cbd995e92f6a41679d8fe86b239bbbcf';
 const client_secret = '450dae33d7674ca8a425224b82bc66c1';
-const redirect_uri = 'http://localhost:8888/callback/';
+const redirect_uri = 'http://localhost:3000/callback/';
 const appUrl = 'https://am-spotify-quiz.herokuapp.com/#'
 
 /**
