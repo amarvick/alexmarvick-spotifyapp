@@ -50,6 +50,9 @@ class QuestionTemplate extends Component {
       this.playNextTrack()
       var idString = 'questionView' + questionNo.toString();
       document.getElementById('questionView' + questionNo.toString()).style.display = 'inline-block'
+    } else {
+      // Stop playlist, count score
+      this.stopPlaylist();
     }
   }
 
@@ -67,6 +70,10 @@ class QuestionTemplate extends Component {
         .catch((error) => {
           console.log(error)
         })
+  }
+
+  stopPlaylist() {
+
   }
 
   render(props) {
