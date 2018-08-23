@@ -1,0 +1,45 @@
+body {
+  background-color: #777777;
+}
+
+.App {
+  text-align: center;
+}
+
+div, button {
+  margin: 10px;
+  text-align: center;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  display: inline-block;
+  text-align: left;
+}
+
+#modal {
+  width: 60%;
+  background-color: #444444;
+  border-color: 2px solid #bbbbbb;
+  color: #bbbbbb;
+  border-radius: 5px;
+
+  padding: 30px;
+  margin: 0px auto;
+}
+
+.questionTemplate {
+  border: 2px solid white;
+  border-radius: 5px;
+  padding: 25px;
+}
+
+#questionView1, #questionView2, #questionView3, #questionView4, #questionView5, #questionView6, #questionView7, #questionView8, #questionView9, #questionView10 {
+  display: none;
+}
+
+.questionTemplate button {
+  width: 300px;
+  height: 50px;
+}
