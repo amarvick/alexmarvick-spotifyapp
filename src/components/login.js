@@ -5,7 +5,7 @@ class Login extends Component {
   render() {
     return (
       <div className='App'>
-        <a href='https://am-spotify-quiz-api.herokuapp.com/login'>Login to Spotify</a>
+        <a href='https://am-spotify-quiz-api.herokuapp.com/login'>Login to Spotify</a> {/* https://am-spotify-quiz-api.herokuapp.com/login */}
       </div>
     )
   }
