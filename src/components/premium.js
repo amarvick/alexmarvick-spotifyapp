@@ -4,6 +4,7 @@ import axios from 'axios';
 
 import ModalGreeting from './modalgreeting';
 import QuestionTemplate from './questiontemplate';
+import ResultsTemplate from './resultstemplate';
 
 const spotifyApi = new Spotify();
 
@@ -32,15 +33,13 @@ class Premium extends Component {
         songNames: []
       },
       noOfCorrect: 0,
-      noOfIncorrect: 0,
       questions: [],
       questionNo: 0
     }
     
     // Functions needed to update the state when passing props in to question template
-    this.onCorrectAnswer = this.onCorrectAnswer.bind(this);
-    this.onIncorrectAnswer = this.onIncorrectAnswer.bind(this);
-    this.getScore = this.getScore.bind(this);
+    this.onAnswerSelect = this.onAnswerSelect.bind(this);
+    // this.getScore = this.getScore.bind(this);
   }
 
   // Retrieving the access token needed for POST requests
@@ -255,47 +254,38 @@ class Premium extends Component {
         questionAnswers = { this.state.questions[i] }
         correctResponse = { this.state.favoriteArtistsSongs.songNames[i] }
         questionNumber = { i + 1 }
-        onCorrectAnswer = {this.onCorrectAnswer}
-        onIncorrectAnswer = {this.onIncorrectAnswer}
+        onAnswerSelect = {this.onAnswerSelect}
         getScore = {this.getScore}
       />
     )
   }
 
-  // AM - can combine these two... 'next question' function?
-  onCorrectAnswer() {
-    alert('CORRECT!');
-    this.setState({ noOfCorrect: this.state.noOfCorrect + 1 })
-    if (this.state.questionNo < 9) {
-      this.nextQuestion()
+  // Determines if answer was correct or not, and whether to proceed to next question or be done.
+  onAnswerSelect(isCorrect) {
+    if (isCorrect) {
+      alert('CORRECT!');
+      this.setState({ noOfCorrect: this.state.noOfCorrect + 1 })
     } else {
-      alert('YOUR SCORE: ' + this.state.noOfCorrect + '/10')
+      alert('INCORRECT ANSWER :(');
     }
-  }
 
-  onIncorrectAnswer() {
-    alert('INCORRECT ANSWER :(');
-    this.setState({ noOfIncorrect: this.state.noOfIncorrect + 1 })
+    // Changes to the next question. Otherwise will give you your result
     if (this.state.questionNo < 9) {
-      this.nextQuestion()
-    } else {
-      alert('YOUR SCORE: ' + this.state.noOfCorrect + '/10')
-    }
-  }
-
-  nextQuestion() {
-    this.setState({ questionNo: this.state.questionNo + 1 })
-  }
-
-  getScore() {
-    alert('YOUR SCORE: ' + this.state.noOfCorrect + '/10')
+      this.setState({ questionNo: this.state.questionNo + 1 })
+    } 
   }
 
   render() {
     let theQuestionView;
 
     if (this.state.questions != null && this.state.questions.length > 0) {
-      theQuestionView = ( <div id="theQuestionView"> { this.renderQuestion(this.state.questionNo) } </div> );
+      theQuestionView = ( 
+        <div id="theQuestionView"> 
+          { this.renderQuestion(this.state.questionNo) } 
+          <ResultsTemplate
+            correctCount = { this.state.noOfCorrect }
+          />
+        </div> );
     }
     
     return (

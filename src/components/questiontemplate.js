@@ -6,21 +6,21 @@ const spotifyApi = new Spotify();
 
 class QuestionTemplate extends Component {
   constructor(props) {
-      super(props);
-      const params = this.getHashParams();
-      const token = params.access_token;
-  
-      if (token) {
-        spotifyApi.setAccessToken(token);
-      }
+    super(props);
+    const params = this.getHashParams();
+    const token = params.access_token;
 
-      this.state = {
-        accesstoken: token,
-        questionAnswers: new Array(4),
-        correctResponse: '',
-        questionNumber: 0,
-        playlistId: ''
-      };
+    if (token) {
+      spotifyApi.setAccessToken(token);
+    }
+
+    this.state = {
+      accesstoken: token,
+      questionAnswers: new Array(4),
+      correctResponse: '',
+      questionNumber: 0,
+      playlistId: ''
+    };
   }
 
   // Retrieving the access token needed for POST requests
@@ -37,16 +37,15 @@ class QuestionTemplate extends Component {
   // Validates answer and checks whether to proceed to the next question or produce score
   checkAnswer(userResponse) {
     if (this.props.correctResponse == userResponse) {
-      this.props.onCorrectAnswer();
+      this.props.onAnswerSelect(true);
     } else {
-      this.props.onIncorrectAnswer();
+      this.props.onAnswerSelect(false);
     }
 
     if ((this.props.questionNumber) < 10) {
       // Play next track if not the next question
       this.playNextTrack()
     } else {
-      // Stop playlist, count score
       // Hide the question view, display the score
       this.stopPlaylist();
     }
@@ -55,35 +54,48 @@ class QuestionTemplate extends Component {
   // Plays next track in playlist
   playNextTrack() {
     axios({
-        url: 'https://api.spotify.com/v1/me/player/next',
-        method: "POST",
-        headers: {
-          'Authorization': 'Bearer ' + this.state.accesstoken
-        }
+      url: 'https://api.spotify.com/v1/me/player/next',
+      method: "POST",
+      headers: {
+        'Authorization': 'Bearer ' + this.state.accesstoken
+      }
+    })
+      .then((response) => {
+        console.log(response)
       })
-        .then((response) => {
-          console.log(response)
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+      .catch((error) => {
+        console.log(error)
+      })
   }
 
   // Stops playlist at the end of the game
+  // AM - does it make more sense to put this in the premium component + passing in props or in here?
   stopPlaylist() {
-    // AM to do - get the API code to stop the playlist
+    axios({
+      url: 'https://api.spotify.com/v1/me/player/pause',
+      method: "PUT",
+      headers: {
+        'Authorization': 'Bearer ' + this.state.accesstoken
+      }
+    })
+      .then((response) => {
+        console.log(response)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
   }
 
   // The question template
   render(props) {
     return (
-        <div className = 'questionTemplate'>
-            <h1>QUESTION { this.props.questionNumber }: What song is this?</h1>
-            <button onClick={ () => this.checkAnswer(this.props.questionAnswers[0]) }> { this.props.questionAnswers[0] } </button><br/>
-            <button onClick={ () => this.checkAnswer(this.props.questionAnswers[1]) }> { this.props.questionAnswers[1] } </button><br/>
-            <button onClick={ () => this.checkAnswer(this.props.questionAnswers[2]) }> { this.props.questionAnswers[2] } </button><br/>
-            <button onClick={ () => this.checkAnswer(this.props.questionAnswers[3]) }> { this.props.questionAnswers[3] } </button><br/>
-        </div>
+      <div className = 'questionTemplate'>
+        <h1>QUESTION { this.props.questionNumber }: What song is this?</h1>
+        <button onClick={ () => this.checkAnswer(this.props.questionAnswers[0]) }> { this.props.questionAnswers[0] } </button><br/>
+        <button onClick={ () => this.checkAnswer(this.props.questionAnswers[1]) }> { this.props.questionAnswers[1] } </button><br/>
+        <button onClick={ () => this.checkAnswer(this.props.questionAnswers[2]) }> { this.props.questionAnswers[2] } </button><br/>
+        <button onClick={ () => this.checkAnswer(this.props.questionAnswers[3]) }> { this.props.questionAnswers[3] } </button><br/>
+      </div>
     )
   }
 }
