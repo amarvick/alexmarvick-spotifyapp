@@ -262,19 +262,24 @@ class Premium extends Component {
     )
   }
 
+  // AM - can combine these two... 'next question' function?
   onCorrectAnswer() {
     alert('CORRECT!');
     this.setState({ noOfCorrect: this.state.noOfCorrect + 1 })
-    if (this.state.questionNo !== 9) {
+    if (this.state.questionNo < 9) {
       this.nextQuestion()
+    } else {
+      alert('YOUR SCORE: ' + this.state.noOfCorrect + '/10')
     }
   }
 
   onIncorrectAnswer() {
     alert('INCORRECT ANSWER :(');
     this.setState({ noOfIncorrect: this.state.noOfIncorrect + 1 })
-    if (this.state.questionNo !== 9) {
+    if (this.state.questionNo < 9) {
       this.nextQuestion()
+    } else {
+      alert('YOUR SCORE: ' + this.state.noOfCorrect + '/10')
     }
   }
 
@@ -289,9 +294,9 @@ class Premium extends Component {
   render() {
     let theQuestionView;
 
-      if (this.state.questions != null && this.state.questions.length > 0) {
-        theQuestionView = ( <div id="theQuestionView"> { this.renderQuestion(this.state.questionNo) } </div> );
-      }
+    if (this.state.questions != null && this.state.questions.length > 0) {
+      theQuestionView = ( <div id="theQuestionView"> { this.renderQuestion(this.state.questionNo) } </div> );
+    }
     
     return (
       <div className='Premium'>
@@ -300,6 +305,7 @@ class Premium extends Component {
           <ModalGreeting
             username = { this.state.loggedInUser.userId }
           />
+
           <button onClick={() => this.startGame()}>
             PLAY NOW!
           </button>

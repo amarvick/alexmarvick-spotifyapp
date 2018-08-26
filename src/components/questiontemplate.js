@@ -47,7 +47,6 @@ class QuestionTemplate extends Component {
       this.playNextTrack()
     } else {
       // Stop playlist, count score
-      this.props.getScore();
       // Hide the question view, display the score
       this.stopPlaylist();
     }
