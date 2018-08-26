@@ -33,8 +33,11 @@ class Premium extends Component {
       },
       noOfCorrect: 0,
       noOfMissed: 0,
-      questions: []
+      questions: [],
+      questionNo: 0
     }
+    this.onCorrectAnswer = this.onCorrectAnswer.bind(this);
+    this.onIncorrectAnswer = this.onIncorrectAnswer.bind(this);
   }
 
   // Retrieving the access token needed for POST requests
@@ -140,7 +143,7 @@ class Premium extends Component {
     this.postPlaylist(this.state.loggedInUser.userId, this.state.favoriteArtistsSongs.songUris)
 
     document.getElementById('modal').style.display = 'none'
-    document.getElementById('questionView1').style.display = 'inline-block'
+    document.getElementById('theQuestionView').style.display = 'inline-block'
   }
 
   // Will create private playlist on user's spotify account
@@ -259,18 +262,18 @@ class Premium extends Component {
 
   onCorrectAnswer() {
     alert('CORRECT!');
-    // var total = this.state.noOfCorrect + 1
-    // this.setState({
-    //   noOfCorrect: total
-    // })
+    if (this.state.questionNo !== 9) {
+      var newQuestionNo = this.state.questionNo + 1
+      this.setState({ questionNo: newQuestionNo })
+    }
   }
 
   onIncorrectAnswer() {
     alert('INCORRECT ANSWER :(');
-    // var total = this.state.noOfMissed + 1
-    // this.setState({
-    //   noOfMissed: total
-    // })
+    if (this.state.questionNo !== 9) {
+      var newQuestionNo = this.state.questionNo + 1
+      this.setState({ questionNo: newQuestionNo })
+    }
   }
 
   getScore() {
@@ -278,24 +281,12 @@ class Premium extends Component {
   }
 
   render() {
-    // AM todo - figure out a better way to organize this. For now, it is OK, but change later
-    let questionView1, questionView2, questionView3, questionView4, questionView5, questionView6, questionView7, questionView8, questionView9, questionView10;
+    let theQuestionView;
 
-      // AM - Make one of these render at a time. Don't use CSS/JS to update the question each time. It works, but do this process via React
       if (this.state.questions != null && this.state.questions.length > 0) {
-        questionView1 = ( <div id="questionView1"> { this.renderQuestion(0) } </div> );
-        questionView2 = ( <div id="questionView2"> { this.renderQuestion(1) } </div> );
-        questionView3 = ( <div id="questionView3"> { this.renderQuestion(2) } </div> );
-        questionView4 = ( <div id="questionView4"> { this.renderQuestion(3) } </div> );
-        questionView5 = ( <div id="questionView5"> { this.renderQuestion(4) } </div> );
-        questionView6 = ( <div id="questionView6"> { this.renderQuestion(5) } </div> );
-        questionView7 = ( <div id="questionView7"> { this.renderQuestion(6) } </div> );
-        questionView8 = ( <div id="questionView8"> { this.renderQuestion(7) } </div> );
-        questionView9 = ( <div id="questionView9"> { this.renderQuestion(8) } </div> );
-        questionView10 = ( <div id="questionView10"> { this.renderQuestion(9) } </div> );
+        theQuestionView = ( <div id="theQuestionView"> { this.renderQuestion(this.state.questionNo) } </div> );
       }
     
-    // console.log(questionView);
     return (
       <div className='Premium'>
 
@@ -310,17 +301,7 @@ class Premium extends Component {
           <br/>
         </div>
 
-        {/* AM todo - figure out a better way to organize this. For now, it is OK, but change later */}
-        { questionView1 }
-        { questionView2 }
-        { questionView3 }
-        { questionView4 }
-        { questionView5 }
-        { questionView6 }
-        { questionView7 }
-        { questionView8 }
-        { questionView9 }
-        { questionView10 }
+        { theQuestionView }
         
       </div>
     )

@@ -40,16 +40,10 @@ class QuestionTemplate extends Component {
     } else {
       this.props.onIncorrectAnswer();
     }
-    
-    // Go to next question
-    var questionNo = this.props.questionNumber;
-    document.getElementById('questionView' + questionNo.toString()).style.display = 'none'
-    questionNo++;
 
-    if (questionNo <= 10) {
+    if ((this.props.questionNumber) < 10) {
+      // Play next track if not the next question
       this.playNextTrack()
-      var idString = 'questionView' + questionNo.toString();
-      document.getElementById('questionView' + questionNo.toString()).style.display = 'inline-block'
     } else {
       // Stop playlist, count score
       this.props.getScore();
@@ -74,7 +68,7 @@ class QuestionTemplate extends Component {
   }
 
   stopPlaylist() {
-
+    // AM to do - get the API code to stop the playlist
   }
 
   render(props) {

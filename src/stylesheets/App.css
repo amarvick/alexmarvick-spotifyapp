@@ -35,7 +35,7 @@ ul {
   padding: 25px;
 }
 
-#questionView1, #questionView2, #questionView3, #questionView4, #questionView5, #questionView6, #questionView7, #questionView8, #questionView9, #questionView10 {
+#theQuestionView {
   display: none;
 }
 
