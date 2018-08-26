@@ -32,12 +32,15 @@ class Premium extends Component {
         songNames: []
       },
       noOfCorrect: 0,
-      noOfMissed: 0,
+      noOfIncorrect: 0,
       questions: [],
       questionNo: 0
     }
+    
+    // Functions needed to update the state when passing props in to question template
     this.onCorrectAnswer = this.onCorrectAnswer.bind(this);
     this.onIncorrectAnswer = this.onIncorrectAnswer.bind(this);
+    this.getScore = this.getScore.bind(this);
   }
 
   // Retrieving the access token needed for POST requests
@@ -57,6 +60,7 @@ class Premium extends Component {
     this.getFavoriteArtist()
   }
 
+  // Gets current user
   getUser() {
     spotifyApi.getMe()
     .then((response) => {
@@ -101,8 +105,7 @@ class Premium extends Component {
           theSongName.push(theSongUriToName[j].substr(theSongUriToName[j].indexOf('---') + 3, theSongUriToName[j].length - 1))
         }
 
-        // AM - later, combine these setState functions?
-
+        // AM - later, combine these setState functions? Might not be doable
         this.setState({
           favoriteArtistsSongs: {
             songUris: theSongUri,
@@ -112,9 +115,7 @@ class Premium extends Component {
 
         var theQuestions = this.generateQuestions()
 
-        this.setState({
-          questions: theQuestions
-        })
+        this.setState({ questions: this.generateQuestions() })
       })
   }
 
@@ -142,6 +143,7 @@ class Premium extends Component {
   startGame() {
     this.postPlaylist(this.state.loggedInUser.userId, this.state.favoriteArtistsSongs.songUris)
 
+    // AM - replace JS Hacks? Or maybe this is good? LOW PRIORITY
     document.getElementById('modal').style.display = 'none'
     document.getElementById('theQuestionView').style.display = 'inline-block'
   }
@@ -262,18 +264,22 @@ class Premium extends Component {
 
   onCorrectAnswer() {
     alert('CORRECT!');
+    this.setState({ noOfCorrect: this.state.noOfCorrect + 1 })
     if (this.state.questionNo !== 9) {
-      var newQuestionNo = this.state.questionNo + 1
-      this.setState({ questionNo: newQuestionNo })
+      this.nextQuestion()
     }
   }
 
   onIncorrectAnswer() {
     alert('INCORRECT ANSWER :(');
+    this.setState({ noOfIncorrect: this.state.noOfIncorrect + 1 })
     if (this.state.questionNo !== 9) {
-      var newQuestionNo = this.state.questionNo + 1
-      this.setState({ questionNo: newQuestionNo })
+      this.nextQuestion()
     }
+  }
+
+  nextQuestion() {
+    this.setState({ questionNo: this.state.questionNo + 1 })
   }
 
   getScore() {

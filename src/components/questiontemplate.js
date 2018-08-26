@@ -34,6 +34,7 @@ class QuestionTemplate extends Component {
     return hashParams;
   }
 
+  // Validates answer and checks whether to proceed to the next question or produce score
   checkAnswer(userResponse) {
     if (this.props.correctResponse == userResponse) {
       this.props.onCorrectAnswer();
@@ -47,10 +48,12 @@ class QuestionTemplate extends Component {
     } else {
       // Stop playlist, count score
       this.props.getScore();
+      // Hide the question view, display the score
       this.stopPlaylist();
     }
   }
 
+  // Plays next track in playlist
   playNextTrack() {
     axios({
         url: 'https://api.spotify.com/v1/me/player/next',
@@ -67,10 +70,12 @@ class QuestionTemplate extends Component {
         })
   }
 
+  // Stops playlist at the end of the game
   stopPlaylist() {
     // AM to do - get the API code to stop the playlist
   }
 
+  // The question template
   render(props) {
     return (
         <div className = 'questionTemplate'>
