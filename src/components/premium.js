@@ -39,7 +39,6 @@ class Premium extends Component {
     
     // Functions needed to update the state when passing props in to question template
     this.onAnswerSelect = this.onAnswerSelect.bind(this);
-    // this.getScore = this.getScore.bind(this);
   }
 
   // Retrieving the access token needed for POST requests
@@ -140,9 +139,10 @@ class Premium extends Component {
 
   // STARTING THE GAME:
   startGame() {
+    // AM To do - May need to find better way of organizing everything that goes on? Because this posts the playlist, 
+    // then does a multitude of other things... 'post playlist' may not be the best function name therefore? Not sure - brainstorm
     this.postPlaylist(this.state.loggedInUser.userId, this.state.favoriteArtistsSongs.songUris)
 
-    // AM - replace JS Hacks? Or maybe this is good? LOW PRIORITY
     document.getElementById('modal').style.display = 'none'
     document.getElementById('theQuestionView').style.display = 'inline-block'
   }
@@ -217,6 +217,40 @@ class Premium extends Component {
       })
   }
 
+  // Plays next track in playlist
+  playNextTrack() {
+    axios({
+      url: 'https://api.spotify.com/v1/me/player/next',
+      method: "POST",
+      headers: {
+        'Authorization': 'Bearer ' + this.state.accesstoken
+      }
+    })
+      .then((response) => {
+        console.log(response)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+
+  // Stops playlist at the end of the game
+  stopPlaylist() {
+    axios({
+      url: 'https://api.spotify.com/v1/me/player/pause',
+      method: "PUT",
+      headers: {
+        'Authorization': 'Bearer ' + this.state.accesstoken
+      }
+    })
+      .then((response) => {
+        console.log(response)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }
+
   // Generates each question
   generateQuestions() {
     for (var i = 0; i < 10; i++) {
@@ -255,7 +289,6 @@ class Premium extends Component {
         correctResponse = { this.state.favoriteArtistsSongs.songNames[i] }
         questionNumber = { i + 1 }
         onAnswerSelect = {this.onAnswerSelect}
-        getScore = {this.getScore}
       />
     )
   }
@@ -272,7 +305,10 @@ class Premium extends Component {
     // Changes to the next question. Otherwise will give you your result
     if (this.state.questionNo < 9) {
       this.setState({ questionNo: this.state.questionNo + 1 })
-    } 
+      this.playNextTrack()
+    } else {
+      this.stopPlaylist();
+    }
   }
 
   render() {
@@ -282,6 +318,7 @@ class Premium extends Component {
       theQuestionView = ( 
         <div id="theQuestionView"> 
           { this.renderQuestion(this.state.questionNo) } 
+
           <ResultsTemplate
             correctCount = { this.state.noOfCorrect }
           />

@@ -9,7 +9,7 @@ class ResultsTemplate extends Component {
     };
   }
 
-  // The question template
+  // The results
   render(props) {
     return (
       <div className = 'resultsTemplate'>
