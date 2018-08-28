@@ -111,8 +111,6 @@ class Premium extends Component {
           }
         })
 
-        var theQuestions = this.generateQuestions()
-
         this.setState({ questions: this.generateQuestions() })
       })
   }
@@ -142,6 +140,7 @@ class Premium extends Component {
     // AM To do - May need to find better way of organizing everything that goes on? Because this posts the playlist, 
     // then does a multitude of other things... 'post playlist' may not be the best function name therefore? Not sure - brainstorm
     this.postPlaylist(this.state.loggedInUser.userId, this.state.favoriteArtistsSongs.songUris)
+    this.removeShuffle()
 
     document.getElementById('modal').style.display = 'none'
     document.getElementById('theQuestionView').style.display = 'inline-block'
@@ -195,6 +194,23 @@ class Premium extends Component {
         console.log(error)
       })
 
+  }
+
+  // If shuffle is set, can ruin the experience. AM - set state as parameter instead of in URL? Or is this OK?
+  removeShuffle() {
+    axios({
+      url: 'https://api.spotify.com/v1/me/player/shuffle?state=false',
+      method: "PUT",
+      headers: {
+        'Authorization': 'Bearer ' + this.state.accesstoken
+      }
+    })
+      .then((response) => {
+        console.log(response)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
   }
 
   // Then... play the playlist to get started
@@ -302,7 +318,7 @@ class Premium extends Component {
       alert('INCORRECT ANSWER :(');
     }
 
-    // Changes to the next question. Otherwise will give you your result
+    // Changes to the next question OR you're finished. AM - work on rendering the results template in a different fashion
     if (this.state.questionNo < 9) {
       this.setState({ questionNo: this.state.questionNo + 1 })
       this.playNextTrack()

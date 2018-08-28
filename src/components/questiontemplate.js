@@ -13,7 +13,7 @@ class QuestionTemplate extends Component {
 
   // Validates answer and checks whether to proceed to the next question or produce score
   checkAnswer(userResponse) {
-    if (this.props.correctResponse == userResponse) {
+    if (this.props.correctResponse === userResponse) {
       this.props.onAnswerSelect(true);
     } else {
       this.props.onAnswerSelect(false);
