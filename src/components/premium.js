@@ -349,7 +349,7 @@ class Premium extends Component {
             username = { this.state.loggedInUser.userId }
           />
 
-          <button onClick={() => this.startGame()}>
+          <button type="button" class="btn btn-primary" onClick={() => this.startGame()}>
             PLAY NOW!
           </button>
 

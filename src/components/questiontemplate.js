@@ -21,14 +21,15 @@ class QuestionTemplate extends Component {
   }
 
   // The question template
-  render(props) {
+  render(props) {    
+
     return (
       <div className = 'questionTemplate'>
-        <h1>QUESTION { this.props.questionNumber }: What song is this?</h1>
-        <button onClick={ () => this.checkAnswer(this.props.questionAnswers[0]) }> { this.props.questionAnswers[0] } </button><br/>
-        <button onClick={ () => this.checkAnswer(this.props.questionAnswers[1]) }> { this.props.questionAnswers[1] } </button><br/>
-        <button onClick={ () => this.checkAnswer(this.props.questionAnswers[2]) }> { this.props.questionAnswers[2] } </button><br/>
-        <button onClick={ () => this.checkAnswer(this.props.questionAnswers[3]) }> { this.props.questionAnswers[3] } </button><br/>
+        <h1 class="display-4">QUESTION { this.props.questionNumber }: What song is this?</h1>
+        <button class="btn btn-light lead" onClick={ () => this.checkAnswer(this.props.questionAnswers[0]) }> { this.props.questionAnswers[0] } </button><br/>
+        <button class="btn btn-light lead" onClick={ () => this.checkAnswer(this.props.questionAnswers[1]) }> { this.props.questionAnswers[1] } </button><br/>
+        <button class="btn btn-light lead" onClick={ () => this.checkAnswer(this.props.questionAnswers[2]) }> { this.props.questionAnswers[2] } </button><br/>
+        <button class="btn btn-light lead" onClick={ () => this.checkAnswer(this.props.questionAnswers[3]) }> { this.props.questionAnswers[3] } </button><br/>
       </div>
     )
   }

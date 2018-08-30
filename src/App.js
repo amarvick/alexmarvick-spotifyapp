@@ -5,7 +5,7 @@ import NonPremium from './components/nonPremium';
 import Premium from './components/premium';
 import Login from './components/login';
 
-import './stylesheets/App.css';
+import './stylesheets/App.scss';
 
 const spotifyApi = new Spotify();
 
