@@ -298,6 +298,7 @@ class Premium extends Component {
     return this.state.questions;
   }
 
+  // Maybe not make this a function, but put in the render.
   renderQuestion(i) {
     return (
       <QuestionTemplate 
