@@ -1,5 +1,8 @@
+$blue-background: rgba(0, 0, 100, 0.7);
+$white: #bbbbbb;
+
 body {
-  background-color: #777777;
+  color: $white;
 }
 
 .App {
@@ -18,15 +21,15 @@ ul {
 }
 
 #modal {
-  background-color: rgba(0, 0, 100, 0.70);
-  color: #bbbbbb;
+  background-color: $blue-background;
+  color: $white;
   height: 100vh;
   padding: 30px;
 }
 
 .questionTemplate {
-  border: 2px solid white;
-  background:rgba(54, 130, 202, 0.9);
+  border: 2px solid $white;
+  background: $blue-background;
   border-radius: 5px;
   padding: 25px;
   
@@ -38,11 +41,10 @@ ul {
 }
 
 #theQuestionView {
-  display: none;
   position: relative;
   top: 15px;
 }
 
 .container-fluid {
-  color: white;
+  color: $white;
 }

@@ -34,7 +34,8 @@ class Premium extends Component {
       },
       noOfCorrect: 0,
       questions: [],
-      questionNo: 0
+      questionNo: 0,
+      gameInProgress: false
     }
     
     // Functions needed to update the state when passing props in to question template
@@ -141,9 +142,7 @@ class Premium extends Component {
     // then does a multitude of other things... 'post playlist' may not be the best function name therefore? Not sure - brainstorm
     this.postPlaylist(this.state.loggedInUser.userId, this.state.favoriteArtistsSongs.songUris)
     this.removeShuffle()
-
-    document.getElementById('modal').style.display = 'none'
-    document.getElementById('theQuestionView').style.display = 'inline-block'
+    this.setState({ gameInProgress: true });
   }
 
   // Will create private playlist on user's spotify account
@@ -187,7 +186,7 @@ class Premium extends Component {
     })
       .then((response) => {
         console.log(response);
-        this.playPlaylist(contextUri)
+        // this.playPlaylist(contextUri)
       })
       .catch((error) => {
         alert(error)
@@ -343,21 +342,20 @@ class Premium extends Component {
     
     return (
       <div className='Premium'>
+        { !this.state.gameInProgress ? (
+          <div id="modal">
+            <ModalGreeting
+              username = { this.state.loggedInUser.userId }
+            />
 
-        <div id="modal">
-          <ModalGreeting
-            username = { this.state.loggedInUser.userId }
-          />
+            <button type="button" className="btn btn-primary" onClick={() => this.startGame()}>
+              PLAY NOW!
+            </button>
 
-          <button type="button" class="btn btn-primary" onClick={() => this.startGame()}>
-            PLAY NOW!
-          </button>
+            <br/>
+          </div> ) : theQuestionView 
+        }
 
-          <br/>
-        </div>
-
-        { theQuestionView }
-        
       </div>
     )
   }

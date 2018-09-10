@@ -13,7 +13,7 @@ class ResultsTemplate extends Component {
   render(props) {
     return (
       <div className = 'resultsTemplate'>
-        <h1 class="display-4">RESULTS: { this.props.correctCount }/10</h1>
+        <h1 className="display-4">RESULTS: { this.props.correctCount }/10</h1>
       </div>
     )
   }
