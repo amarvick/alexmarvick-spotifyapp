@@ -35,7 +35,8 @@ class Premium extends Component {
       noOfCorrect: 0,
       questions: [],
       questionNo: 0,
-      gameInProgress: false
+      gameInProgress: false,
+      resultsReady: false
     }
     
     // Functions needed to update the state when passing props in to question template
@@ -322,27 +323,34 @@ class Premium extends Component {
       this.setState({ questionNo: this.state.questionNo + 1 })
       this.playNextTrack()
     } else {
+      this.setState({ resultsReady: true })
       this.stopPlaylist();
     }
   }
 
   render() {
-    let theQuestionView;
+    let theGameView;
 
+    // AM todo - see if you can combine theGameView results together
     if (this.state.questions != null && this.state.questions.length > 0) {
-      theQuestionView = ( 
-        <div id="theQuestionView"> 
-          { this.renderQuestion(this.state.questionNo) } 
-
+      if (!this.state.resultsReady) {
+        theGameView = ( 
+          <div id="theGameView"> 
+            { this.renderQuestion(this.state.questionNo) } 
+          </div> 
+        )
+      } else {
+        theGameView = ( 
           <ResultsTemplate
             correctCount = { this.state.noOfCorrect }
           />
-        </div> );
-    }
+        )
+      }
+    } 
     
     return (
       <div className='Premium'>
-        { !this.state.gameInProgress ? (
+        { !this.state.gameInProgress && !this.state.resultsReady ? (
           <div id="modal">
             <ModalGreeting
               username = { this.state.loggedInUser.userId }
@@ -353,8 +361,14 @@ class Premium extends Component {
             </button>
 
             <br/>
-          </div> ) : theQuestionView 
+          </div> ) : theGameView 
         }
+
+        {/* { this.state.resultsReady &&
+          <ResultsTemplate
+            correctCount = { this.state.noOfCorrect }
+          />
+        } */}
 
       </div>
     )
