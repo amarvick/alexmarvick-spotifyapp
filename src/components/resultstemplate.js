@@ -6,13 +6,14 @@ class ResultsTemplate extends Component {
 
     this.state = {
       correctCount: 0,
-      didCheat: false
+      didUserCheat: false
     };
   }
 
   // The results
   render(props) {
 
+    // AM - always rendering as zero... fix
     let cheatMessage = 'You are the fakest fan I\'ve ever seen. Get out of here!'
     let zeroCorrect = 'This isn\'t really your favorite artist, is it?'
     let oneToThreeCorrect = 'You have a bit of a way to go before you can declare this your favorite artist.'
@@ -22,14 +23,14 @@ class ResultsTemplate extends Component {
 
     let endOfGameMsg;
     
-    if (this.state.didCheat) {
+    if (this.props.didCheat) {
       endOfGameMsg = (
         <div>
           { cheatMessage }
         </div>
       )
     } else {
-      if (this.state.correctCount === 0) { 
+      if (this.props.correctCount === 0) { 
         endOfGameMsg = (
           <div>
             { zeroCorrect }
@@ -37,7 +38,7 @@ class ResultsTemplate extends Component {
         )
       }
       
-      else if (this.state.correctCount >= 1 && this.state.correctCount <= 3) { 
+      else if (this.props.correctCount >= 1 && this.props.correctCount <= 3) { 
         endOfGameMsg = (
           <div>
             { oneToThreeCorrect }
@@ -45,7 +46,7 @@ class ResultsTemplate extends Component {
         )
       }
 
-      else if (this.state.correctCount >= 4 && this.state.correctCount <= 6) { 
+      else if (this.props.correctCount >= 4 && this.props.correctCount <= 6) { 
         endOfGameMsg = (
           <div>
             { fourToSixCorrect }
@@ -53,7 +54,7 @@ class ResultsTemplate extends Component {
         )
       }
 
-      else if (this.state.correctCount >= 7 && this.state.correctCount <= 9) { 
+      else if (this.props.correctCount >= 7 && this.props.correctCount <= 9) { 
         endOfGameMsg = (
           <div>
             { sevenToNineCorrect }
@@ -61,7 +62,7 @@ class ResultsTemplate extends Component {
         )
       }
 
-      else if (this.state.correctCount === 10) { 
+      else if (this.props.correctCount === 10) { 
         endOfGameMsg = (
           <div>
             { allCorrect }
@@ -74,7 +75,7 @@ class ResultsTemplate extends Component {
       <div className = 'resultsTemplate'>
         <h1 className="display-4">RESULTS: { this.props.correctCount }/10</h1>
 
-        {/* {} */}
+        { endOfGameMsg }
       </div>
     )
   }

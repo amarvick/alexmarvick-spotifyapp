@@ -36,7 +36,8 @@ class Premium extends Component {
       questions: [],
       questionNo: 0,
       gameInProgress: false,
-      resultsReady: false
+      resultsReady: false,
+      didUserCheat: false
     }
     
     // Functions needed to update the state when passing props in to question template
@@ -105,7 +106,7 @@ class Premium extends Component {
           theSongName.push(theSongUriToName[j].substr(theSongUriToName[j].indexOf('---') + 3, theSongUriToName[j].length - 1))
         }
 
-        // AM - later, combine these setState functions? Might not be doable
+        // AM - later, combine these setState functions? Might not be doable. Also figure out why I'm setting questions state here instead of in function?
         this.setState({
           favoriteArtistsSongs: {
             songUris: theSongUri,
@@ -299,16 +300,16 @@ class Premium extends Component {
   }
 
   // Maybe not make this a function, but put in the render.
-  renderQuestion(i) {
-    return (
-      <QuestionTemplate 
-        questionAnswers = { this.state.questions[i] }
-        correctResponse = { this.state.favoriteArtistsSongs.songNames[i] }
-        questionNumber = { i + 1 }
-        onAnswerSelect = {this.onAnswerSelect}
-      />
-    )
-  }
+  // renderQuestion(i) {
+  //   return (
+  //     <QuestionTemplate 
+  //       questionAnswers = { this.state.questions[i] }
+  //       correctResponse = { this.state.favoriteArtistsSongs.songNames[i] }
+  //       questionNumber = { i + 1 }
+  //       onAnswerSelect = {this.onAnswerSelect}
+  //     />
+  //   )
+  // }
 
   // Determines if answer was correct or not, and whether to proceed to next question or be done.
   onAnswerSelect(isCorrect) {
@@ -319,7 +320,7 @@ class Premium extends Component {
       alert('INCORRECT ANSWER :(');
     }
 
-    // Changes to the next question OR you're finished. AM - work on rendering the results template in a different fashion
+    // Changes to the next question OR you're finished and the results will be presented.
     if (this.state.questionNo < 9) {
       this.setState({ questionNo: this.state.questionNo + 1 })
       this.playNextTrack()
@@ -334,16 +335,23 @@ class Premium extends Component {
 
     // AM todo - see if you can combine theGameView results together
     if (this.state.questions != null && this.state.questions.length > 0) {
-      if (!this.state.resultsReady) {
+      if (!this.state.resultsReady || this.state.didUserCheat) {
         theGameView = ( 
-          <div id="theGameView"> 
-            { this.renderQuestion(this.state.questionNo) } 
-          </div> 
+          // <div id="theGameView"> 
+          //   { this.renderQuestion(this.state.questionNo) } 
+          // </div> 
+          <QuestionTemplate 
+            questionAnswers = { this.state.questions[this.state.questionNo] }
+            correctResponse = { this.state.favoriteArtistsSongs.songNames[this.state.questionNo] }
+            questionNumber = { this.state.questionNo + 1 }
+            onAnswerSelect = {this.onAnswerSelect}
+          />
         )
       } else {
         theGameView = ( 
           <ResultsTemplate
             correctCount = { this.state.noOfCorrect }
+            didUserCheat = { this.state.didUserCheat }
           />
         )
       }
@@ -364,13 +372,6 @@ class Premium extends Component {
             <br/>
           </div> ) : theGameView 
         }
-
-        {/* { this.state.resultsReady &&
-          <ResultsTemplate
-            correctCount = { this.state.noOfCorrect }
-          />
-        } */}
-
       </div>
     )
   }
