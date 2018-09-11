@@ -188,7 +188,7 @@ class Premium extends Component {
     })
       .then((response) => {
         console.log(response);
-        // this.playPlaylist(contextUri)
+        this.playPlaylist(contextUri)
       })
       .catch((error) => {
         alert(error)
