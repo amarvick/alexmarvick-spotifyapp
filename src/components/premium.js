@@ -212,6 +212,7 @@ class Premium extends Component {
       .catch((error) => {
         console.log(error)
       })
+
   }
 
   // Then... play the playlist to get started
@@ -360,7 +361,7 @@ class Premium extends Component {
     return (
       <div className='Premium'>
         { !this.state.gameInProgress && !this.state.resultsReady ? (
-          <div id="modal">
+          <div>
             <ModalGreeting
               username = { this.state.loggedInUser.userId }
             />

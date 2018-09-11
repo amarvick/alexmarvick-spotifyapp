@@ -13,7 +13,6 @@ class ResultsTemplate extends Component {
   // The results
   render(props) {
 
-    // AM - always rendering as zero... fix
     let cheatMessage = 'You are the fakest fan I\'ve ever seen. Get out of here!'
     let zeroCorrect = 'This isn\'t really your favorite artist, is it?'
     let oneToThreeCorrect = 'You have a bit of a way to go before you can declare this your favorite artist.'

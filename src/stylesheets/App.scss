@@ -1,15 +1,24 @@
 $blue-background: rgba(0, 0, 100, 0.7);
+$turquoise-background: rgba(0, 135, 104, 0.7);
+$red-background: rgba(248, 68, 68, 0.7);
 $white: #bbbbbb;
+
+@mixin gameProperties($backgroundColor) {
+  background: $backgroundColor;
+
+  border: 2px solid $white;
+  border-radius: 5px;
+  padding: 25px;
+}
+
+@mixin preGameProperties($backgroundColor) {
+  background-color: $backgroundColor;
+  height: 100vh;
+  padding: 25px;
+}
 
 body {
   color: $white;
-}
-
-.App {
-  text-align: center;
-}
-
-div, button {
   text-align: center;
 }
 
@@ -20,18 +29,17 @@ ul {
   text-align: left;
 }
 
-#modal {
-  background-color: $blue-background;
-  color: $white;
-  height: 100vh;
-  padding: 30px;
+// AM todo - make sure blue background goes away when clicking button to play game
+.Premium {
+  @include preGameProperties($blue-background);
+}
+
+.NonPremium {
+  @include preGameProperties($red-background);
 }
 
 .questionTemplate {
-  border: 2px solid $white;
-  background: $blue-background;
-  border-radius: 5px;
-  padding: 25px;
+  @include gameProperties($blue-background);
   
   button {
     width: 300px;
@@ -40,13 +48,15 @@ ul {
   };
 }
 
+.resultsTemplate {
+  @include gameProperties($turquoise-background);
+}
+
+/*
 #theGameView {
   position: relative;
   margin: auto;
   width: 85%;
   top: 15px;
 }
-
-.container-fluid {
-  color: $white;
-}
+*/
