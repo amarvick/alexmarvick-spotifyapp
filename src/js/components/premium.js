@@ -1,12 +1,20 @@
 import Spotify from 'spotify-web-api-js';
-import React, { Component } from 'react';
-import axios from 'axios';
+import React, { Component, StartupActions } from 'react';
+
+import axios from 'axios'; // AM - will get rid of eventually
 
 import ModalGreeting from './modalgreeting';
 import QuestionTemplate from './questiontemplate';
 import ResultsTemplate from './resultstemplate';
 
-const spotifyApi = new Spotify();
+const spotifyApi = new Spotify(); // AM - will get rid of eventually
+
+// connect((store) => {
+//   return {
+//     userId: store.user.userId,
+
+//   }
+// })
 
 class Premium extends Component {
   constructor() {
