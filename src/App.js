@@ -13,8 +13,6 @@ import { fetchUser } from './js/actions/userActions'
 const spotifyApi = new Spotify(); // AM - to remove later
 
 connect((store) => {
-  console.log('()()()()()')
-  console.log(store)
   return {
     user: store.user.user,
   };
@@ -59,7 +57,6 @@ class App extends Component {
 
     if (this.props.user) {
       user = this.props.user;
-      console.log(user)
     }
 
     // AM - Flashing issue

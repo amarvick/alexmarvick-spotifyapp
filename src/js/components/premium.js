@@ -8,6 +8,7 @@ import QuestionTemplate from './questiontemplate';
 import ResultsTemplate from './resultstemplate';
 
 import { fetchArtist } from '../actions/artistActions'
+import { fetchSongs } from '../actions/songsActions'
 
 const spotifyApi = new Spotify(); // AM - will get rid of eventually
 
@@ -48,10 +49,13 @@ class Premium extends Component {
 
   // Get logged in user + favorite artist.. Maybe combine the three functions used together?
   componentWillMount() {
-    // this.fetchData()
-    this.getFavoriteArtist()
+    // this.getFavoriteArtist()
+    this.props.dispatch(fetchArtist()); 
   }
 
+  componentDidMount() {
+    this.fetchData()
+  }
 
   fetchData() {
     this.props.dispatch(fetchArtist()); 
@@ -158,7 +162,6 @@ class Premium extends Component {
 
   // Then... add tracks initially received to newly created playlist
   addTracksToPlaylist(newPlaylistId, allSongs, contextUri) {
-    console.log(allSongs);
     axios({
       url: 'https://api.spotify.com/v1/users/' + this.props.loggedInUserId + '/playlists/' + newPlaylistId + '/tracks/',
       method: "POST",
@@ -321,8 +324,6 @@ class Premium extends Component {
 
     if (this.props.artist) {
       artist = this.props.artist;
-      console.log('******')
-      console.log(artist)
     }
 
     // AM todo - see if you can combine theGameView results together
@@ -379,8 +380,9 @@ const mapDispatchToProps = (dispatch) => ({
 // Maps the state in to props (for displaying on the front end)
 const mapStateToProps = (state) => ({
   nav: state.nav,
-  user: state.user.user
+  user: state.user.user,
+  artist: state.artist.artist,
+  songs: state.songs.songs
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Premium);
-// export default Premium;
