@@ -197,7 +197,7 @@ class Premium extends Component {
 
   }
 
-  // If shuffle is set, can ruin the experience. AM - set state as parameter instead of in URL? Or is this OK?
+  // If shuffle is set, can ruin the experience.
   removeShuffle() {
     axios({
       url: 'https://api.spotify.com/v1/me/player/shuffle?state=false',
