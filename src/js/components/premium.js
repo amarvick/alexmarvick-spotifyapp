@@ -1,36 +1,30 @@
 import Spotify from 'spotify-web-api-js';
 import React, { Component, StartupActions } from 'react';
-
 import axios from 'axios'; // AM - will get rid of eventually
+import { connect } from 'react-redux';
 
 import ModalGreeting from './modalgreeting';
 import QuestionTemplate from './questiontemplate';
 import ResultsTemplate from './resultstemplate';
 
+import { fetchArtist } from '../actions/artistActions'
+
 const spotifyApi = new Spotify(); // AM - will get rid of eventually
 
-// connect((store) => {
-//   return {
-//     userId: store.user.userId,
-
-//   }
-// })
+connect((store) => {
+  return {
+    artist: store.artist.artist,
+    songs: store.songs.songs,
+  };
+})
 
 class Premium extends Component {
-  constructor() {
-    super();
-    const params = this.getHashParams();
-    const token = params.access_token;
-
-    if (token) {
-      spotifyApi.setAccessToken(token);
-    }
+  constructor(props) {
+    super(props);
 
     this.state = { 
-      accesstoken: token,
-      loggedInUser: {
-        userId: ''
-      },
+      accesstoken: '',
+      loggedInUserId: '',
       favoriteArtists: {
         artist: '',
         artistId: ''
@@ -52,33 +46,15 @@ class Premium extends Component {
     this.onAnswerSelect = this.onAnswerSelect.bind(this);
   }
 
-  // Retrieving the access token needed for POST requests
-  getHashParams() {
-    var hashParams = {};
-    var e, r = /([^&;=]+)=?([^&;]*)/g,
-        q = window.location.hash.substring(1);
-    while ( e = r.exec(q)) {
-       hashParams[e[1]] = decodeURIComponent(e[2]);
-    }
-    return hashParams;
-  }
-
   // Get logged in user + favorite artist.. Maybe combine the three functions used together?
   componentWillMount() {
-    this.getUser()
+    // this.fetchData()
     this.getFavoriteArtist()
   }
 
-  // Gets current user
-  getUser() {
-    spotifyApi.getMe()
-    .then((response) => {
-      this.setState({
-        loggedInUser: {
-          userId: response.id
-        }
-      })
-    })
+
+  fetchData() {
+    this.props.dispatch(fetchArtist()); 
   }
 
   // Get user's favorite artist
@@ -150,7 +126,7 @@ class Premium extends Component {
   startGame() {
     // AM To do - May need to find better way of organizing everything that goes on? Because this posts the playlist, 
     // then does a multitude of other things... 'post playlist' may not be the best function name therefore? Not sure - brainstorm
-    this.postPlaylist(this.state.loggedInUser.userId, this.state.favoriteArtistsSongs.songUris)
+    this.postPlaylist(this.props.loggedInUserId, this.state.favoriteArtistsSongs.songUris)
     this.removeShuffle()
     this.setState({ gameInProgress: true });
   }
@@ -158,14 +134,14 @@ class Premium extends Component {
   // Will create private playlist on user's spotify account
   postPlaylist(userId, allSongs) {
     axios({
-      url: 'https://api.spotify.com/v1/users/' + this.state.loggedInUser.userId + '/playlists',
+      url: 'https://api.spotify.com/v1/users/' + userId + '/playlists',
       method: "POST",
       data: {
         name: 'HOW BIG OF A ' + this.state.favoriteArtists.artist.toUpperCase() + ' FAN ARE YOU?',
         public: true
       },
       headers: {
-        'Authorization': 'Bearer ' + this.state.accesstoken,
+        'Authorization': 'Bearer ' + this.props.accesstoken,
         'Content-Type': 'application/json'
       }
     })
@@ -184,13 +160,13 @@ class Premium extends Component {
   addTracksToPlaylist(newPlaylistId, allSongs, contextUri) {
     console.log(allSongs);
     axios({
-      url: 'https://api.spotify.com/v1/users/' + this.state.loggedInUser.userId + '/playlists/' + newPlaylistId + '/tracks/',
+      url: 'https://api.spotify.com/v1/users/' + this.props.loggedInUserId + '/playlists/' + newPlaylistId + '/tracks/',
       method: "POST",
       data: {
         uris: allSongs
       },
       headers: {
-        'Authorization': 'Bearer ' + this.state.accesstoken,
+        'Authorization': 'Bearer ' + this.props.accesstoken,
         'Content-Type': 'application/json'
       }
     })
@@ -211,7 +187,7 @@ class Premium extends Component {
       url: 'https://api.spotify.com/v1/me/player/shuffle?state=false',
       method: "PUT",
       headers: {
-        'Authorization': 'Bearer ' + this.state.accesstoken
+        'Authorization': 'Bearer ' + this.props.accesstoken
       }
     })
       .then((response) => {
@@ -232,7 +208,7 @@ class Premium extends Component {
         context_uri: contextUri
       },
       headers: {
-        'Authorization': 'Bearer ' + this.state.accesstoken
+        'Authorization': 'Bearer ' + this.props.accesstoken
       }
     })
       .then((response) => {
@@ -249,7 +225,7 @@ class Premium extends Component {
       url: 'https://api.spotify.com/v1/me/player/next',
       method: "POST",
       headers: {
-        'Authorization': 'Bearer ' + this.state.accesstoken
+        'Authorization': 'Bearer ' + this.props.accesstoken
       }
     })
       .then((response) => {
@@ -266,7 +242,7 @@ class Premium extends Component {
       url: 'https://api.spotify.com/v1/me/player/pause',
       method: "PUT",
       headers: {
-        'Authorization': 'Bearer ' + this.state.accesstoken
+        'Authorization': 'Bearer ' + this.props.accesstoken
       }
     })
       .then((response) => {
@@ -339,12 +315,19 @@ class Premium extends Component {
     }
   }
 
-  render() {
+  render(props) {
     let theGameView;
+    let artist = {};
+
+    if (this.props.artist) {
+      artist = this.props.artist;
+      console.log('******')
+      console.log(artist)
+    }
 
     // AM todo - see if you can combine theGameView results together
     if (this.state.questions != null && this.state.questions.length > 0) {
-      if (!this.state.resultsReady || this.state.didUserCheat) {
+      if (!this.state.resultsReady || !this.state.didUserCheat) {
         theGameView = ( 
           // <div id="theGameView"> 
           //   { this.renderQuestion(this.state.questionNo) } 
@@ -371,7 +354,7 @@ class Premium extends Component {
         { !this.state.gameInProgress && !this.state.resultsReady ? (
           <div>
             <ModalGreeting
-              username = { this.state.loggedInUser.userId }
+              username = { this.props.loggedInUserId }
             />
 
             <button type="button" className="btn btn-primary" onClick={() => this.startGame()}>
@@ -385,4 +368,19 @@ class Premium extends Component {
     )
   }
 }
-export default Premium;
+
+// wraps dispatch to create nicer functions to call within our component
+// Mapping dispatch actions to the props
+const mapDispatchToProps = (dispatch) => ({
+  dispatch: dispatch,
+  startup: () => dispatch(StartupActions.startup())
+})
+
+// Maps the state in to props (for displaying on the front end)
+const mapStateToProps = (state) => ({
+  nav: state.nav,
+  user: state.user.user
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Premium);
+// export default Premium;

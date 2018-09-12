@@ -12,8 +12,9 @@ import { fetchUser } from './js/actions/userActions'
 
 const spotifyApi = new Spotify(); // AM - to remove later
 
-// AM - make sure this only runs when the user is logged in?
 connect((store) => {
+  console.log('()()()()()')
+  console.log(store)
   return {
     user: store.user.user,
   };
@@ -45,7 +46,7 @@ class App extends Component {
     return hashParams;
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.fetchData()
   }
 
@@ -58,8 +59,10 @@ class App extends Component {
 
     if (this.props.user) {
       user = this.props.user;
+      console.log(user)
     }
 
+    // AM - Flashing issue
     return (
       <div className='App'>
 
@@ -68,11 +71,16 @@ class App extends Component {
         }
 
         { this.state.loggedIn && user.product !== 'premium' && user.product !== '' &&
-          <NonPremium />
+          <NonPremium 
+            loggedInUserId = { user.id }
+          />
         }
 
         { this.state.loggedIn && user.product === 'premium' &&
-          <Premium />
+          <Premium 
+            loggedInUserId = { user.id }
+            accesstoken = { this.getHashParams().access_token }
+          />
         }
 
       </div>
