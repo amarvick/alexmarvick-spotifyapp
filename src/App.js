@@ -1,4 +1,3 @@
-import Spotify from 'spotify-web-api-js'; // AM - to remove later
 import React, { Component, StartupActions } from 'react';
 import { connect } from 'react-redux';
 
@@ -9,8 +8,6 @@ import Login from './js/components/login';
 import './stylesheets/App.scss';
 
 import { fetchUser } from './js/actions/userActions'
-
-const spotifyApi = new Spotify(); // AM - to remove later
 
 connect((store) => {
   return {
