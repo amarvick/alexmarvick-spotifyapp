@@ -1,13 +1,23 @@
-import Spotify from 'spotify-web-api-js';
-import React, { Component } from 'react';
+import Spotify from 'spotify-web-api-js'; // AM - to remove later
+import React, { Component, StartupActions } from 'react';
+import { connect } from 'react-redux';
 
-import NonPremium from './components/nonPremium';
-import Premium from './components/premium';
-import Login from './components/login';
+import NonPremium from './js/components/nonPremium';
+import Premium from './js/components/premium';
+import Login from './js/components/login';
 
 import './stylesheets/App.scss';
 
-const spotifyApi = new Spotify();
+import { fetchUser } from './js/actions/userActions'
+
+const spotifyApi = new Spotify(); // AM - to remove later
+
+// AM - make sure this only runs when the user is logged in?
+connect((store) => {
+  return {
+    user: store.user.user,
+  };
+})
 
 class App extends Component {
   constructor() {
@@ -20,10 +30,7 @@ class App extends Component {
     }
 
     this.state = { 
-      loggedIn: token ? true : false,
-      loggedInUser: {
-        userProduct: ''
-      }
+      loggedIn: token ? true : false
     }
   }
 
@@ -39,21 +46,20 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.getUserProduct()
+    this.fetchData()
   }
 
-  getUserProduct() {
-    spotifyApi.getMe()
-    .then((response) => {
-      this.setState({
-        loggedInUser: {
-          userProduct: response.product
-        }
-      })
-    })
+  fetchData() {
+    this.props.dispatch(fetchUser()); 
   }
 
   render() {
+    let user = {};
+
+    if (this.props.user) {
+      user = this.props.user;
+    }
+
     return (
       <div className='App'>
 
@@ -61,11 +67,11 @@ class App extends Component {
           <Login/>
         }
 
-        { this.state.loggedIn && this.state.loggedInUser.userProduct !== 'premium' && this.state.loggedInUser.userProduct !== '' &&
+        { this.state.loggedIn && user.product !== 'premium' && user.product !== '' &&
           <NonPremium />
         }
 
-        { this.state.loggedIn && this.state.loggedInUser.userProduct === 'premium' &&
+        { this.state.loggedIn && user.product === 'premium' &&
           <Premium />
         }
 
@@ -73,4 +79,20 @@ class App extends Component {
     )
   }
 }
-export default App;
+
+// wraps dispatch to create nicer functions to call within our component
+// Mapping dispatch actions to the props
+const mapDispatchToProps = (dispatch) => ({
+  dispatch: dispatch,
+  startup: () => dispatch(StartupActions.startup())
+})
+
+// Maps the state in to props (for displaying on the front end)
+const mapStateToProps = (state) => ({
+  nav: state.nav,
+  user: state.user.user
+})
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
+// export default App;
