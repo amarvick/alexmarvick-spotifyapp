@@ -26,10 +26,6 @@ class Premium extends Component {
     this.state = { 
       accesstoken: '',
       loggedInUserId: '',
-      favoriteArtists: {
-        artist: '',
-        artistId: ''
-      },
       favoriteArtistsSongs: {
         songUriToName: [],
         songUris: [],
@@ -47,63 +43,48 @@ class Premium extends Component {
     this.onAnswerSelect = this.onAnswerSelect.bind(this);
   }
 
-  // Get logged in user + favorite artist.. Maybe combine the three functions used together?
-  componentWillMount() {
-    // this.getFavoriteArtist()
-    this.props.dispatch(fetchArtist()); 
-  }
-
   componentDidMount() {
     this.fetchData()
   }
 
   fetchData() {
-    this.props.dispatch(fetchArtist()); 
-  }
-
-  // Get user's favorite artist
-  getFavoriteArtist() {
-    spotifyApi.getMyTopArtists()
-      .then((response) => {
-        this.setState({
-          favoriteArtists: {
-            artist: response.items[0].name,
-            artistId: response.items[0].id
-          }
-        })
-        this.getFavoriteArtistsSongs(this.state.favoriteArtists.artistId, 'US')
-      })
+    this.props.dispatch(fetchArtist());
   }
 
   // Alex, TO DO - probably a better way to map song uris to names. Look to see if there is a function that does this. Maybe put in an object? Find key/value pairs? I don't know, brainstorm...
-  getFavoriteArtistsSongs(artistId, US) {
-    spotifyApi.getArtistTopTracks(artistId, US)
-      .then((response) => {
-        var theSongUriToName = []
-        var theSongUri = []
-        var theSongName = []
+  getFavoriteArtistsSongs(songs) {
+    var theSongUriToName = []
+    var theSongUris = []
+    var theSongNames = []
 
-        // Maps Song URI with Name so they are in the same order when generating playlist.
-        for (var i = 0; i < 10; i++) {
-          theSongUriToName.push(response.tracks[i].uri + '---' + response.tracks[i].name);
-        }
-        this.shuffle(theSongUriToName)
+    // Maps Song URI with Name so they are in the same order when generating playlist.
+    for (var i = 0; i < songs.length; i++) {
+      theSongUriToName.push(songs[i].uri + '---' + songs[i].name);
+    }
 
-        for (var j = 0; j < 10; j++) {
-          theSongUri.push(theSongUriToName[j].substr(0, theSongUriToName[j].indexOf('---')))
-          theSongName.push(theSongUriToName[j].substr(theSongUriToName[j].indexOf('---') + 3, theSongUriToName[j].length - 1))
-        }
+    this.shuffle(theSongUriToName)
+    
+    for (var j = 0; j < theSongUriToName.length; j++) {
+      theSongUris.push(theSongUriToName[j].substr(0, theSongUriToName[j].indexOf('---')))
+      theSongNames.push(theSongUriToName[j].substr(theSongUriToName[j].indexOf('---') + 3, theSongUriToName[j].length - 1))
+    }
 
-        // AM - later, combine these setState functions? Might not be doable. Also figure out why I'm setting questions state here instead of in function?
-        this.setState({
-          favoriteArtistsSongs: {
-            songUris: theSongUri,
-            songNames: theSongName
+    // AM - later, combine these setState functions? Might not be doable. Also figure out why I'm setting questions state here instead of in function?
+    this.setState({
+      favoriteArtistsSongs: {
+        songUris: theSongUris,
+        songNames: theSongNames
+      }, function () {
+        this.setState({ questions: this.generateQuestions(),
+          function () {
+            this.startGame()
           }
         })
+      }
+    })
 
-        this.setState({ questions: this.generateQuestions() })
-      })
+    // this.setState({ questions: this.generateQuestions() })
+    // this.startGame()
   }
 
   // Randomize the generated playlist order
@@ -141,7 +122,7 @@ class Premium extends Component {
       url: 'https://api.spotify.com/v1/users/' + userId + '/playlists',
       method: "POST",
       data: {
-        name: 'HOW BIG OF A ' + this.state.favoriteArtists.artist.toUpperCase() + ' FAN ARE YOU?',
+        name: 'HOW BIG OF A ' + this.props.artist.name.toUpperCase() + ' FAN ARE YOU?',
         public: true
       },
       headers: {
@@ -287,18 +268,6 @@ class Premium extends Component {
     return this.state.questions;
   }
 
-  // Maybe not make this a function, but put in the render.
-  // renderQuestion(i) {
-  //   return (
-  //     <QuestionTemplate 
-  //       questionAnswers = { this.state.questions[i] }
-  //       correctResponse = { this.state.favoriteArtistsSongs.songNames[i] }
-  //       questionNumber = { i + 1 }
-  //       onAnswerSelect = {this.onAnswerSelect}
-  //     />
-  //   )
-  // }
-
   // Determines if answer was correct or not, and whether to proceed to next question or be done.
   onAnswerSelect(isCorrect) {
     if (isCorrect) {
@@ -326,13 +295,16 @@ class Premium extends Component {
       artist = this.props.artist;
     }
 
+    let songs = []
+
+    if (this.props.songs) {
+      songs = this.props.songs;
+    }
+
     // AM todo - see if you can combine theGameView results together
     if (this.state.questions != null && this.state.questions.length > 0) {
       if (!this.state.resultsReady || !this.state.didUserCheat) {
         theGameView = ( 
-          // <div id="theGameView"> 
-          //   { this.renderQuestion(this.state.questionNo) } 
-          // </div> 
           <QuestionTemplate 
             questionAnswers = { this.state.questions[this.state.questionNo] }
             correctResponse = { this.state.favoriteArtistsSongs.songNames[this.state.questionNo] }
@@ -358,7 +330,7 @@ class Premium extends Component {
               username = { this.props.loggedInUserId }
             />
 
-            <button type="button" className="btn btn-primary" onClick={() => this.startGame()}>
+            <button type="button" className="btn btn-primary" onClick={() => this.getFavoriteArtistsSongs(songs)}>
               PLAY NOW!
             </button>
 
