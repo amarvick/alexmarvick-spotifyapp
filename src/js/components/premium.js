@@ -10,7 +10,10 @@ import ResultsTemplate from './resultstemplate';
 import { fetchArtist } from '../actions/artistActions'
 import { fetchSongs } from '../actions/songsActions'
 import { postPlaylist } from '../actions/songsActions'
-// import { addTracksToPlaylist } from '../actions/songsActions'
+import { removeShuffle } from '../actions/songsActions'
+import { stopPlaylist } from '../actions/songsActions'
+import { playNextTrack } from '../actions/songsActions'
+import { generateQuestions } from '../actions/songsActions'
 
 const spotifyApi = new Spotify(); // AM - will get rid of eventually
 
@@ -76,7 +79,7 @@ class Premium extends Component {
         songUris: theSongUris,
         songNames: theSongNames
       }}, function () {
-        this.setState({ questions: this.generateQuestions() },
+        this.setState({ questions: generateQuestions(this.state.favoriteArtistsSongs.songNames, this.state.questions) },
           function () {
             this.startGame()
           }
@@ -85,116 +88,12 @@ class Premium extends Component {
     )
   }
 
-  // Randomize the generated playlist order
-  shuffle(tracksArray) {
-    var currentIndex = tracksArray.length, temporaryValue, randomIndex;
-  
-    // While there remain elements to shuffle...
-    while (0 !== currentIndex) {
-  
-      // Pick a remaining element...
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex -= 1;
-  
-      // And swap it with the current element.
-      temporaryValue = tracksArray[currentIndex];
-      tracksArray[currentIndex] = tracksArray[randomIndex];
-      tracksArray[randomIndex] = temporaryValue;
-    }
-  
-    return tracksArray;
-  }
-
   // STARTING THE GAME:
   startGame() {
-    // AM To do - May need to find better way of organizing everything that goes on? Because this posts the playlist, 
-    // then does a multitude of other things... 'post playlist' may not be the best function name therefore? Not sure - brainstorm
-    postPlaylist(this.props.loggedInUserId, this.state.favoriteArtistsSongs.songUris, this.props.artist.name, this.props.accesstoken)
-    this.removeShuffle()
-    this.setState({ gameInProgress: true });
-  }
-
-  // If shuffle is set, can ruin the experience.
-  removeShuffle() {
-    axios({
-      url: 'https://api.spotify.com/v1/me/player/shuffle?state=false',
-      method: "PUT",
-      headers: {
-        'Authorization': 'Bearer ' + this.props.accesstoken
-      }
-    })
-      .then((response) => {
-        console.log(response)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-
-  }
-
-  // Plays next track in playlist
-  playNextTrack() {
-    axios({
-      url: 'https://api.spotify.com/v1/me/player/next',
-      method: "POST",
-      headers: {
-        'Authorization': 'Bearer ' + this.props.accesstoken
-      }
-    })
-      .then((response) => {
-        console.log(response)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-  }
-
-  // Stops playlist at the end of the game
-  stopPlaylist() {
-    axios({
-      url: 'https://api.spotify.com/v1/me/player/pause',
-      method: "PUT",
-      headers: {
-        'Authorization': 'Bearer ' + this.props.accesstoken
-      }
-    })
-      .then((response) => {
-        console.log(response)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-  }
-
-  // Generates each question
-  generateQuestions() {
-    for (var i = 0; i < 10; i++) {
-      var multChoiceOpts = []
-      var noQuestionInserted = []
-      var isQuestionInserted
-
-      // Add correct answer
-      multChoiceOpts.push(this.state.favoriteArtistsSongs.songNames[i]);
-      noQuestionInserted.push(i); 
-
-      // Add remaining three possible selections
-      for (var j = 0; j < 3; j++) {
-        isQuestionInserted = false;
-        while(!isQuestionInserted) {
-          var index = Math.floor(Math.random() * 9)
-          
-          if (!noQuestionInserted.includes(index)) {
-            noQuestionInserted.push(index)
-            multChoiceOpts.push(this.state.favoriteArtistsSongs.songNames[index])
-            isQuestionInserted = true;
-          } 
-        }
-      }
-      this.shuffle(multChoiceOpts);
-      this.state.questions.push(multChoiceOpts);
-    }
-
-    return this.state.questions;
+    removeShuffle(this.props.accesstoken)
+    this.setState({ gameInProgress: true }, function() { 
+      postPlaylist(this.props.loggedInUserId, this.state.favoriteArtistsSongs.songUris, this.props.artist.name, this.props.accesstoken) 
+    });
   }
 
   // Determines if answer was correct or not, and whether to proceed to next question or be done.
@@ -209,13 +108,11 @@ class Premium extends Component {
     // Changes to the next question OR you're finished and the results will be presented.
     if (this.state.questionNo < 9) {
       this.setState({ questionNo: this.state.questionNo + 1 })
-      this.playNextTrack()
+      playNextTrack(this.props.accesstoken)
     } else {
-      this.setState(
-      { resultsReady: true }, function() { 
-          this.stopPlaylist()
-        }
-      )
+      this.setState({ resultsReady: true }, function() { 
+        stopPlaylist(this.props.accesstoken)
+      })
     }
   }
 
