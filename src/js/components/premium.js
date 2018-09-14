@@ -9,6 +9,8 @@ import ResultsTemplate from './resultstemplate';
 
 import { fetchArtist } from '../actions/artistActions'
 import { fetchSongs } from '../actions/songsActions'
+import { postPlaylist } from '../actions/songsActions'
+// import { addTracksToPlaylist } from '../actions/songsActions'
 
 const spotifyApi = new Spotify(); // AM - will get rid of eventually
 
@@ -27,7 +29,6 @@ class Premium extends Component {
       accesstoken: '',
       loggedInUserId: '',
       favoriteArtistsSongs: {
-        songUriToName: [],
         songUris: [],
         songNames: []
       },
@@ -74,17 +75,14 @@ class Premium extends Component {
       favoriteArtistsSongs: {
         songUris: theSongUris,
         songNames: theSongNames
-      }, function () {
-        this.setState({ questions: this.generateQuestions(),
+      }}, function () {
+        this.setState({ questions: this.generateQuestions() },
           function () {
             this.startGame()
           }
-        })
+        )
       }
-    })
-
-    // this.setState({ questions: this.generateQuestions() })
-    // this.startGame()
+    )
   }
 
   // Randomize the generated playlist order
@@ -111,58 +109,9 @@ class Premium extends Component {
   startGame() {
     // AM To do - May need to find better way of organizing everything that goes on? Because this posts the playlist, 
     // then does a multitude of other things... 'post playlist' may not be the best function name therefore? Not sure - brainstorm
-    this.postPlaylist(this.props.loggedInUserId, this.state.favoriteArtistsSongs.songUris)
+    postPlaylist(this.props.loggedInUserId, this.state.favoriteArtistsSongs.songUris, this.props.artist.name, this.props.accesstoken)
     this.removeShuffle()
     this.setState({ gameInProgress: true });
-  }
-
-  // Will create private playlist on user's spotify account
-  postPlaylist(userId, allSongs) {
-    axios({
-      url: 'https://api.spotify.com/v1/users/' + userId + '/playlists',
-      method: "POST",
-      data: {
-        name: 'HOW BIG OF A ' + this.props.artist.name.toUpperCase() + ' FAN ARE YOU?',
-        public: true
-      },
-      headers: {
-        'Authorization': 'Bearer ' + this.props.accesstoken,
-        'Content-Type': 'application/json'
-      }
-    })
-      .then((response) => {
-        var playlistId = response.data.id;
-        var uri = response.data.uri
-        this.addTracksToPlaylist(playlistId, allSongs, uri);
-      })
-      .catch((error) => {
-        alert('ERROR CREATING PLAYLIST: ' + error)
-        console.log(error)
-      })
-  }
-
-  // Then... add tracks initially received to newly created playlist
-  addTracksToPlaylist(newPlaylistId, allSongs, contextUri) {
-    axios({
-      url: 'https://api.spotify.com/v1/users/' + this.props.loggedInUserId + '/playlists/' + newPlaylistId + '/tracks/',
-      method: "POST",
-      data: {
-        uris: allSongs
-      },
-      headers: {
-        'Authorization': 'Bearer ' + this.props.accesstoken,
-        'Content-Type': 'application/json'
-      }
-    })
-      .then((response) => {
-        console.log(response);
-        this.playPlaylist(contextUri)
-      })
-      .catch((error) => {
-        alert(error)
-        console.log(error)
-      })
-
   }
 
   // If shuffle is set, can ruin the experience.
@@ -181,26 +130,6 @@ class Premium extends Component {
         console.log(error)
       })
 
-  }
-
-  // Then... play the playlist to get started
-  playPlaylist(contextUri) {
-    axios({
-      url: 'https://api.spotify.com/v1/me/player/play',
-      method: "PUT",
-      data: {
-        context_uri: contextUri
-      },
-      headers: {
-        'Authorization': 'Bearer ' + this.props.accesstoken
-      }
-    })
-      .then((response) => {
-        console.log(response)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
   }
 
   // Plays next track in playlist
@@ -282,8 +211,11 @@ class Premium extends Component {
       this.setState({ questionNo: this.state.questionNo + 1 })
       this.playNextTrack()
     } else {
-      this.setState({ resultsReady: true })
-      this.stopPlaylist();
+      this.setState(
+      { resultsReady: true }, function() { 
+          this.stopPlaylist()
+        }
+      )
     }
   }
 
@@ -303,7 +235,7 @@ class Premium extends Component {
 
     // AM todo - see if you can combine theGameView results together
     if (this.state.questions != null && this.state.questions.length > 0) {
-      if (!this.state.resultsReady || !this.state.didUserCheat) {
+      if (!this.state.resultsReady && !this.state.didUserCheat) {
         theGameView = ( 
           <QuestionTemplate 
             questionAnswers = { this.state.questions[this.state.questionNo] }
