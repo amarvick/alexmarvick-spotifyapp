@@ -1,5 +1,4 @@
 import Spotify from 'spotify-web-api-js';
-import axios from 'axios';
 import { fetchSongs } from './songsActions'
 
 const spotifyApi = new Spotify(); 

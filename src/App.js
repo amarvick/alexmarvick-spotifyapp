@@ -49,35 +49,40 @@ class App extends Component {
   }
 
   render() {
-    let user = {};
+    let user = {}
 
     if (this.props.user) {
       user = this.props.user;
     }
 
-    // AM - Flashing issue
+    let loggedInScreen
+
+    if (user.product !== 'premium' && user.product !== '') {
+      loggedInScreen = (
+        <NonPremium 
+          loggedInUserId = { user.id }
+        />
+      )
+    } else {
+      loggedInScreen = (
+        <Premium 
+          loggedInUserId = { user.id }
+          accesstoken = { this.getHashParams().access_token }
+        />
+      )
+    }
+
+
     return (
       <div className='App'>
-
-        { !this.state.loggedIn &&
-          <Login/>
+        { !this.state.loggedIn ? (
+            <Login/>
+          ) : loggedInScreen 
         }
-
-        { this.state.loggedIn && user.product !== 'premium' && user.product !== '' &&
-          <NonPremium 
-            loggedInUserId = { user.id }
-          />
-        }
-
-        { this.state.loggedIn && user.product === 'premium' &&
-          <Premium 
-            loggedInUserId = { user.id }
-            accesstoken = { this.getHashParams().access_token }
-          />
-        }
-
       </div>
     )
+    
+    
   }
 }
 

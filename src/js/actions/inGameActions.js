@@ -1,7 +1,4 @@
-import Spotify from 'spotify-web-api-js';
 import axios from 'axios';
-
-const spotifyApi = new Spotify(); 
 
 // Generates each question
 export function generateQuestions(songNames, questions) {

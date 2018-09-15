@@ -1,4 +1,3 @@
-import Spotify from 'spotify-web-api-js';
 import React, { Component, StartupActions } from 'react';
 import { connect } from 'react-redux';
 
@@ -7,7 +6,6 @@ import QuestionTemplate from './questiontemplate';
 import ResultsTemplate from './resultstemplate';
 
 import { fetchArtist } from '../actions/artistActions'
-import { fetchSongs } from '../actions/songsActions'
 import { postPlaylist } from '../actions/inGameActions'
 import { removeShuffle } from '../actions/inGameActions'
 import { stopPlaylist } from '../actions/inGameActions'
@@ -112,12 +110,6 @@ class Premium extends Component {
 
   render(props) {
     let theGameView;
-    let artist = {};
-
-    if (this.props.artist) {
-      artist = this.props.artist;
-    }
-
     let songs = []
 
     if (this.props.songs) {
