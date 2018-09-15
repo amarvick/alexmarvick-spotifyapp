@@ -8,11 +8,12 @@ import ResultsTemplate from './resultstemplate';
 
 import { fetchArtist } from '../actions/artistActions'
 import { fetchSongs } from '../actions/songsActions'
-import { postPlaylist } from '../actions/songsActions'
-import { removeShuffle } from '../actions/songsActions'
-import { stopPlaylist } from '../actions/songsActions'
-import { playNextTrack } from '../actions/songsActions'
-import { generateQuestions } from '../actions/songsActions'
+import { postPlaylist } from '../actions/inGameActions'
+import { removeShuffle } from '../actions/inGameActions'
+import { stopPlaylist } from '../actions/inGameActions'
+import { playNextTrack } from '../actions/inGameActions'
+import { generateQuestions } from '../actions/inGameActions'
+import { shuffle } from '../actions/inGameActions'
 
 connect((store) => {
   return {
@@ -61,7 +62,7 @@ class Premium extends Component {
       theSongUriToName.push(songs[i].uri + '---' + songs[i].name);
     }
 
-    this.shuffle(theSongUriToName)
+    shuffle(theSongUriToName)
     
     for (var j = 0; j < theSongUriToName.length; j++) {
       theSongUris.push(theSongUriToName[j].substr(0, theSongUriToName[j].indexOf('---')))
