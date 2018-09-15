@@ -1,6 +1,5 @@
 import Spotify from 'spotify-web-api-js';
 import React, { Component, StartupActions } from 'react';
-import axios from 'axios'; // AM - will get rid of eventually
 import { connect } from 'react-redux';
 
 import ModalGreeting from './modalgreeting';
@@ -14,8 +13,6 @@ import { removeShuffle } from '../actions/songsActions'
 import { stopPlaylist } from '../actions/songsActions'
 import { playNextTrack } from '../actions/songsActions'
 import { generateQuestions } from '../actions/songsActions'
-
-const spotifyApi = new Spotify(); // AM - will get rid of eventually
 
 connect((store) => {
   return {
@@ -47,11 +44,9 @@ class Premium extends Component {
     this.onAnswerSelect = this.onAnswerSelect.bind(this);
   }
 
+  // Retrieve artists and songs
   componentDidMount() {
-    this.fetchData()
-  }
-
-  fetchData() {
+    // AM - can probably combine fetchArtist with fetchSongs. Change action name to 'artistSongsActions' or something
     this.props.dispatch(fetchArtist());
   }
 
@@ -79,11 +74,9 @@ class Premium extends Component {
         songUris: theSongUris,
         songNames: theSongNames
       }}, function () {
-        this.setState({ questions: generateQuestions(this.state.favoriteArtistsSongs.songNames, this.state.questions) },
-          function () {
-            this.startGame()
-          }
-        )
+        this.setState({ questions: generateQuestions(this.state.favoriteArtistsSongs.songNames, this.state.questions) }, function () {
+          this.startGame()
+        })
       }
     )
   }

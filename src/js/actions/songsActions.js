@@ -75,10 +75,8 @@ function shuffle(tracksArray) {
   }  
 
 // Create and upload playlist
-
 // AM To do - May need to find better way of organizing everything that goes on? Because this posts the playlist, 
 // then does a multitude of other things... 'post playlist' may not be the best function name therefore? Not sure - brainstorm
-
 export function postPlaylist(userId, allSongs, artist, accesstoken) {
     // changes title of playlist depending on whether an artist's first letter is a vowel
     var playlistName;

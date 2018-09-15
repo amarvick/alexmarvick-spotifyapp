@@ -45,10 +45,6 @@ class App extends Component {
   }
 
   componentWillMount() {
-    this.fetchData()
-  }
-
-  fetchData() {
     this.props.dispatch(fetchUser()); 
   }
 
@@ -97,6 +93,5 @@ const mapStateToProps = (state) => ({
   nav: state.nav,
   user: state.user.user
 })
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
