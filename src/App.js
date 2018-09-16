@@ -1,4 +1,4 @@
-import Spotify from 'spotify-web-api-js'; // AM - to remove later
+import Spotify from 'spotify-web-api-js';
 import React, { Component, StartupActions } from 'react';
 import { connect } from 'react-redux';
 
@@ -10,7 +10,7 @@ import './stylesheets/App.scss';
 
 import { fetchUser } from './js/actions/userActions'
 
-const spotifyApi = new Spotify(); // AM - to remove later
+const spotifyApi = new Spotify();
 
 connect((store) => {
   return {
@@ -57,6 +57,7 @@ class App extends Component {
 
     let loggedInScreen
 
+    // AM - if user.product === null, that indicates that a user couldn't be fetched... access token likely expired? Try making a new component and test
     if (user.product !== 'premium' && user.product !== '') {
       loggedInScreen = (
         <NonPremium 
@@ -71,7 +72,6 @@ class App extends Component {
         />
       )
     }
-
 
     return (
       <div className='App'>

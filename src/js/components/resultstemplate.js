@@ -70,6 +70,7 @@ class ResultsTemplate extends Component {
       }
     }
 
+    // AM - redux may come in handy here. Output all results, then have a button clicked on that will return you to the main screen.
     return (
       <div className = 'resultsTemplate'>
         <h1 className="display-4">RESULTS: { this.props.correctCount }/10</h1>

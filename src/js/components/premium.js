@@ -6,17 +6,15 @@ import QuestionTemplate from './questiontemplate';
 import ResultsTemplate from './resultstemplate';
 
 import { fetchArtist } from '../actions/artistActions'
-import { postPlaylist } from '../actions/inGameActions'
-import { removeShuffle } from '../actions/inGameActions'
 import { stopPlaylist } from '../actions/inGameActions'
 import { playNextTrack } from '../actions/inGameActions'
-import { generateQuestions } from '../actions/inGameActions'
-import { shuffle } from '../actions/inGameActions'
+import { organizeSongUriAndNames } from '../actions/inGameActions'
 
 connect((store) => {
   return {
     artist: store.artist.artist,
     songs: store.songs.songs,
+    inGameData: store.inGameData.inGameData
   };
 })
 
@@ -27,16 +25,8 @@ class Premium extends Component {
     this.state = { 
       accesstoken: '',
       loggedInUserId: '',
-      favoriteArtistsSongs: {
-        songUris: [],
-        songNames: []
-      },
       noOfCorrect: 0,
-      questions: [],
-      questionNo: 0,
-      gameInProgress: false,
-      resultsReady: false,
-      didUserCheat: false
+      questionNo: 0
     }
     
     // Functions needed to update the state when passing props in to question template
@@ -47,45 +37,6 @@ class Premium extends Component {
   componentDidMount() {
     // AM - can probably combine fetchArtist with fetchSongs. Change action name to 'artistSongsActions' or something
     this.props.dispatch(fetchArtist());
-  }
-
-  // Alex, TO DO - probably a better way to map song uris to names. Look to see if there is a function that does this. Maybe put in an object? Find key/value pairs? I don't know, brainstorm...
-  getFavoriteArtistsSongs(songs) {
-    var theSongUriToName = []
-    var theSongUris = []
-    var theSongNames = []
-
-    // Maps Song URI with Name so they are in the same order when generating playlist.
-    for (var i = 0; i < songs.length; i++) {
-      theSongUriToName.push(songs[i].uri + '---' + songs[i].name);
-    }
-
-    shuffle(theSongUriToName)
-    
-    for (var j = 0; j < theSongUriToName.length; j++) {
-      theSongUris.push(theSongUriToName[j].substr(0, theSongUriToName[j].indexOf('---')))
-      theSongNames.push(theSongUriToName[j].substr(theSongUriToName[j].indexOf('---') + 3, theSongUriToName[j].length - 1))
-    }
-
-    // AM - later, combine these setState functions? Might not be doable. Also figure out why I'm setting questions state here instead of in function?
-    this.setState({
-      favoriteArtistsSongs: {
-        songUris: theSongUris,
-        songNames: theSongNames
-      }}, function () {
-        this.setState({ questions: generateQuestions(this.state.favoriteArtistsSongs.songNames, this.state.questions) }, function () {
-          this.startGame()
-        })
-      }
-    )
-  }
-
-  // STARTING THE GAME:
-  startGame() {
-    removeShuffle(this.props.accesstoken)
-    this.setState({ gameInProgress: true }, function() { 
-      postPlaylist(this.props.loggedInUserId, this.state.favoriteArtistsSongs.songUris, this.props.artist.name, this.props.accesstoken) 
-    });
   }
 
   // Determines if answer was correct or not, and whether to proceed to next question or be done.
@@ -110,18 +61,31 @@ class Premium extends Component {
 
   render(props) {
     let theGameView;
+
+    let artist = {}
+
+    if (this.props.artist) {
+      artist = this.props.artist;
+    }
+
     let songs = []
 
     if (this.props.songs) {
       songs = this.props.songs;
     }
 
+    let inGameData = {};
+
+    if (this.props.inGameData) {
+      inGameData = this.props.inGameData
+    }
+
     // AM todo - see if you can combine theGameView results together
     if (this.state.questions != null && this.state.questions.length > 0) {
-      if (!this.state.resultsReady && !this.state.didUserCheat) {
+      if (!inGameData.resultsReady && !inGameData.didUserCheat) {
         theGameView = ( 
           <QuestionTemplate 
-            questionAnswers = { this.state.questions[this.state.questionNo] }
+            questionAnswers = { this.props.questions[this.state.questionNo] }
             correctResponse = { this.state.favoriteArtistsSongs.songNames[this.state.questionNo] }
             questionNumber = { this.state.questionNo + 1 }
             onAnswerSelect = {this.onAnswerSelect}
@@ -139,13 +103,13 @@ class Premium extends Component {
     
     return (
       <div className='Premium'>
-        { !this.state.gameInProgress && !this.state.resultsReady ? (
+        { !inGameData.gameInProgress && !inGameData.resultsReady ? (
           <div>
             <ModalGreeting
               username = { this.props.loggedInUserId }
             />
 
-            <button type="button" className="btn btn-primary" onClick={() => this.getFavoriteArtistsSongs(songs)}>
+            <button type="button" className="btn btn-primary" onClick={() => this.props.dispatch(organizeSongUriAndNames(songs, this.props.accesstoken, this.props.loggedInUserId, artist.name))}>
               PLAY NOW!
             </button>
 
@@ -169,7 +133,8 @@ const mapStateToProps = (state) => ({
   nav: state.nav,
   user: state.user.user,
   artist: state.artist.artist,
-  songs: state.songs.songs
+  songs: state.songs.songs,
+  inGameData: state.inGameData.inGameData
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Premium);
