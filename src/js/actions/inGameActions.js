@@ -18,16 +18,16 @@ export function organizeSongUriAndNames(songs, accesstoken, userId, artistName) 
             theSongNames.push(theSongUriToName[j].substr(theSongUriToName[j].indexOf('---') + 3, theSongUriToName[j].length - 1))
         }
 
-        // AM - later, combine these setState functions? Might not be doable. Also figure out why I'm setting questions state here instead of in function?
-        dispatch({
-            type: "FETCH_INGAMEDATA_OUTPUTSONGS",
-            payload: {
-                favoriteArtistsSongs: {
-                    songUris: theSongUris,
-                    songNames: theSongNames
-                }
-            }   
-        })
+        // // AM - later, combine these setState functions? Might not be doable. Also figure out why I'm setting questions state here instead of in function?
+        // dispatch({
+        //     type: "FETCH_INGAMEDATA_OUTPUTSONGS",
+        //     payload: {
+        //         favoriteArtistsSongs: {
+        //             songUris: theSongUris,
+        //             songNames: theSongNames
+        //         }
+        //     }   
+        // })
 
         // accesstoken, userId, artistName
         dispatch(generateQuestions(theSongNames, accesstoken, userId, theSongUris, artistName))
@@ -234,8 +234,9 @@ export function stopPlaylist(accesstoken) {
             })  
     }
 }
-  // Randomize the generated playlist order
-  export function shuffleArray(tracksArray) {
+
+// Randomize the generated playlist order
+export function shuffleArray(tracksArray) {
     var currentIndex = tracksArray.length, temporaryValue, randomIndex;
   
     // While there remain elements to shuffle...

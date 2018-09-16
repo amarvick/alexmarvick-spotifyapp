@@ -1,8 +1,8 @@
 export default function reducer(state={
     inGameData: {
-        noOfCorrect: 0,
+        // noOfCorrect: 0,
         questions: [],
-        questionNo: 0,
+        // questionNo: 0,
         gameInProgress: false,
         resultsReady: false,
         didUserCheat: false
