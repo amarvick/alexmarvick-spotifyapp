@@ -1,3 +1,6 @@
+/* File Name: songsActions.js                                       *
+ * Description: Retrieves the user's favorite artist's top songs.   */
+
 import Spotify from 'spotify-web-api-js';
 
 const spotifyApi = new Spotify(); 
