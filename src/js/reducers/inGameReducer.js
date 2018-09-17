@@ -48,7 +48,7 @@ export default function reducer(state={
             return {...state,
                 inGameData: {
                     ...state.inGameData,
-                    gameInProgress: false
+                    gameInProgress: action.payload
                 }
             }
         }
@@ -66,27 +66,27 @@ export default function reducer(state={
         case "FETCH_INGAMEDATA_NEXTQUESTION": {
             return {...state,
                 inGameData: {
-                    ...state.inGameData
-                },
-                questionNo: action.payload
+                    ...state.inGameData,
+                    questionNo: action.payload
+                }
             }
         }
 
         case "FETCH_INGAMEDATA_CORRECTANSWER": {
             return {...state,
-                inGameData: action.payload
+                inGameData: {
+                    ...state.inGameData,
+                    noOfCorrect: action.payload
+                }
             }
         }
 
         case "FETCH_INGAMEDATA_USERCHEATED": {
             return {...state,
-                inGameData: action.payload
-                // {
-                //     didUserCheat: true,
-                //     resultsReady: true,
-                //     gameInProgress: false,
-                //     noOfCorrect: 0
-                // }
+                inGameData: {
+                    ...state.inGameData,
+                    didUserCheat: action.payload
+                }
             }
         }
 

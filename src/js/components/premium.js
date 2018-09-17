@@ -70,7 +70,7 @@ class Premium extends Component {
         theGameView = ( 
           <QuestionTemplate 
             questionAnswers = { inGameData.questions.questions[inGameData.questionNo] }
-            correctResponse = { inGameData.favoriteArtistsSongs.favoriteArtistsSongs.songNames[this.state.questionNo] }
+            correctResponse = { inGameData.favoriteArtistsSongs.favoriteArtistsSongs.songNames[inGameData.questionNo] }
             questionNumber = { inGameData.questionNo + 1 }
             onAnswerSelect = {this.onAnswerSelect}
           />

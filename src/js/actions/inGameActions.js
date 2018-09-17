@@ -194,14 +194,11 @@ export function removeShuffle(accesstoken) {
 // Determines if answer was correct or not, and whether to proceed to next question or be done.
 export function onAnswerSelect(isCorrect, questionNum, correctCount, accessToken) {
     return function(dispatch) {
-
         if (isCorrect) {
             alert('CORRECT!');
             dispatch({
                 type: "FETCH_INGAMEDATA_CORRECTANSWER",
-                payload: {
-                    noOfCorrect: correctCount++
-                }
+                payload: correctCount + 1
             })
         } else {
             alert('INCORRECT ANSWER :(');
@@ -212,9 +209,7 @@ export function onAnswerSelect(isCorrect, questionNum, correctCount, accessToken
         if (questionNum < 9) {
             dispatch({
                 type: 'FETCH_INGAMEDATA_NEXTQUESTION',
-                payload:  {
-                    questionNo: questionNum + 1
-                }
+                payload: questionNum + 1
             })
             playNextTrack(accessToken)
         } else {
@@ -226,9 +221,7 @@ export function onAnswerSelect(isCorrect, questionNum, correctCount, accessToken
                     gameInProgress: false
                 }
             })
-            // this.setState({ resultsReady: true }, function() { 
             stopPlaylist(accessToken)
-            
         }
     }
 }
