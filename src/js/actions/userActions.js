@@ -1,3 +1,6 @@
+/* File Name: userActions.js                                        *
+ * Description: Retrieves the logged in user & his/her information  */
+
 import Spotify from 'spotify-web-api-js';
 
 const spotifyApi = new Spotify(); 
