@@ -1,3 +1,8 @@
+/* File Name: App.js                                                *
+ * Description: The page that displays everything on the front end. *
+ *              What renders depends on the state of the user       *
+ *              (if user is logged in, premium...)                  */
+
 import Spotify from 'spotify-web-api-js';
 import React, { Component, StartupActions } from 'react';
 import { connect } from 'react-redux';
