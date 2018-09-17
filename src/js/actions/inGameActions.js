@@ -243,27 +243,19 @@ export function playNextTrack(accesstoken) {
 }
 
 export function stopPlaylist(accesstoken) {
-    return function(dispatch) {
-        axios({
-            url: 'https://api.spotify.com/v1/me/player/pause',
-            method: "PUT",
-            headers: {
-            'Authorization': 'Bearer ' + accesstoken
-            }
+    axios({
+        url: 'https://api.spotify.com/v1/me/player/pause',
+        method: "PUT",
+        headers: {
+        'Authorization': 'Bearer ' + accesstoken
+        }
+    })
+        .then((response) => {
+            console.log(response)
         })
-            .then((response) => {
-                console.log(response)
-                dispatch({
-                    type: "FETCH_INGAMEDATA_GAMEOFF",
-                    payload: {
-                        gameInProgress: false
-                    }
-                })
-            })
-            .catch((error) => {
-                console.log(error)
-            })  
-    }
+        .catch((error) => {
+            console.log(error)
+        })  
 }
 
 // Randomize the generated playlist order

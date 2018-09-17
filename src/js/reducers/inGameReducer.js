@@ -44,15 +44,6 @@ export default function reducer(state={
             }
         }
 
-        case "FETCH_INGAMEDATA_GAMEOFF": {
-            return {...state,
-                inGameData: {
-                    ...state.inGameData,
-                    gameInProgress: action.payload
-                }
-            }
-        }
-
         case "FETCH_INGAMEDATA_RESULTSREADY": {
             return {...state,
                 inGameData: {
