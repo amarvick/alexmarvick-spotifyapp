@@ -9,6 +9,7 @@ import { fetchArtist } from '../actions/artistActions'
 import { stopPlaylist } from '../actions/inGameActions'
 import { playNextTrack } from '../actions/inGameActions'
 import { organizeSongUriAndNames } from '../actions/inGameActions'
+import { onAnswerSelect } from '../actions/inGameActions'
 
 connect((store) => {
   return {
@@ -24,9 +25,7 @@ class Premium extends Component {
 
     this.state = { 
       accesstoken: '',
-      loggedInUserId: '',
-      noOfCorrect: 0,
-      questionNo: 0
+      loggedInUserId: ''
     }
     
     // Functions needed to update the state when passing props in to question template
@@ -41,22 +40,7 @@ class Premium extends Component {
 
   // Determines if answer was correct or not, and whether to proceed to next question or be done.
   onAnswerSelect(isCorrect) {
-    if (isCorrect) {
-      alert('CORRECT!');
-      this.setState({ noOfCorrect: this.state.noOfCorrect + 1 })
-    } else {
-      alert('INCORRECT ANSWER :(');
-    }
-
-    // Changes to the next question OR you're finished and the results will be presented.
-    if (this.state.questionNo < 9) {
-      this.setState({ questionNo: this.state.questionNo + 1 })
-      playNextTrack(this.props.accesstoken)
-    } else {
-      this.setState({ resultsReady: true }, function() { 
-        stopPlaylist(this.props.accesstoken)
-      })
-    }
+    this.props.dispatch(onAnswerSelect(isCorrect, this.props.inGameData.questionNo, this.props.inGameData.noOfCorrect, this.props.accesstoken));
   }
 
   render(props) {
@@ -81,21 +65,21 @@ class Premium extends Component {
     }
 
     // AM todo - see if you can combine theGameView results together
-    if (this.state.questions != null && this.state.questions.length > 0) {
+    if (inGameData.questions.questions != null && inGameData.questions.questions.length > 0) {
       if (!inGameData.resultsReady && !inGameData.didUserCheat) {
         theGameView = ( 
           <QuestionTemplate 
-            questionAnswers = { this.props.questions[this.state.questionNo] }
-            correctResponse = { this.state.favoriteArtistsSongs.songNames[this.state.questionNo] }
-            questionNumber = { this.state.questionNo + 1 }
+            questionAnswers = { inGameData.questions.questions[inGameData.questionNo] }
+            correctResponse = { inGameData.favoriteArtistsSongs.favoriteArtistsSongs.songNames[this.state.questionNo] }
+            questionNumber = { inGameData.questionNo + 1 }
             onAnswerSelect = {this.onAnswerSelect}
           />
         )
       } else {
         theGameView = ( 
           <ResultsTemplate
-            correctCount = { this.state.noOfCorrect }
-            didUserCheat = { this.state.didUserCheat }
+            correctCount = { inGameData.noOfCorrect }
+            didUserCheat = { inGameData.didUserCheat }
           />
         )
       }

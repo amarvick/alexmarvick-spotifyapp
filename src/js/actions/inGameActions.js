@@ -18,16 +18,16 @@ export function organizeSongUriAndNames(songs, accesstoken, userId, artistName) 
             theSongNames.push(theSongUriToName[j].substr(theSongUriToName[j].indexOf('---') + 3, theSongUriToName[j].length - 1))
         }
 
-        // // AM - later, combine these setState functions? Might not be doable. Also figure out why I'm setting questions state here instead of in function?
-        // dispatch({
-        //     type: "FETCH_INGAMEDATA_OUTPUTSONGS",
-        //     payload: {
-        //         favoriteArtistsSongs: {
-        //             songUris: theSongUris,
-        //             songNames: theSongNames
-        //         }
-        //     }   
-        // })
+        // AM - later, combine these setState functions? Might not be doable. Also figure out why I'm setting questions state here instead of in function?
+        dispatch({
+            type: "INGAMEDATA_UPDATE_FAV_ARTIST_SONGS_URIS",
+            payload: {
+                favoriteArtistsSongs: {
+                    songUris: theSongUris,
+                    songNames: theSongNames
+                }
+            }   
+        })
 
         // accesstoken, userId, artistName
         dispatch(generateQuestions(theSongNames, accesstoken, userId, theSongUris, artistName))
@@ -83,11 +83,7 @@ export function startGame(accesstoken, userId, songUris, artistName) {
     return function(dispatch) {
         removeShuffle(accesstoken)
         dispatch({
-            type: "FETCH_INGAMEDATA_GAMEON",
-            payload: {
-                gameInProgress: true,
-                resultsReady: false
-            }
+            type: "FETCH_INGAMEDATA_GAMEON"
         })
  
         postPlaylist(userId, songUris, artistName, accesstoken) 
@@ -193,6 +189,48 @@ export function removeShuffle(accesstoken) {
         .catch((error) => {
             console.log(error)
         })
+}
+
+// Determines if answer was correct or not, and whether to proceed to next question or be done.
+export function onAnswerSelect(isCorrect, questionNum, correctCount, accessToken) {
+    return function(dispatch) {
+
+        if (isCorrect) {
+            alert('CORRECT!');
+            dispatch({
+                type: "FETCH_INGAMEDATA_CORRECTANSWER",
+                payload: {
+                    noOfCorrect: correctCount++
+                }
+            })
+        } else {
+            alert('INCORRECT ANSWER :(');
+        }
+
+        // Changes to the next question OR you're finished and the results will be presented.
+        // AM todo - this won't bump up the question number, try to fix this
+        if (questionNum < 9) {
+            dispatch({
+                type: 'FETCH_INGAMEDATA_NEXTQUESTION',
+                payload:  {
+                    questionNo: questionNum + 1
+                }
+            })
+            playNextTrack(accessToken)
+        } else {
+            // AM - fill out payload
+            dispatch({
+                type: 'FETCH_INGAMEDATA_RESULTSREADY',
+                payload: {
+                    resultsReady: true,
+                    gameInProgress: false
+                }
+            })
+            // this.setState({ resultsReady: true }, function() { 
+            stopPlaylist(accessToken)
+            
+        }
+    }
 }
 
 export function playNextTrack(accesstoken) {

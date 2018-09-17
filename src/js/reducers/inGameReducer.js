@@ -1,8 +1,12 @@
 export default function reducer(state={
     inGameData: {
-        // noOfCorrect: 0,
+        noOfCorrect: 0,
         questions: [],
-        // questionNo: 0,
+        favoriteArtistsSongs: {
+            songUris: [],
+            songNames: []
+        },
+        questionNo: 0,
         gameInProgress: false,
         resultsReady: false,
         didUserCheat: false
@@ -11,59 +15,66 @@ export default function reducer(state={
 }, action) {
 
     switch(action.type) {
+        case "INGAMEDATA_UPDATE_FAV_ARTIST_SONGS_URIS": {
+            return {...state,
+                inGameData: {
+                    ...state.inGameData,
+                    favoriteArtistsSongs: action.payload
+                }
+            }
+        }
+
         case "FETCH_INGAMEDATA_GETQUESTIONS": {
             return {...state,
-                inGameData: action.payload
-                // {
-                //     gameInProgress: !gameInProgress
-                // }
+                inGameData:  {
+                    ...state.inGameData,
+                    questions: action.payload
+                }
             }
         }
 
         case "FETCH_INGAMEDATA_GAMEON": {
             return {...state,
-                inGameData: action.payload
-                // {
-                //     gameInProgress: true,
-                //     resultsReady: false
-                // }
+                inGameData: {
+                    ...state.inGameData,
+                    gameInProgress: true,
+                    resultsReady: false,
+                    didUserCheat: false
+                }
             }
         }
 
         case "FETCH_INGAMEDATA_GAMEOFF": {
             return {...state,
-                inGameData: action.payload
-                // {
-                //     gameInProgress: false
-                // }
+                inGameData: {
+                    ...state.inGameData,
+                    gameInProgress: false
+                }
             }
         }
 
         case "FETCH_INGAMEDATA_RESULTSREADY": {
             return {...state,
-                inGameData: action.payload
-                // {
-                //     resultsReady: true,
-                //     gameInProgress: false
-                // }
+                inGameData: {
+                    ...state.inGameData,
+                    gameInProgress: false,
+                    resultsReady: true
+                }
             }
         }
 
         case "FETCH_INGAMEDATA_NEXTQUESTION": {
             return {...state,
-                inGameData: action.payload
-                // {
-                //     questionNo: questionNo++
-                // }
+                inGameData: {
+                    ...state.inGameData
+                },
+                questionNo: action.payload
             }
         }
 
         case "FETCH_INGAMEDATA_CORRECTANSWER": {
             return {...state,
                 inGameData: action.payload
-                // {
-                //     noOfCorrect: noOfCorrect++
-                // }
             }
         }
 
