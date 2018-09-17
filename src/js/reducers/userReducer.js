@@ -1,3 +1,6 @@
+/* File Name: userReducer.js                                        *
+ * Description: Redux reducer for the user                          */
+
 export default function reducer(state={
     fetching: false,
     fetched: false,
