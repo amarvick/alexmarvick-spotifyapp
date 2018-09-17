@@ -1,3 +1,6 @@
+/* File Name: premium.js                                            *
+ * Description: The game display. For premium users only            */
+
 import React, { Component, StartupActions } from 'react';
 import { connect } from 'react-redux';
 
