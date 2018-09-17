@@ -1,12 +1,19 @@
+/* File Name: inGameActions.js                                      *
+ * Description: All of the actions which manipulate the state of    *
+ *              the game as the user plays; including questions     *
+ *              which get generated, if the user cheated, the       *
+ *              question they are on, etc.                          */
+
 import axios from 'axios';
 
+// Retrieves song URIs and Names, which need to be in the same order for creating the playlist and having correct answers be in sync
 export function organizeSongUriAndNames(songs, accesstoken, userId, artistName) {
     return function(dispatch) {
         var theSongUriToName = []
         var theSongUris = []
         var theSongNames = []
 
-        // Maps Song URI with Name so they are in the same order when generating playlist.
+        // Maps Song URI with Name so they are in the same order when generating playlist. AM - probably a better way of organizing; try a map
         for (var i = 0; i < songs.length; i++) {
             theSongUriToName.push(songs[i].uri + '---' + songs[i].name);
         }
@@ -18,7 +25,7 @@ export function organizeSongUriAndNames(songs, accesstoken, userId, artistName) 
             theSongNames.push(theSongUriToName[j].substr(theSongUriToName[j].indexOf('---') + 3, theSongUriToName[j].length - 1))
         }
 
-        // AM - later, combine these setState functions? Might not be doable. Also figure out why I'm setting questions state here instead of in function?
+        // AM - later, combine these dispatch functions? Might not be doable. Also figure out why I'm setting questions state here instead of in function?
         dispatch({
             type: "INGAMEDATA_UPDATE_FAV_ARTIST_SONGS_URIS",
             payload: {
@@ -38,7 +45,6 @@ export function organizeSongUriAndNames(songs, accesstoken, userId, artistName) 
 export function generateQuestions(songNames, accesstoken, userId, songUris, artistName) {
     return function(dispatch) {
         var questions = [];
-
 
         for (var i = 0; i < 10; i++) {
             var multChoiceOpts = []
@@ -78,7 +84,7 @@ export function generateQuestions(songNames, accesstoken, userId, songUris, arti
     }
 }
 
-// starts game
+// Starts game
 export function startGame(accesstoken, userId, songUris, artistName) {
     return function(dispatch) {
         removeShuffle(accesstoken)
@@ -91,7 +97,6 @@ export function startGame(accesstoken, userId, songUris, artistName) {
     }
 }
  
-
 // Create and upload playlist
 // AM To do - May need to find better way of organizing everything that goes on? Because this posts the playlist, 
 // then does a multitude of other things... 'post playlist' may not be the best function name therefore? Not sure - brainstorm
@@ -226,6 +231,7 @@ export function onAnswerSelect(isCorrect, questionNum, correctCount, accessToken
     }
 }
 
+// Plays next track
 export function playNextTrack(accesstoken) {
     axios({
         url: 'https://api.spotify.com/v1/me/player/next',
@@ -242,6 +248,7 @@ export function playNextTrack(accesstoken) {
         })
 }
 
+// Stops playlist when game is finished
 export function stopPlaylist(accesstoken) {
     return function(dispatch) {
         axios({
@@ -266,7 +273,7 @@ export function stopPlaylist(accesstoken) {
     }
 }
 
-// Randomize the generated playlist order
+// Randomize array order (generated playlist, multiple choice questions, etc.)
 export function shuffleArray(tracksArray) {
     var currentIndex = tracksArray.length, temporaryValue, randomIndex;
   
