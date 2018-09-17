@@ -55,9 +55,10 @@ class App extends Component {
       user = this.props.user;
     }
 
+    // loggedInScreen determines what view the user will see if the user is logged in, based off of whether that user is a premium user.
     let loggedInScreen
 
-    // AM - if user.product === null, that indicates that a user couldn't be fetched... access token likely expired? Try making a new component and test
+    // Make a component specifically for if the user token is invalid/expired?
     if (user.product !== 'premium' && user.product !== '') {
       loggedInScreen = (
         <NonPremium 
