@@ -1,3 +1,6 @@
+/* File Name: modalgreeting.js                                      *
+ * Description: Welcome screen/game instructions for premium users  */
+
 import React, { Component } from 'react';
 
 class ModalGreeting extends Component {
