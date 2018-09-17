@@ -1,3 +1,6 @@
+/* File Name: artistReducer.js                                      *
+ * Description: Redux reducer for the artist                        */
+
 export default function reducer(state={
     fetching: false,
     fetched: false,
