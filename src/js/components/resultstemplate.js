@@ -1,3 +1,6 @@
+/* File Name: resultstemplate.js                                    *
+ * Description: The template for post-game results                  */
+
 import React, { Component } from 'react';
 
 class ResultsTemplate extends Component {
