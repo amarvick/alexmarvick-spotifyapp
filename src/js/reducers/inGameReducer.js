@@ -13,7 +13,7 @@ export default function reducer(state={
         gameInProgress: false,
         resultsReady: false,
         didUserCheat: false,
-        gameDifficulty: ''
+        gameDifficulty: null
     },
     error: null,
 }, action) {
@@ -62,8 +62,24 @@ export default function reducer(state={
                 inGameData: {
                     ...state.inGameData,
                     gameInProgress: false,
-                    resultsReady: true,
-                    gameDifficulty: ''
+                    resultsReady: true
+                }
+            }
+        }
+
+        case "FETCH_INGAMEDATA_RESTARTGAME": {
+            return {...state,
+                inGameData: {
+                    ...state.inGameData,
+                    resultsReady: false,
+                    gameDifficulty: null,
+                    questions: [],
+                    noOfCorrect: 0,
+                    questionNo: 0,
+                    favoriteArtistsSongs: {
+                        songUris: [],
+                        songNames: []
+                    }
                 }
             }
         }

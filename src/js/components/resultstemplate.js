@@ -1,7 +1,16 @@
 /* File Name: resultstemplate.js                                    *
  * Description: The template for post-game results                  */
 
-import React, { Component } from 'react';
+import React, { Component, StartupActions } from 'react';
+import { connect } from 'react-redux';
+
+import { restartGame } from '../actions/inGameActions'
+
+connect((store) => {
+  return {
+      inGameData: store.inGameData.inGameData
+  };
+})
 
 class ResultsTemplate extends Component {
   constructor(props) {
@@ -80,11 +89,24 @@ class ResultsTemplate extends Component {
 
         { endOfGameMsg }
 
-        <button className="btn btn-success lead">Play Again?</button>
-        <button className="btn btn-danger lead">Leave (Redirect to Github)</button>
+        <button className="btn btn-success lead" onClick={ () => this.props.dispatch(restartGame()) }>Play Again?</button>
+        <a className="btn btn-danger lead" target="_blank" href="http://www.github.com/amarvick/marvify-spotify">Leave (Redirect to Github)</a>
       </div>
     )
   }
 }
 
-export default ResultsTemplate;
+// wraps dispatch to create nicer functions to call within our component
+// Mapping dispatch actions to the props
+const mapDispatchToProps = (dispatch) => ({
+  dispatch: dispatch,
+  startup: () => dispatch(StartupActions.startup())
+})
+
+// Maps the state in to props (for displaying on the front end)
+const mapStateToProps = (state) => ({
+  nav: state.nav,
+  inGameData: state.inGameData.inGameData
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(ResultsTemplate);

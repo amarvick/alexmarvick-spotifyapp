@@ -8,6 +8,8 @@ import axios from 'axios';
 // import { StartupActions } from 'react';
 // import { connect } from 'react-redux';
 
+import { fetchArtistData } from './artistActions'
+
 // connect((store) => {
 //     return {
 //         inGameData: store.inGameData.inGameData
@@ -23,6 +25,8 @@ export function selectDifficulty(difficulty) {
                 gameDifficulty: difficulty
             }   
         })
+
+        dispatch(fetchArtistData(difficulty));
     }
 }
 
@@ -283,6 +287,18 @@ export function stopPlaylist(accesstoken) {
         .catch((error) => {
             console.log(error)
         })  
+}
+
+export function restartGame() {
+    return function (dispatch) {
+        dispatch({
+            type: "FETCH_INGAMEDATA_RESTARTGAME",
+            payload: {
+                resultsReady: false,
+                gameDifficulty: ''
+            }   
+        })
+    }
 }
 
 // Randomize array order (generated playlist, multiple choice questions, etc.)

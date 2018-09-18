@@ -9,9 +9,6 @@ import QuestionTemplate from './questiontemplate';
 import ResultsTemplate from './resultstemplate';
 import GameDifficulty from './gameDifficulty';
 
-import { fetchArtistData } from '../actions/artistActions'
-import { stopPlaylist } from '../actions/inGameActions'
-import { playNextTrack } from '../actions/inGameActions'
 import { organizeSongUriAndNames } from '../actions/inGameActions'
 import { onAnswerSelect } from '../actions/inGameActions'
 
@@ -39,7 +36,7 @@ class Premium extends Component {
   // Retrieve artists and songs
   componentDidMount() {
     // AM - can probably combine fetchArtist with fetchSongs. Change action name to 'artistSongsActions' or something
-    this.props.dispatch(fetchArtistData());
+    // this.props.dispatch(fetchArtistData());
   }
 
   // Determines if answer was correct or not, and whether to proceed to next question or be done.
@@ -91,7 +88,7 @@ class Premium extends Component {
     
     return (
       <div className='Premium'>
-        { !inGameData.gameInProgress && !inGameData.resultsReady && !inGameData.gameDifficulty &&
+        { !inGameData.gameInProgress && !inGameData.resultsReady && inGameData.gameDifficulty == null &&
           <div>
             <GameDifficulty
               username = { this.props.loggedInUserId }

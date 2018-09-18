@@ -8,17 +8,27 @@ import { fetchSongs } from './songsActions'
 const spotifyApi = new Spotify(); 
 
 // Retrieve Artist, then songs immediately after
-export function fetchArtistData() {
+export function fetchArtistData(difficulty) {
     return function(dispatch) {
         spotifyApi.getMyTopArtists()
         .then((response) => {
+            console.log(response);
+            let thePayload = {};
+
+            if (difficulty === 'Easy' || difficulty === 'Hard') {
+                thePayload = response.items[0]
+            } else if (difficulty === 'Medium') {
+                var randomInt = Math.floor(Math.random() * response.items.length);
+                thePayload = response.items[randomInt]
+            }
+
             dispatch({
                 type: "FETCH_ARTIST_SUCCESS",
-                payload: response.items[0]
+                payload: thePayload
             })
             
             // Retrieving songs
-            dispatch(fetchSongs(response.items[0].id, 'US'));
+            dispatch(fetchSongs(thePayload.id, 'US'));
         })
 
         .catch((error) => {
