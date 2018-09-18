@@ -79,6 +79,9 @@ class ResultsTemplate extends Component {
         <h1 className="display-4">RESULTS: { this.props.correctCount }/10</h1>
 
         { endOfGameMsg }
+
+        <button className="btn btn-success lead">Play Again?</button>
+        <button className="btn btn-danger lead">Leave (Redirect to Github)</button>
       </div>
     )
   }

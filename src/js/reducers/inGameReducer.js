@@ -12,12 +12,22 @@ export default function reducer(state={
         questionNo: 0,
         gameInProgress: false,
         resultsReady: false,
-        didUserCheat: false
+        didUserCheat: false,
+        gameDifficulty: ''
     },
     error: null,
 }, action) {
 
     switch(action.type) {
+        case "INGAMEDATA_GAME_DIFFICULTY": {
+            return {...state,
+                inGameData: {
+                    ...state.inGameData,
+                    gameDifficulty: action.payload
+                }
+            }
+        }
+
         case "INGAMEDATA_UPDATE_FAV_ARTIST_SONGS_URIS": {
             return {...state,
                 inGameData: {
@@ -52,7 +62,8 @@ export default function reducer(state={
                 inGameData: {
                     ...state.inGameData,
                     gameInProgress: false,
-                    resultsReady: true
+                    resultsReady: true,
+                    gameDifficulty: ''
                 }
             }
         }

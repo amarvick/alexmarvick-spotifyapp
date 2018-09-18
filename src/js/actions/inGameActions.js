@@ -5,6 +5,26 @@
  *              question they are on, etc.                          */
 
 import axios from 'axios';
+// import { StartupActions } from 'react';
+// import { connect } from 'react-redux';
+
+// connect((store) => {
+//     return {
+//         inGameData: store.inGameData.inGameData
+//     };
+// })
+
+// Updates the game difficulty
+export function selectDifficulty(difficulty) {
+    return function (dispatch) {
+        dispatch({
+            type: "INGAMEDATA_GAME_DIFFICULTY",
+            payload: {
+                gameDifficulty: difficulty
+            }   
+        })
+    }
+}
 
 // Retrieves song URIs and Names, which need to be in the same order for creating the playlist and having correct answers be in sync
 export function organizeSongUriAndNames(songs, accesstoken, userId, artistName) {
@@ -284,3 +304,21 @@ export function shuffleArray(tracksArray) {
   
     return tracksArray;
 } 
+
+// // wraps dispatch to create nicer functions to call within our component
+// // Mapping dispatch actions to the props
+// const mapDispatchToProps = (dispatch) => ({
+//     dispatch: dispatch,
+//     startup: () => dispatch(StartupActions.startup())
+// })
+  
+//   // Maps the state in to props (for displaying on the front end)
+// const mapStateToProps = (state) => ({
+//     nav: state.nav,
+//     user: state.user.user,
+//     artist: state.artist.artist,
+//     songs: state.songs.songs,
+//     inGameData: state.inGameData.inGameData
+//   })
+  
+// export default connect(mapStateToProps, mapDispatchToProps);

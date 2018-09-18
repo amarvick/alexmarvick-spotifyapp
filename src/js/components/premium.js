@@ -7,8 +7,9 @@ import { connect } from 'react-redux';
 import ModalGreeting from './modalgreeting';
 import QuestionTemplate from './questiontemplate';
 import ResultsTemplate from './resultstemplate';
+import GameDifficulty from './gameDifficulty';
 
-import { fetchArtist } from '../actions/artistActions'
+import { fetchArtistData } from '../actions/artistActions'
 import { stopPlaylist } from '../actions/inGameActions'
 import { playNextTrack } from '../actions/inGameActions'
 import { organizeSongUriAndNames } from '../actions/inGameActions'
@@ -38,7 +39,7 @@ class Premium extends Component {
   // Retrieve artists and songs
   componentDidMount() {
     // AM - can probably combine fetchArtist with fetchSongs. Change action name to 'artistSongsActions' or something
-    this.props.dispatch(fetchArtist());
+    this.props.dispatch(fetchArtistData());
   }
 
   // Determines if answer was correct or not, and whether to proceed to next question or be done.
@@ -90,7 +91,15 @@ class Premium extends Component {
     
     return (
       <div className='Premium'>
-        { !inGameData.gameInProgress && !inGameData.resultsReady ? (
+        { !inGameData.gameInProgress && !inGameData.resultsReady && !inGameData.gameDifficulty &&
+          <div>
+            <GameDifficulty
+              username = { this.props.loggedInUserId }
+            />
+          </div>
+        }
+
+        { !inGameData.gameInProgress && !inGameData.resultsReady && inGameData.gameDifficulty ? (
           <div>
             <ModalGreeting
               username = { this.props.loggedInUserId }

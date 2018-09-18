@@ -8,7 +8,7 @@ import { fetchSongs } from './songsActions'
 const spotifyApi = new Spotify(); 
 
 // Retrieve Artist, then songs immediately after
-export function fetchArtist() {
+export function fetchArtistData() {
     return function(dispatch) {
         spotifyApi.getMyTopArtists()
         .then((response) => {
@@ -17,7 +17,7 @@ export function fetchArtist() {
                 payload: response.items[0]
             })
             
-            // AM - can you put 'fetchSongs' function in above dispatch after '}'? Try.
+            // Retrieving songs
             dispatch(fetchSongs(response.items[0].id, 'US'));
         })
 
