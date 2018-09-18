@@ -1,3 +1,6 @@
+/* File Name: questiontemplate.js                                   *
+ * Description: The template for each individual question           */
+
 import React, { Component } from 'react';
 
 class QuestionTemplate extends Component {

@@ -1,3 +1,6 @@
+/* File Name: login.js                                              *
+ * Description: Login Screen for User                               */
+
 import React, { Component } from 'react';
 
 class Login extends Component {

@@ -1,3 +1,8 @@
+/* File Name: App.js                                                *
+ * Description: The page that displays everything on the front end. *
+ *              What renders depends on the state of the user       *
+ *              (if user is logged in, premium...)                  */
+
 import Spotify from 'spotify-web-api-js';
 import React, { Component, StartupActions } from 'react';
 import { connect } from 'react-redux';
@@ -55,9 +60,10 @@ class App extends Component {
       user = this.props.user;
     }
 
+    // loggedInScreen determines what view the user will see if the user is logged in, based off of whether that user is a premium user.
     let loggedInScreen
 
-    // AM - if user.product === null, that indicates that a user couldn't be fetched... access token likely expired? Try making a new component and test
+    // Make a component specifically for if the user token is invalid/expired?
     if (user.product !== 'premium' && user.product !== '') {
       loggedInScreen = (
         <NonPremium 

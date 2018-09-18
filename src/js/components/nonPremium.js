@@ -1,8 +1,12 @@
+/* File Name: nonPremium.js                                         *
+ * Description: Warning screen for non-premium users/if access      *
+ *              token is expired                                    */
+
 import React, { Component } from 'react';
 
 class NonPremium extends Component {
 
-// AM to do - make the links look nicer
+// AM to do - make the links look nicer. Also, do I want to call 'nonPremium'?
 
   render() {
     return (

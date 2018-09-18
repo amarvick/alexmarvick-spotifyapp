@@ -1,3 +1,6 @@
+/* File Name: inGameReducer.js                                      *
+ * Description: Redux reducer for the in-game activity              */
+
 export default function reducer(state={
     inGameData: {
         noOfCorrect: 0,

@@ -1,3 +1,6 @@
+/* File Name: songReducer.js                                        *
+ * Description: Redux reducer for the songs                         */
+
 export default function reducer(state={
     fetching: false,
     fetched: false,
