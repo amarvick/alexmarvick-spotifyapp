@@ -66,13 +66,6 @@ class Premium extends Component {
       artist = this.props.artist;
     }
 
-
-    if (inGameData.gameDifficulty === 'Easy' || inGameData.gameDifficulty === 'Medium') {
-      artistNameForTitle = artist[0].name
-    } else {
-      artistNameForTitle = 'SPOTIFY'
-    }
-
     // AM todo - see if you can combine theGameView results together
     if (inGameData.questions.questions != null && inGameData.questions.questions.length > 0) {
       if (!inGameData.resultsReady && !inGameData.didUserCheat) {
@@ -110,7 +103,7 @@ class Premium extends Component {
               username = { this.props.loggedInUserId }
             />
             {/* AM TODO - start from here. Working on the hard feature! */}
-            <button type="button" className="btn btn-primary" onClick={() => this.props.dispatch(organizeSongUriAndNames(songs, this.props.accesstoken, this.props.loggedInUserId, artistNameForTitle))}> 
+            <button type="button" className="btn btn-primary" onClick={() => this.props.dispatch(organizeSongUriAndNames(songs, this.props.accesstoken, this.props.loggedInUserId, artist[0].name))}> 
               PLAY NOW!
             </button>
 

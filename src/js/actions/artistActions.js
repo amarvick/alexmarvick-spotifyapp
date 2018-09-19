@@ -28,11 +28,9 @@ export function fetchArtistData(difficulty) {
                 payload: thePayload
             })
             
-            console.log(thePayload[0])
-
             if (difficulty === 'Hard') {
                 dispatch(fetchSongs(thePayload[0], 'US'));
-            } else if (difficulty === 'Easy' || difficulty === 'Medium') {
+            } else {
                 dispatch(fetchSongs(thePayload, 'US'))
             }
         })

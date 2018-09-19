@@ -37,12 +37,13 @@ export function organizeSongUriAndNames(songs, accesstoken, userId, artistName) 
         var theSongUris = []
         var theSongNames = []
 
+        shuffleArray(songs)
+
         // Maps Song URI with Name so they are in the same order when generating playlist. AM - probably a better way of organizing; try a map
-        for (var i = 0; i < songs.length; i++) {
+        // for (var i = 0; i < songs.length; i++) {
+        for (var i = 0; i < 10; i++) {
             theSongUriToName.push(songs[i].uri + '---' + songs[i].name);
         }
-
-        shuffleArray(theSongUriToName)
         
         for (var j = 0; j < theSongUriToName.length; j++) {
             theSongUris.push(theSongUriToName[j].substr(0, theSongUriToName[j].indexOf('---')))
@@ -129,10 +130,14 @@ export function postPlaylist(userId, allSongs, artist, accesstoken) {
     var playlistName;
     const vowels = ['A', 'E', 'I', 'O', 'U'];
 
-    if (vowels.includes(artist[0])) {
-        playlistName = 'HOW BIG OF AN ' + artist.toUpperCase() + ' FAN ARE YOU?'
+    if(artist) {
+        if (vowels.includes(artist[0])) {
+            playlistName = 'HOW BIG OF AN ' + artist.toUpperCase() + ' FAN ARE YOU?'
+        } else {
+            playlistName = 'HOW BIG OF A ' + artist.toUpperCase() + ' FAN ARE YOU?'
+        }
     } else {
-        playlistName = 'HOW BIG OF A ' + artist.toUpperCase() + ' FAN ARE YOU?'
+        playlistName = 'HOW BIG OF A SPOTIFY FAN ARE YOU?'
     }
 
     axios({
