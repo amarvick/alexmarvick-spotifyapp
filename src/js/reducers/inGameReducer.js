@@ -5,6 +5,7 @@ export default function reducer(state={
     inGameData: {
         noOfCorrect: 0,
         questions: [],
+        yourResponses: [],
         favoriteArtistsSongs: {
             songUris: [],
             songNames: []

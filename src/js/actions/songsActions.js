@@ -5,21 +5,27 @@ import Spotify from 'spotify-web-api-js';
 
 const spotifyApi = new Spotify(); 
 
-export function fetchSongs(artistId, LocCode) {
+export function fetchSongs(artists, LocCode) {
+    var allTracks = []
     return function(dispatch) {
-        spotifyApi.getArtistTopTracks(artistId, LocCode)
-        .then((response) => {
-            dispatch({
-                type: "FETCH_SONGS_SUCCESS",
-                payload: response.tracks
-            })
-        })
+        for (var i = 0; i < artists.length; i++) {
+            spotifyApi.getArtistTopTracks(artists[i].id, LocCode)
+            .then((response) => {
+                allTracks = allTracks.concat(response.tracks);
+                console.log(allTracks)
 
-        .catch((error) => {
-            dispatch({
-                type: "FETCH_SONGS_ERROR",
-                payload: error
+                dispatch({
+                    type: "FETCH_SONGS_SUCCESS",
+                    payload: allTracks
+                })
             })
-        })
+
+            .catch((error) => {
+                dispatch({
+                    type: "FETCH_SONGS_ERROR",
+                    payload: error
+                })
+            })
+        }
     }
 }

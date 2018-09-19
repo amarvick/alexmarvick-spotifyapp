@@ -4,10 +4,12 @@
 export default function reducer(state={
     fetching: false,
     fetched: false,
-    artist: {
-        artist: null,
-        artistId: null
-    },
+    artist: [
+        {
+            artist: null,
+            artistId: null
+        }
+    ],
     error: null,
 }, action) {
 

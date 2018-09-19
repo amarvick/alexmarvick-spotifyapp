@@ -12,14 +12,15 @@ export function fetchArtistData(difficulty) {
     return function(dispatch) {
         spotifyApi.getMyTopArtists()
         .then((response) => {
-            console.log(response);
-            let thePayload = {};
+            let thePayload = [];
 
-            if (difficulty === 'Easy' || difficulty === 'Hard') {
-                thePayload = response.items[0]
+            if (difficulty === 'Easy') {
+                thePayload.push(response.items[0])
             } else if (difficulty === 'Medium') {
                 var randomInt = Math.floor(Math.random() * response.items.length);
-                thePayload = response.items[randomInt]
+                thePayload.push(response.items[randomInt])
+            } else if (difficulty === 'Hard') {
+                thePayload.push(response.items)
             }
 
             dispatch({
@@ -27,8 +28,13 @@ export function fetchArtistData(difficulty) {
                 payload: thePayload
             })
             
-            // Retrieving songs
-            dispatch(fetchSongs(thePayload.id, 'US'));
+            console.log(thePayload[0])
+
+            if (difficulty === 'Hard') {
+                dispatch(fetchSongs(thePayload[0], 'US'));
+            } else if (difficulty === 'Easy' || difficulty === 'Medium') {
+                dispatch(fetchSongs(thePayload, 'US'))
+            }
         })
 
         .catch((error) => {

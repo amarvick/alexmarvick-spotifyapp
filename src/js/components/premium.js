@@ -47,11 +47,8 @@ class Premium extends Component {
   render(props) {
     let theGameView;
 
-    let artist = {}
-
-    if (this.props.artist) {
-      artist = this.props.artist;
-    }
+    let artist = []
+    let artistNameForTitle
 
     let songs = []
 
@@ -63,6 +60,17 @@ class Premium extends Component {
 
     if (this.props.inGameData) {
       inGameData = this.props.inGameData
+    }
+
+    if (this.props.artist) {
+      artist = this.props.artist;
+    }
+
+
+    if (inGameData.gameDifficulty === 'Easy' || inGameData.gameDifficulty === 'Medium') {
+      artistNameForTitle = artist[0].name
+    } else {
+      artistNameForTitle = 'SPOTIFY'
     }
 
     // AM todo - see if you can combine theGameView results together
@@ -101,8 +109,8 @@ class Premium extends Component {
             <ModalGreeting
               username = { this.props.loggedInUserId }
             />
-
-            <button type="button" className="btn btn-primary" onClick={() => this.props.dispatch(organizeSongUriAndNames(songs, this.props.accesstoken, this.props.loggedInUserId, artist.name))}>
+            {/* AM TODO - start from here. Working on the hard feature! */}
+            <button type="button" className="btn btn-primary" onClick={() => this.props.dispatch(organizeSongUriAndNames(songs, this.props.accesstoken, this.props.loggedInUserId, artistNameForTitle))}> 
               PLAY NOW!
             </button>
 
