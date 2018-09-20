@@ -17,7 +17,7 @@ export function fetchArtistData(difficulty) {
             if (difficulty === 'Easy') {
                 thePayload.push(response.items[0])
             } else if (difficulty === 'Medium') {
-                var randomInt = Math.floor(Math.random() * response.items.length);
+                var randomInt = Math.floor(Math.random() * response.items.length); // AM - may have to make 'ceil' so it doesn't pick the #1 artist
                 thePayload.push(response.items[randomInt])
             } else if (difficulty === 'Hard') {
                 thePayload.push(response.items)
