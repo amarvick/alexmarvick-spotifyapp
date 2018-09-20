@@ -2,7 +2,10 @@
  * Description: Welcome screen/game instructions for premium users  */
 
 import React, { Component, StartupActions } from 'react';
+import { ButtonToolbar, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
+
+import TheModal from './modal'
 
 import { selectDifficulty } from '../actions/inGameActions'
  
@@ -11,7 +14,6 @@ connect((store) => {
         inGameData: store.inGameData.inGameData
     };
 })
- 
 
 class GameDifficulty extends Component {
     constructor(props){
@@ -20,18 +22,29 @@ class GameDifficulty extends Component {
         this.state = {
             username: ''
         }
+
     }
+
     render() {
       return (
         <div className='Modal container'>
           <h1 className="display-4">Welcome to Marvify!</h1>
           <p className="lead">Hello, {this.props.username}! Thank you for taking the time to check out my game. How obsessed do you believe you are with your favorite artist's songs?</p>
-        
+
           <div>
-            <button className="btn btn-success lead" onClick={ () => this.props.dispatch(selectDifficulty('Easy')) }> Artists? You mean 'artist'? (Easy) </button><br/>
-            <button className="btn btn-warning lead" onClick={ () => this.props.dispatch(selectDifficulty('Medium')) }> I think I'm mildly obsessed! (Medium) </button><br/>
-            <button className="btn btn-danger lead" onClick={ () => this.props.dispatch(selectDifficulty('Hard')) }> Extremely obsessed! (Difficult) </button><br/>
+            <ButtonToolbar>  
+                <Button bsStyle="success" onClick={ () => this.props.dispatch(selectDifficulty('Easy')) } block>
+                    Artists? You mean 'artist'? (Easy)
+                </Button>
+                <Button bsStyle="warning" onClick={ () => this.props.dispatch(selectDifficulty('Medium')) } block>
+                    I think I'm mildly obsessed! (Medium)
+                </Button>
+                <Button bsStyle="danger" onClick={ () => this.props.dispatch(selectDifficulty('Hard')) } block>
+                    Extremely obsessed! (Difficult)
+                </Button>
+            </ButtonToolbar> 
           </div>
+
         </div>
       )
     }

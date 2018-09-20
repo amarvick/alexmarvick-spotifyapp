@@ -2,6 +2,7 @@
  * Description: The template for each individual question           */
 
 import React, { Component } from 'react';
+import { ButtonToolbar, Button } from 'react-bootstrap';
 
 class QuestionTemplate extends Component {
   constructor(props) {
@@ -30,10 +31,21 @@ class QuestionTemplate extends Component {
     return (
       <div className = 'questionTemplate'>
         <h1 className="display-4">QUESTION { this.props.questionNumber }: What song is this?</h1>
-        <button className="btn btn-light lead" data-toggle="modal" data-target="responsePrompt" onClick={ () => this.checkAnswer(this.props.questionAnswers[0]) }> { this.props.questionAnswers[0] } </button><br/>
-        <button className="btn btn-light lead" data-toggle="modal" data-target="responsePrompt" onClick={ () => this.checkAnswer(this.props.questionAnswers[1]) }> { this.props.questionAnswers[1] } </button><br/>
-        <button className="btn btn-light lead" data-toggle="modal" data-target="responsePrompt" onClick={ () => this.checkAnswer(this.props.questionAnswers[2]) }> { this.props.questionAnswers[2] } </button><br/>
-        <button className="btn btn-light lead" data-toggle="modal" data-target="responsePrompt" onClick={ () => this.checkAnswer(this.props.questionAnswers[3]) }> { this.props.questionAnswers[3] } </button><br/>
+
+        <ButtonToolbar>
+          <Button bsSize="default" data-toggle="modal" data-target="responsePrompt" onClick={ () => this.checkAnswer(this.props.questionAnswers[0]) } block> 
+            { this.props.questionAnswers[0] } 
+          </Button>
+          <Button bsSize="default" data-toggle="modal" data-target="responsePrompt" onClick={ () => this.checkAnswer(this.props.questionAnswers[1]) } block>
+            { this.props.questionAnswers[1] }
+          </Button>
+          <Button bsSize="default" data-toggle="modal" data-target="responsePrompt" onClick={ () => this.checkAnswer(this.props.questionAnswers[2]) } block>
+            { this.props.questionAnswers[2] }
+          </Button>
+          <Button bsSize="default" data-toggle="modal" data-target="responsePrompt" onClick={ () => this.checkAnswer(this.props.questionAnswers[3]) } block>
+            { this.props.questionAnswers[3] }
+          </Button>
+        </ButtonToolbar>
 
         <div className="modal fade" id="responsePrompt" tabIndex="-1" role="dialog" aria-labelledby="responsePrompt" aria-hidden="true">
           <div className="modal-dialog modal-dialog-centered" role="document">

@@ -33,12 +33,6 @@ class Premium extends Component {
     this.onAnswerSelect = this.onAnswerSelect.bind(this);
   }
 
-  // Retrieve artists and songs
-  componentDidMount() {
-    // AM - can probably combine fetchArtist with fetchSongs. Change action name to 'artistSongsActions' or something
-    // this.props.dispatch(fetchArtistData());
-  }
-
   // Determines if answer was correct or not, and whether to proceed to next question or be done.
   onAnswerSelect(isCorrect) {
     this.props.dispatch(onAnswerSelect(isCorrect, this.props.inGameData.questionNo, this.props.inGameData.noOfCorrect, this.props.accesstoken));
