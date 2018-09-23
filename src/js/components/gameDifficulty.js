@@ -28,7 +28,7 @@ class GameDifficulty extends Component {
     render() {
       return (
         <div className='Modal container'>
-          <h1 className="display-4">Welcome to Marvify!</h1>
+          <h1 className="display-4">Welcome to Spotelligence!</h1>
           <p className="lead">Hello, {this.props.username}! Thank you for taking the time to check out my game. How obsessed do you believe you are with your favorite artist's songs?</p>
 
           <div>

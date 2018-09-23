@@ -2,7 +2,7 @@
  * Description: The template for each individual question           */
 
 import React, { Component } from 'react';
-import { ButtonToolbar, Button } from 'react-bootstrap';
+import { ButtonToolbar, Button, Modal } from 'react-bootstrap';
 
 class QuestionTemplate extends Component {
   constructor(props) {
@@ -11,7 +11,8 @@ class QuestionTemplate extends Component {
     this.state = {
       questionAnswers: new Array(4),
       correctResponse: '',
-      questionNumber: 0
+      questionNumber: 0,
+      show: false
     };
   }
 
@@ -26,8 +27,6 @@ class QuestionTemplate extends Component {
 
   // The question template
   render(props) {    
-    
-
     return (
       <div className = 'questionTemplate'>
         <h1 className="display-4">QUESTION { this.props.questionNumber }: What song is this?</h1>
@@ -46,21 +45,6 @@ class QuestionTemplate extends Component {
             { this.props.questionAnswers[3] }
           </Button>
         </ButtonToolbar>
-
-        <div className="modal fade" id="responsePrompt" tabIndex="-1" role="dialog" aria-labelledby="responsePrompt" aria-hidden="true">
-          <div className="modal-dialog modal-dialog-centered" role="document">
-            <div className="modal-content">
-              <div className="modal-body">
-                ...
-              </div>
-              <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" className="btn btn-primary">Save changes</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
 
       </div>
 

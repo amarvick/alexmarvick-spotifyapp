@@ -2,6 +2,7 @@
  * Description: The game display. For premium users only            */
 
 import React, { Component, StartupActions } from 'react';
+import { ButtonToolbar, Button, Modal } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import ModalGreeting from './modalgreeting';
@@ -42,7 +43,10 @@ class Premium extends Component {
     let theGameView;
 
     let artist = []
-    let artistNameForTitle
+
+    if (this.props.artist) {
+      artist = this.props.artist;
+    }
 
     let songs = []
 
@@ -54,10 +58,6 @@ class Premium extends Component {
 
     if (this.props.inGameData) {
       inGameData = this.props.inGameData
-    }
-
-    if (this.props.artist) {
-      artist = this.props.artist;
     }
 
     // AM todo - see if you can combine theGameView results together

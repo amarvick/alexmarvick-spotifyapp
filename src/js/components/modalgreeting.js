@@ -14,7 +14,7 @@ class ModalGreeting extends Component {
   render() {
     return (
       <div className='Modal container'>
-        <h1 className="display-4">Welcome to Marvify!</h1>
+        <h1 className="display-4">Welcome to Spotelligence!</h1>
         <p className="lead">Hello, {this.props.username}! Thank you for taking the time to play my game. This is a 10 question quiz to see how well you know your favorite artist's top songs!</p>
         <p className="lead">As soon as you click 'play', your spotify account will immediately create a playlist of your top artist's favorite songs. You will be prompted 10 questions, one by one, 
         giving you ten seconds to determine the song. If you guess incorrectly or run out of time, the question will

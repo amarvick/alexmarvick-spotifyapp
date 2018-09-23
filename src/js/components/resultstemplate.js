@@ -2,6 +2,7 @@
  * Description: The template for post-game results                  */
 
 import React, { Component, StartupActions } from 'react';
+import { ButtonToolbar, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import { restartGame } from '../actions/inGameActions'
@@ -89,8 +90,10 @@ class ResultsTemplate extends Component {
 
         { endOfGameMsg }
 
-        <button className="btn btn-success lead" onClick={ () => this.props.dispatch(restartGame()) }>Play Again?</button>
-        <a className="btn btn-danger lead" target="_blank" href="http://www.github.com/amarvick/marvify-spotify">Leave (Redirect to Github)</a>
+        <ButtonToolbar>
+          <Button bsStyle="success" onClick={ () => this.props.dispatch(restartGame()) }>Play Again?</Button>
+          <a className="btn btn-danger lead" target="_blank" rel="noopener noreferrer" href="https://github.com/amarvick/alexmarvick-spotifyapp" block>Leave (Redirect to Github)</a>
+        </ButtonToolbar>
       </div>
     )
   }
