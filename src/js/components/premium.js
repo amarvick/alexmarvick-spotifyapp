@@ -17,7 +17,8 @@ connect((store) => {
   return {
     artist: store.artist.artist,
     songs: store.songs.songs,
-    inGameData: store.inGameData.inGameData
+    inGameData: store.inGameData.inGameData,
+    loading: store.inGameData.loading
   };
 })
 
@@ -41,24 +42,34 @@ class Premium extends Component {
 
   render(props) {
     let theGameView;
+    let loadingView;
 
     let artist = []
 
     if (this.props.artist) {
-      artist = this.props.artist;
+      artist = this.props.artist
     }
 
     let songs = []
 
     if (this.props.songs) {
-      songs = this.props.songs;
+      songs = this.props.songs
     }
 
-    let inGameData = {};
+    let inGameData = {}
+    let loading
 
     if (this.props.inGameData) {
       inGameData = this.props.inGameData
+      loading = this.props.loading
     }
+
+    // AM - make in to a component, but OK for now
+    loadingView = (
+      <div>
+        LOADING
+      </div>
+    )
 
     // AM todo - see if you can combine theGameView results together
     if (inGameData.questions.questions != null && inGameData.questions.questions.length > 0) {
@@ -83,27 +94,30 @@ class Premium extends Component {
     
     return (
       <div className='Premium'>
-        { !inGameData.gameInProgress && !inGameData.resultsReady && inGameData.gameDifficulty == null &&
-          <div>
-            <GameDifficulty
-              username = { this.props.loggedInUserId }
-            />
-          </div>
-        }
+      { !loading ? (
+        <div>
+          { !inGameData.gameInProgress && !inGameData.resultsReady && inGameData.gameDifficulty == null &&
+            <div>
+              <GameDifficulty
+                username = { this.props.loggedInUserId }
+              />
+            </div>
+          }
 
-        { !inGameData.gameInProgress && !inGameData.resultsReady && inGameData.gameDifficulty ? (
-          <div>
-            <ModalGreeting
-              username = { this.props.loggedInUserId }
-            />
-            {/* AM TODO - start from here. Working on the hard feature! */}
-            <button type="button" className="btn btn-primary" onClick={() => this.props.dispatch(organizeSongUriAndNames(songs, this.props.accesstoken, this.props.loggedInUserId, artist[0].name))}> 
-              PLAY NOW!
-            </button>
+          { !inGameData.gameInProgress && !inGameData.resultsReady && inGameData.gameDifficulty && !loading ? (
+            <div>
+              <ModalGreeting
+                username = { this.props.loggedInUserId }
+              />
+              <button type="button" className="btn btn-primary" onClick={() => this.props.dispatch(organizeSongUriAndNames(songs, this.props.accesstoken, this.props.loggedInUserId, artist[0].name))}> 
+                PLAY NOW!
+              </button>
 
-            <br/>
-          </div> ) : theGameView 
-        }
+              <br/>
+            </div> ) : theGameView 
+          }
+        </div> ) : loadingView 
+      }
       </div>
     )
   }
@@ -122,7 +136,8 @@ const mapStateToProps = (state) => ({
   user: state.user.user,
   artist: state.artist.artist,
   songs: state.songs.songs,
-  inGameData: state.inGameData.inGameData
+  inGameData: state.inGameData.inGameData,
+  loading: state.inGameData.loading
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Premium);

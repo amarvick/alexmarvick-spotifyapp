@@ -32,16 +32,16 @@ class QuestionTemplate extends Component {
         <h1 className="display-4">QUESTION { this.props.questionNumber }: What song is this?</h1>
 
         <ButtonToolbar>
-          <Button bsSize="default" data-toggle="modal" data-target="responsePrompt" onClick={ () => this.checkAnswer(this.props.questionAnswers[0]) } block> 
+          <Button data-toggle="modal" data-target="responsePrompt" onClick={ () => this.checkAnswer(this.props.questionAnswers[0]) } block> 
             { this.props.questionAnswers[0] } 
           </Button>
-          <Button bsSize="default" data-toggle="modal" data-target="responsePrompt" onClick={ () => this.checkAnswer(this.props.questionAnswers[1]) } block>
+          <Button data-toggle="modal" data-target="responsePrompt" onClick={ () => this.checkAnswer(this.props.questionAnswers[1]) } block>
             { this.props.questionAnswers[1] }
           </Button>
-          <Button bsSize="default" data-toggle="modal" data-target="responsePrompt" onClick={ () => this.checkAnswer(this.props.questionAnswers[2]) } block>
+          <Button data-toggle="modal" data-target="responsePrompt" onClick={ () => this.checkAnswer(this.props.questionAnswers[2]) } block>
             { this.props.questionAnswers[2] }
           </Button>
-          <Button bsSize="default" data-toggle="modal" data-target="responsePrompt" onClick={ () => this.checkAnswer(this.props.questionAnswers[3]) } block>
+          <Button data-toggle="modal" data-target="responsePrompt" onClick={ () => this.checkAnswer(this.props.questionAnswers[3]) } block>
             { this.props.questionAnswers[3] }
           </Button>
         </ButtonToolbar>

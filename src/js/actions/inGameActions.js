@@ -33,6 +33,8 @@ export function selectDifficulty(difficulty) {
 // Retrieves song URIs and Names, which need to be in the same order for creating the playlist and having correct answers be in sync
 export function organizeSongUriAndNames(songs, accesstoken, userId, artistName) {
     return function(dispatch) {
+        dispatch(loadingInProgress());
+
         var theSongUriToName = []
         var theSongUris = []
         var theSongNames = []
@@ -117,7 +119,7 @@ export function startGame(accesstoken, userId, songUris, artistName) {
             type: "FETCH_INGAMEDATA_GAMEON"
         })
  
-        postPlaylist(userId, songUris, artistName, accesstoken) 
+        dispatch(postPlaylist(userId, songUris, artistName, accesstoken))
 
     }
 }
@@ -126,86 +128,94 @@ export function startGame(accesstoken, userId, songUris, artistName) {
 // AM To do - May need to find better way of organizing everything that goes on? Because this posts the playlist, 
 // then does a multitude of other things... 'post playlist' may not be the best function name therefore? Not sure - brainstorm
 export function postPlaylist(userId, allSongs, artist, accesstoken) {
-    // changes title of playlist depending on whether an artist's first letter is a vowel
-    var playlistName;
-    const vowels = ['A', 'E', 'I', 'O', 'U'];
+    return function(dispatch) {
+        // changes title of playlist depending on whether an artist's first letter is a vowel
+        var playlistName;
+        const vowels = ['A', 'E', 'I', 'O', 'U'];
 
-    if(artist) {
-        if (vowels.includes(artist[0])) {
-            playlistName = 'HOW BIG OF AN ' + artist.toUpperCase() + ' FAN ARE YOU?'
+        if(artist) {
+            if (vowels.includes(artist[0])) {
+                playlistName = 'HOW BIG OF AN ' + artist.toUpperCase() + ' FAN ARE YOU?'
+            } else {
+                playlistName = 'HOW BIG OF A ' + artist.toUpperCase() + ' FAN ARE YOU?'
+            }
         } else {
-            playlistName = 'HOW BIG OF A ' + artist.toUpperCase() + ' FAN ARE YOU?'
+            playlistName = 'HOW BIG OF A SPOTIFY FAN ARE YOU?'
         }
-    } else {
-        playlistName = 'HOW BIG OF A SPOTIFY FAN ARE YOU?'
-    }
 
-    axios({
-        url: 'https://api.spotify.com/v1/users/' + userId + '/playlists',
-        method: "POST",
-        data: {
-            name: playlistName,
-            public: true
-        },
-        headers: {
-            'Authorization': 'Bearer ' + accesstoken,
-            'Content-Type': 'application/json'
-        }
-    })
-        .then((response) => {
-            var playlistId = response.data.id;
-            var uri = response.data.uri
-            addTracksToPlaylist(playlistId, allSongs, uri, accesstoken, userId);
+        axios({
+            url: 'https://api.spotify.com/v1/users/' + userId + '/playlists',
+            method: "POST",
+            data: {
+                name: playlistName,
+                public: true
+            },
+            headers: {
+                'Authorization': 'Bearer ' + accesstoken,
+                'Content-Type': 'application/json'
+            }
         })
-        .catch((error) => {
-            alert('ERROR CREATING PLAYLIST: ' + error)
-            console.log(error)
-        })
+            .then((response) => {
+                var playlistId = response.data.id;
+                var uri = response.data.uri
+                dispatch(addTracksToPlaylist(playlistId, allSongs, uri, accesstoken, userId));
+            })
+            .catch((error) => {
+                alert('ERROR CREATING PLAYLIST: ' + error)
+                console.log(error)
+            })
+    }
 }
 
 // Add all tracks to the playlist
 export function addTracksToPlaylist(newPlaylistId, allSongs, contextUri, accesstoken, userId) {
-    axios({
-        url: 'https://api.spotify.com/v1/users/' + userId + '/playlists/' + newPlaylistId + '/tracks/',
-        method: "POST",
-        data: {
-            uris: allSongs
-        },
-        headers: {
-            'Authorization': 'Bearer ' + accesstoken,
-            'Content-Type': 'application/json'
-        }
-    })
+    return function(dispatch) {
+        axios({
+            url: 'https://api.spotify.com/v1/users/' + userId + '/playlists/' + newPlaylistId + '/tracks/',
+            method: "POST",
+            data: {
+                uris: allSongs
+            },
+            headers: {
+                'Authorization': 'Bearer ' + accesstoken,
+                'Content-Type': 'application/json'
+            }
+        })
+        
         .then((response) => {
             console.log(response);
-            playPlaylist(contextUri, accesstoken)
+            dispatch(playPlaylist(contextUri, accesstoken))
         })
         .catch((error) => {
             alert(error)
             console.log(error)
         })
-
-  }
+    }
+}
 
 // Plays the playlist from the beginning
 export function playPlaylist(contextUri, accesstoken) {
-    removeShuffle(accesstoken);
-    axios({
-        url: 'https://api.spotify.com/v1/me/player/play',
-        method: "PUT",
-        data: {
-            context_uri: contextUri
-        },
-        headers: {
-            'Authorization': 'Bearer ' + accesstoken
-        }
-    })
-        .then((response) => {
-            console.log(response)
+    return function(dispatch) {
+        dispatch(loadingComplete());
+        removeShuffle(accesstoken);
+        axios({
+            url: 'https://api.spotify.com/v1/me/player/play',
+            method: "PUT",
+            data: {
+                context_uri: contextUri
+            },
+            headers: {
+                'Authorization': 'Bearer ' + accesstoken
+            }
         })
-        .catch((error) => {
-            console.log(error)
-        })
+            .then((response) => {
+                console.log(response)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+
+    }
 }
 
 // Shuffle needs to be removed or the questions and playlist will be out of sync
@@ -325,6 +335,30 @@ export function shuffleArray(tracksArray) {
   
     return tracksArray;
 } 
+
+export function loadingInProgress() {
+    return function(dispatch) {
+        // Everything is loaded - can play playlist
+        dispatch({
+            type: "LOADING_INPROGRESS",
+            payload: {
+                loading: true
+            }
+        })
+    }
+}
+
+export function loadingComplete() {
+    return function(dispatch) {
+        // Everything is loaded - can play playlist
+        dispatch({
+            type: "LOADING_COMPLETE",
+            payload: {
+                loading: false
+            }
+        })
+    }
+}
 
 // // wraps dispatch to create nicer functions to call within our component
 // // Mapping dispatch actions to the props

@@ -5,7 +5,7 @@ export default function reducer(state={
     inGameData: {
         noOfCorrect: 0,
         questions: [],
-        yourResponses: [],
+        yourResponses: [], // AM - need to work on this. Logs in user's responses
         favoriteArtistsSongs: {
             songUris: [],
             songNames: []
@@ -16,10 +16,23 @@ export default function reducer(state={
         didUserCheat: false,
         gameDifficulty: null
     },
+    loading: false,
     error: null,
 }, action) {
 
     switch(action.type) {
+        case "LOADING_INPROGRESS": {
+            return {...state,
+                loading: true
+            }
+        }
+
+        case "LOADING_COMPLETE": {
+            return {...state,
+                loading: false
+            }
+        }
+
         case "INGAMEDATA_GAME_DIFFICULTY": {
             return {...state,
                 inGameData: {
