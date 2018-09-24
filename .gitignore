@@ -3,6 +3,9 @@
 # dependencies
 /node_modules
 
+# components
+./src/js/components/login.js
+
 # testing
 /coverage
 
