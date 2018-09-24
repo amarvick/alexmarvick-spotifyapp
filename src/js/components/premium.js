@@ -64,7 +64,7 @@ class Premium extends Component {
       loading = this.props.loading
     }
 
-    // AM - make in to a component, but OK for now
+    // AM - make in to a component and make this nicer, but OK for now
     loadingView = (
       <div>
         LOADING

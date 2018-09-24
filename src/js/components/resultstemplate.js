@@ -90,10 +90,10 @@ class ResultsTemplate extends Component {
 
         { endOfGameMsg }
 
-        <ButtonToolbar>
-          <Button bsStyle="success" onClick={ () => this.props.dispatch(restartGame()) }>Play Again?</Button>
-          <a className="btn btn-danger lead" target="_blank" rel="noopener noreferrer" href="https://github.com/amarvick/alexmarvick-spotifyapp" block>Leave (Redirect to Github)</a>
-        </ButtonToolbar>
+
+        <button type="button" className="btn btn-success" onClick={ () => this.props.dispatch(restartGame()) }>Play Again?</button>
+        <a className="btn btn-danger lead" target="_blank" rel="noopener noreferrer" href="https://github.com/amarvick/alexmarvick-spotifyapp" block>Leave (Redirect to Github)</a>
+
       </div>
     )
   }
