@@ -19,6 +19,7 @@ import { fetchArtistData } from './artistActions'
 // Updates the game difficulty
 export function selectDifficulty(difficulty) {
     return function (dispatch) {
+        dispatch(loadingInProgress());
         dispatch({
             type: "INGAMEDATA_GAME_DIFFICULTY",
             payload: {

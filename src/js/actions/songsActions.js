@@ -2,8 +2,9 @@
  * Description: Retrieves the user's favorite artist's top songs.   */
 
 import Spotify from 'spotify-web-api-js';
+import { loadingComplete } from './inGameActions'
 
-const spotifyApi = new Spotify(); 
+const spotifyApi = new Spotify();
 
 export function fetchSongs(artists, LocCode) {
     var allTracks = []
@@ -26,6 +27,8 @@ export function fetchSongs(artists, LocCode) {
                     payload: error
                 })
             })
+
+            dispatch(loadingComplete());
         }
     }
 }
