@@ -2,22 +2,22 @@
  * Description: Retrieves the user's top artists, then immediately  *
  *              calls to get that artist's top songs.               */
 
-import Spotify from 'spotify-web-api-js';
+import Spotify from 'spotify-web-api-js'
 import { fetchSongs } from './songsActions'
 
-const spotifyApi = new Spotify(); 
+const spotifyApi = new Spotify()
 
 // Retrieve Artist, then songs immediately after
 export function fetchArtistData(difficulty) {
     return function(dispatch) {
         spotifyApi.getMyTopArtists()
         .then((response) => {
-            let thePayload = [];
+            let thePayload = []
 
             if (difficulty === 'Easy') {
                 thePayload.push(response.items[0])
             } else if (difficulty === 'Medium') {
-                var randomInt = Math.floor(Math.random() * response.items.length); // AM - may have to make 'ceil' so it doesn't pick the #1 artist
+                var randomInt = Math.floor(Math.random() * response.items.length) // AM - may have to make 'ceil' so it doesn't pick the #1 artist
                 thePayload.push(response.items[randomInt])
             } else if (difficulty === 'Hard') {
                 thePayload.push(response.items)
@@ -29,7 +29,7 @@ export function fetchArtistData(difficulty) {
             })
             
             if (difficulty === 'Hard') {
-                dispatch(fetchSongs(thePayload[0], 'US'));
+                dispatch(fetchSongs(thePayload[0], 'US'))
             } else {
                 dispatch(fetchSongs(thePayload, 'US'))
             }

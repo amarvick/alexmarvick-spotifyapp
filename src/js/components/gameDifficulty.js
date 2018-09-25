@@ -1,9 +1,9 @@
 /* File Name: gameDifficulty.js                                     *
  * Description: Welcome screen/game instructions for premium users  */
 
-import React, { Component, StartupActions } from 'react';
-import { ButtonToolbar, Button } from 'react-bootstrap';
-import { connect } from 'react-redux';
+import React, { Component, StartupActions } from 'react'
+import { ButtonToolbar, Button } from 'react-bootstrap'
+import { connect } from 'react-redux'
 
 import TheModal from './modal'
 
@@ -12,12 +12,12 @@ import { selectDifficulty } from '../actions/inGameActions'
 connect((store) => {
     return {
         inGameData: store.inGameData.inGameData
-    };
+    }
 })
 
 class GameDifficulty extends Component {
     constructor(props){
-        super(props);
+        super(props)
  
         this.state = {
             username: ''
@@ -66,4 +66,4 @@ const mapStateToProps = (state) => ({
     inGameData: state.inGameData.inGameData
   })
   
-export default connect(mapStateToProps, mapDispatchToProps)(GameDifficulty);
+export default connect(mapStateToProps, mapDispatchToProps)(GameDifficulty)

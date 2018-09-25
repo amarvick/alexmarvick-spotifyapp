@@ -1,25 +1,25 @@
 /* File Name: modal.js                                              *
  * Description: Bootstrap modal                                     */
 
-import React, { Component, StartupActions } from 'react';
-import { ButtonToolbar, Button, Modal } from 'react-bootstrap';
-import { connect } from 'react-redux';
+import React, { Component, StartupActions } from 'react'
+import { ButtonToolbar, Button, Modal } from 'react-bootstrap'
+import { connect } from 'react-redux'
 
 class TheModal extends Component {
     constructor(props) {
-      super(props);
+      super(props)
   
-    //   this.handleShow = this.handleShow.bind(this);
-      this.closeModal = this.closeModal.bind(this);
+    //   this.handleShow = this.handleShow.bind(this)
+      this.closeModal = this.closeModal.bind(this)
   
       this.state = {
         show: true
-      };
+      }
     }
 
   
     closeModal() {
-    //   this.props.closeModal();
+    //   this.props.closeModal()
     }
   
     render(props) {
@@ -45,7 +45,7 @@ class TheModal extends Component {
             </Modal.Footer>
           </Modal>
         </div>
-      );
+      )
     }
   }
 
@@ -65,4 +65,4 @@ class TheModal extends Component {
     inGameData: state.inGameData.inGameData
   })
   
-  export default connect(mapStateToProps, mapDispatchToProps)(TheModal);
+  export default connect(mapStateToProps, mapDispatchToProps)(TheModal)

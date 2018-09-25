@@ -1,7 +1,7 @@
 /* File Name: login.js                                              *
  * Description: Login Screen for User                               */
 
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
 class Login extends Component {
 
@@ -19,4 +19,4 @@ class Login extends Component {
     )
   }
 }
-export default Login;
+export default Login

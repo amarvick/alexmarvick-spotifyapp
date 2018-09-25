@@ -1,10 +1,10 @@
 /* File Name: songsActions.js                                       *
  * Description: Retrieves the user's favorite artist's top songs.   */
 
-import Spotify from 'spotify-web-api-js';
+import Spotify from 'spotify-web-api-js'
 import { loadingComplete } from './inGameActions'
 
-const spotifyApi = new Spotify();
+const spotifyApi = new Spotify()
 
 export function fetchSongs(artists, LocCode) {
     var allTracks = []
@@ -12,7 +12,7 @@ export function fetchSongs(artists, LocCode) {
         for (var i = 0; i < artists.length; i++) {
             spotifyApi.getArtistTopTracks(artists[i].id, LocCode)
             .then((response) => {
-                allTracks = allTracks.concat(response.tracks);
+                allTracks = allTracks.concat(response.tracks)
                 console.log(allTracks)
 
                 dispatch({
@@ -28,7 +28,7 @@ export function fetchSongs(artists, LocCode) {
                 })
             })
 
-            dispatch(loadingComplete());
+            dispatch(loadingComplete())
         }
     }
 }

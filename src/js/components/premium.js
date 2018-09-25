@@ -1,14 +1,14 @@
 /* File Name: premium.js                                            *
  * Description: The game display. For premium users only            */
 
-import React, { Component, StartupActions } from 'react';
-import { ButtonToolbar, Button, Modal } from 'react-bootstrap';
-import { connect } from 'react-redux';
+import React, { Component, StartupActions } from 'react'
+import { ButtonToolbar, Button, Modal } from 'react-bootstrap'
+import { connect } from 'react-redux'
 
-import ModalGreeting from './modalgreeting';
-import QuestionTemplate from './questiontemplate';
-import ResultsTemplate from './resultstemplate';
-import GameDifficulty from './gameDifficulty';
+import ModalGreeting from './modalgreeting'
+import QuestionTemplate from './questiontemplate'
+import ResultsTemplate from './resultstemplate'
+import GameDifficulty from './gameDifficulty'
 
 import { organizeSongUriAndNames } from '../actions/inGameActions'
 import { onAnswerSelect } from '../actions/inGameActions'
@@ -18,13 +18,17 @@ connect((store) => {
     artist: store.artist.artist,
     songs: store.songs.songs,
     inGameData: store.inGameData.inGameData,
-    loading: store.inGameData.loading
-  };
+    loading: store.inGameData.loading,
+    userError: store.user.error,
+    artistError: store.artist.error,
+    songsError: store.songs.error,
+    inGameDataError: store.inGameData.error
+  }
 })
 
 class Premium extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = { 
       accesstoken: '',
@@ -32,42 +36,66 @@ class Premium extends Component {
     }
     
     // Functions needed to update the state when passing props in to question template
-    this.onAnswerSelect = this.onAnswerSelect.bind(this);
+    this.onAnswerSelect = this.onAnswerSelect.bind(this)
   }
 
   // Determines if answer was correct or not, and whether to proceed to next question or be done.
   onAnswerSelect(isCorrect) {
-    this.props.dispatch(onAnswerSelect(isCorrect, this.props.inGameData.questionNo, this.props.inGameData.noOfCorrect, this.props.accesstoken));
+    this.props.dispatch(onAnswerSelect(isCorrect, this.props.inGameData.questionNo, this.props.inGameData.noOfCorrect, this.props.accesstoken))
   }
 
   render(props) {
-    let theGameView;
-    let loadingView;
+    let style = {
+      fontSize: 100
+    }
 
     let artist = []
+    let songs = []
+    let inGameData = {}
+    let loading
+    let errors = false
+    let error
+
+    let theGameView
+    let loadingView
+    let errorView
 
     if (this.props.artist) {
       artist = this.props.artist
     }
 
-    let songs = []
-
     if (this.props.songs) {
       songs = this.props.songs
     }
-
-    let inGameData = {}
-    let loading
 
     if (this.props.inGameData) {
       inGameData = this.props.inGameData
       loading = this.props.loading
     }
 
-    // AM - make in to a component and make this nicer, but OK for now
+    // In case an error occurs, will populate in error message.
+    if (this.props.userError) {
+      error = this.props.userError
+    } else if (this.props.artistError) {
+      error = this.props.artistError
+    } else if (this.props.songsError) {
+      error = this.props.songsError
+    } else if (this.props.inGameDataError) {
+      error = this.props.inGameDataError
+    }
+
+    // When data is retrieving...
     loadingView = (
+      <div style = {style}>
+        <i className="fa fa-circle-o-notch fa-spin"/><br/>
+        LOADING...
+      </div>
+    )
+
+    // If an error happens at any point. Will want to edit this so the error is specific
+    errorView = (
       <div>
-        LOADING
+        ERROR! {error}
       </div>
     )
 
@@ -94,30 +122,37 @@ class Premium extends Component {
     
     return (
       <div className='Premium'>
-      { !loading ? (
-        <div>
-          { !inGameData.gameInProgress && !inGameData.resultsReady && inGameData.gameDifficulty == null &&
+        { !errors ? (
+          <div>
+          {/* Display screens based on whether data is loading */}
+          { !loading ? (
             <div>
-              <GameDifficulty
-                username = { this.props.loggedInUserId }
-              />
-            </div>
-          }
+              {/* Display the difficulty screen - the main one */}
+              { !inGameData.gameInProgress && !inGameData.resultsReady && inGameData.gameDifficulty == null &&
+                <div>
+                  <GameDifficulty
+                    username = { this.props.loggedInUserId }
+                  />
+                </div>
+              }
 
-          { !inGameData.gameInProgress && !inGameData.resultsReady && inGameData.gameDifficulty && !loading ? (
-            <div>
-              <ModalGreeting
-                username = { this.props.loggedInUserId }
-              />
-              <button type="button" className="btn btn-primary" onClick={() => this.props.dispatch(organizeSongUriAndNames(songs, this.props.accesstoken, this.props.loggedInUserId, artist[0].name))}> 
-                PLAY NOW!
-              </button>
+              {/* Display the instructions OR the in game view */}
+              { !inGameData.gameInProgress && !inGameData.resultsReady && inGameData.gameDifficulty ? (
+                <div>
+                  <ModalGreeting
+                    username = { this.props.loggedInUserId }
+                  />
+                  <button type="button" className="btn btn-primary" onClick={() => this.props.dispatch(organizeSongUriAndNames(songs, this.props.accesstoken, this.props.loggedInUserId, artist[0].name))}> 
+                    PLAY NOW!
+                  </button>
 
-              <br/>
-            </div> ) : theGameView 
+                  <br/>
+                </div> ) : theGameView 
+              }
+            </div> ) : loadingView 
           }
-        </div> ) : loadingView 
-      }
+        </div>) : errorView
+        }
       </div>
     )
   }
@@ -137,7 +172,11 @@ const mapStateToProps = (state) => ({
   artist: state.artist.artist,
   songs: state.songs.songs,
   inGameData: state.inGameData.inGameData,
-  loading: state.inGameData.loading
+  loading: state.inGameData.loading,
+  userError: state.user.error,
+  artistError: state.artist.error,
+  songsError: state.songs.error,
+  inGameDataError: state.inGameData.error
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Premium);
+export default connect(mapStateToProps, mapDispatchToProps)(Premium)

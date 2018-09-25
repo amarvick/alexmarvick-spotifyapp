@@ -1,26 +1,26 @@
 /* File Name: resultstemplate.js                                    *
  * Description: The template for post-game results                  */
 
-import React, { Component, StartupActions } from 'react';
-import { ButtonToolbar, Button } from 'react-bootstrap';
-import { connect } from 'react-redux';
+import React, { Component, StartupActions } from 'react'
+import { ButtonToolbar, Button } from 'react-bootstrap'
+import { connect } from 'react-redux'
 
 import { restartGame } from '../actions/inGameActions'
 
 connect((store) => {
   return {
       inGameData: store.inGameData.inGameData
-  };
+  }
 })
 
 class ResultsTemplate extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       correctCount: 0,
       didUserCheat: false
-    };
+    }
   }
 
   // The results
@@ -33,7 +33,7 @@ class ResultsTemplate extends Component {
     let sevenToNineCorrect = 'Pretty good! Lucky for you, there is still more of your favorite artist to explore!'
     let allCorrect = 'Wow! You really are a big fan of your favorite artist. Well done!'
 
-    let endOfGameMsg;
+    let endOfGameMsg
     
     if (this.props.didCheat) {
       endOfGameMsg = (
@@ -112,4 +112,4 @@ const mapStateToProps = (state) => ({
   inGameData: state.inGameData.inGameData
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(ResultsTemplate);
+export default connect(mapStateToProps, mapDispatchToProps)(ResultsTemplate)

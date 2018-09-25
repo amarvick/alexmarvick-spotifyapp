@@ -1,11 +1,11 @@
 /* File Name: modalgreeting.js                                      *
  * Description: Welcome screen/game instructions for premium users  */
 
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
 class ModalGreeting extends Component {
   constructor(props){
-    super(props);
+    super(props)
 
     this.state = {
       username: ''
@@ -30,4 +30,4 @@ class ModalGreeting extends Component {
     )
   }
 }
-export default ModalGreeting;
+export default ModalGreeting

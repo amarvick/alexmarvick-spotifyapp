@@ -4,22 +4,22 @@
  *              which get generated, if the user cheated, the       *
  *              question they are on, etc.                          */
 
-import axios from 'axios';
-// import { StartupActions } from 'react';
-// import { connect } from 'react-redux';
+import axios from 'axios'
+// import { StartupActions } from 'react'
+// import { connect } from 'react-redux'
 
 import { fetchArtistData } from './artistActions'
 
 // connect((store) => {
 //     return {
 //         inGameData: store.inGameData.inGameData
-//     };
+//     }
 // })
 
 // Updates the game difficulty
 export function selectDifficulty(difficulty) {
     return function (dispatch) {
-        dispatch(loadingInProgress());
+        dispatch(loadingInProgress())
         dispatch({
             type: "INGAMEDATA_GAME_DIFFICULTY",
             payload: {
@@ -27,14 +27,14 @@ export function selectDifficulty(difficulty) {
             }   
         })
 
-        dispatch(fetchArtistData(difficulty));
+        dispatch(fetchArtistData(difficulty))
     }
 }
 
 // Retrieves song URIs and Names, which need to be in the same order for creating the playlist and having correct answers be in sync
 export function organizeSongUriAndNames(songs, accesstoken, userId, artistName) {
     return function(dispatch) {
-        dispatch(loadingInProgress());
+        dispatch(loadingInProgress())
 
         var theSongUriToName = []
         var theSongUris = []
@@ -45,7 +45,7 @@ export function organizeSongUriAndNames(songs, accesstoken, userId, artistName) 
         // Maps Song URI with Name so they are in the same order when generating playlist. AM - probably a better way of organizing; try a map
         // for (var i = 0; i < songs.length; i++) {
         for (var i = 0; i < 10; i++) {
-            theSongUriToName.push(songs[i].uri + '---' + songs[i].name);
+            theSongUriToName.push(songs[i].uri + '---' + songs[i].name)
         }
         
         for (var j = 0; j < theSongUriToName.length; j++) {
@@ -72,7 +72,7 @@ export function organizeSongUriAndNames(songs, accesstoken, userId, artistName) 
 // Generates each question
 export function generateQuestions(songNames, accesstoken, userId, songUris, artistName) {
     return function(dispatch) {
-        var questions = [];
+        var questions = []
 
         for (var i = 0; i < 10; i++) {
             var multChoiceOpts = []
@@ -80,24 +80,24 @@ export function generateQuestions(songNames, accesstoken, userId, songUris, arti
             var isQuestionInserted
 
             // Add correct answer
-            multChoiceOpts.push(songNames[i]);
-            noQuestionInserted.push(i); 
+            multChoiceOpts.push(songNames[i])
+            noQuestionInserted.push(i)
 
             // Add remaining three possible selections
             for (var j = 0; j < 3; j++) {
-                isQuestionInserted = false;
+                isQuestionInserted = false
                 while(!isQuestionInserted) {
                     var index = Math.floor(Math.random() * 9)
                     
                     if (!noQuestionInserted.includes(index)) {
                         noQuestionInserted.push(index)
                         multChoiceOpts.push(songNames[index])
-                        isQuestionInserted = true;
+                        isQuestionInserted = true
                     } 
                 }
             }
-            shuffleArray(multChoiceOpts);
-            questions.push(multChoiceOpts);
+            shuffleArray(multChoiceOpts)
+            questions.push(multChoiceOpts)
         }
 
         dispatch({
@@ -108,7 +108,7 @@ export function generateQuestions(songNames, accesstoken, userId, songUris, arti
         })
 
         // access token, userId, songUris, artistName
-        dispatch(startGame(accesstoken, userId, songUris, artistName));
+        dispatch(startGame(accesstoken, userId, songUris, artistName))
     }
 }
 
@@ -132,7 +132,7 @@ export function postPlaylist(userId, allSongs, artist, accesstoken) {
     return function(dispatch) {
         // changes title of playlist depending on whether an artist's first letter is a vowel
         var playlistName;
-        const vowels = ['A', 'E', 'I', 'O', 'U'];
+        const vowels = ['A', 'E', 'I', 'O', 'U']
 
         if(artist) {
             if (vowels.includes(artist[0])) {
@@ -157,9 +157,9 @@ export function postPlaylist(userId, allSongs, artist, accesstoken) {
             }
         })
             .then((response) => {
-                var playlistId = response.data.id;
+                var playlistId = response.data.id // AM - ask user if they want to keep the playlist. Maybe put this in 'inGameData' or 'songs' reducer? Decide
                 var uri = response.data.uri
-                dispatch(addTracksToPlaylist(playlistId, allSongs, uri, accesstoken, userId));
+                dispatch(addTracksToPlaylist(playlistId, allSongs, uri, accesstoken, userId))
             })
             .catch((error) => {
                 alert('ERROR CREATING PLAYLIST: ' + error)
@@ -184,7 +184,7 @@ export function addTracksToPlaylist(newPlaylistId, allSongs, contextUri, accesst
         })
         
         .then((response) => {
-            console.log(response);
+            console.log(response)
             dispatch(playPlaylist(contextUri, accesstoken))
         })
         .catch((error) => {
@@ -197,8 +197,8 @@ export function addTracksToPlaylist(newPlaylistId, allSongs, contextUri, accesst
 // Plays the playlist from the beginning
 export function playPlaylist(contextUri, accesstoken) {
     return function(dispatch) {
-        dispatch(loadingComplete());
-        removeShuffle(accesstoken);
+        dispatch(loadingComplete())
+        removeShuffle(accesstoken)
         axios({
             url: 'https://api.spotify.com/v1/me/player/play',
             method: "PUT",
@@ -246,17 +246,17 @@ export function onAnswerSelect(isCorrect, questionNum, correctCount, accessToken
                 payload: correctCount + 1
             })
         } else {
-            alert('INCORRECT ANSWER :(');
+            alert('INCORRECT ANSWER :(')
         }
 
         // Changes to the next question OR you're finished and the results will be presented.
-        // AM todo - this won't bump up the question number, try to fix this
         if (questionNum < 9) {
+            dispatch(loadingInProgress())
             dispatch({
                 type: 'FETCH_INGAMEDATA_NEXTQUESTION',
                 payload: questionNum + 1
             })
-            playNextTrack(accessToken)
+            dispatch(playNextTrack(accessToken))
         } else {
             // AM - fill out payload
             dispatch({
@@ -273,19 +273,22 @@ export function onAnswerSelect(isCorrect, questionNum, correctCount, accessToken
 
 // Plays next track
 export function playNextTrack(accesstoken) {
-    axios({
-        url: 'https://api.spotify.com/v1/me/player/next',
-        method: "POST",
-        headers: {
-            'Authorization': 'Bearer ' + accesstoken
-        }
-    })
-        .then((response) => {
-            console.log(response)
+    return function(dispatch) {
+        axios({
+            url: 'https://api.spotify.com/v1/me/player/next',
+            method: "POST",
+            headers: {
+                'Authorization': 'Bearer ' + accesstoken
+            }
         })
-        .catch((error) => {
-            console.log(error)
-        })
+            .then((response) => {
+                console.log(response)
+                dispatch(loadingComplete())
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }
 }
 
 // Stops playlist when game is finished
@@ -319,22 +322,22 @@ export function restartGame() {
 
 // Randomize array order (generated playlist, multiple choice questions, etc.)
 export function shuffleArray(tracksArray) {
-    var currentIndex = tracksArray.length, temporaryValue, randomIndex;
+    var currentIndex = tracksArray.length, temporaryValue, randomIndex
   
     // While there remain elements to shuffle...
     while (0 !== currentIndex) {
     
         // Pick a remaining element...
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
+        randomIndex = Math.floor(Math.random() * currentIndex)
+        currentIndex -= 1
     
         // And swap it with the current element.
-        temporaryValue = tracksArray[currentIndex];
-        tracksArray[currentIndex] = tracksArray[randomIndex];
-        tracksArray[randomIndex] = temporaryValue;
+        temporaryValue = tracksArray[currentIndex]
+        tracksArray[currentIndex] = tracksArray[randomIndex]
+        tracksArray[randomIndex] = temporaryValue
     }
   
-    return tracksArray;
+    return tracksArray
 } 
 
 export function loadingInProgress() {
@@ -377,4 +380,4 @@ export function loadingComplete() {
 //     inGameData: state.inGameData.inGameData
 //   })
   
-// export default connect(mapStateToProps, mapDispatchToProps);
+// export default connect(mapStateToProps, mapDispatchToProps)

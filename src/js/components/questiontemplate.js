@@ -1,27 +1,27 @@
 /* File Name: questiontemplate.js                                   *
  * Description: The template for each individual question           */
 
-import React, { Component } from 'react';
-import { ButtonToolbar, Button, Modal } from 'react-bootstrap';
+import React, { Component } from 'react'
+import { ButtonToolbar, Button, Modal } from 'react-bootstrap'
 
 class QuestionTemplate extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       questionAnswers: new Array(4),
       correctResponse: '',
       questionNumber: 0,
       show: false
-    };
+    }
   }
 
   // Validates answer and checks whether to proceed to the next question or produce score
   checkAnswer(userResponse) {
     if (this.props.correctResponse === userResponse) {
-      this.props.onAnswerSelect(true);
+      this.props.onAnswerSelect(true)
     } else {
-      this.props.onAnswerSelect(false);
+      this.props.onAnswerSelect(false)
     }
   }
 
@@ -52,4 +52,4 @@ class QuestionTemplate extends Component {
   }
 }
 
-export default QuestionTemplate;
+export default QuestionTemplate

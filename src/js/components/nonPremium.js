@@ -2,7 +2,7 @@
  * Description: Warning screen for non-premium users/if access      *
  *              token is expired                                    */
 
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
 class NonPremium extends Component {
 
@@ -18,4 +18,4 @@ class NonPremium extends Component {
     )
   }
 }
-export default NonPremium;
+export default NonPremium
