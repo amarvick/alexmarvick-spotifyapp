@@ -4,6 +4,7 @@
 
 import Spotify from 'spotify-web-api-js'
 import { fetchSongs } from './songsActions'
+import { loadingComplete } from './inGameActions'
 
 const spotifyApi = new Spotify()
 
@@ -40,6 +41,7 @@ export function fetchArtistData(difficulty) {
                 type: "FETCH_ARTIST_ERROR",
                 payload: error
             })
+            dispatch(loadingComplete())
         })
     }
 }

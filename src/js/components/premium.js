@@ -9,6 +9,7 @@ import ModalGreeting from './modalgreeting'
 import QuestionTemplate from './questiontemplate'
 import ResultsTemplate from './resultstemplate'
 import GameDifficulty from './gameDifficulty'
+import Error from './error'
 
 import { organizeSongUriAndNames } from '../actions/inGameActions'
 import { onAnswerSelect } from '../actions/inGameActions'
@@ -74,14 +75,21 @@ class Premium extends Component {
     }
 
     // In case an error occurs, will populate in error message.
-    if (this.props.userError) {
-      error = this.props.userError
-    } else if (this.props.artistError) {
-      error = this.props.artistError
-    } else if (this.props.songsError) {
-      error = this.props.songsError
-    } else if (this.props.inGameDataError) {
-      error = this.props.inGameDataError
+    if (!errors) {
+      if (this.props.userError) {
+        console.log(this.props.userError)
+        error = String(this.props.userError)
+        errors = true
+      } else if (this.props.artistError) {
+        error = String(this.props.artistError)
+        errors = true
+      } else if (this.props.songsError) {
+        error = String(this.props.songsError)
+        errors = true
+      } else if (this.props.inGameDataError) {
+        error = String(this.props.inGameDataError)
+        errors = true
+      }
     }
 
     // When data is retrieving...
@@ -95,7 +103,9 @@ class Premium extends Component {
     // If an error happens at any point. Will want to edit this so the error is specific
     errorView = (
       <div>
-        ERROR! {error}
+        <Error
+          errorMessage = { error }
+        />
       </div>
     )
 
