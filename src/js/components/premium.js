@@ -35,10 +35,6 @@ class Premium extends Component {
 
   // AM - a lot of stuff in here! May consider componentizing?
   render(props) {
-    let style = {
-      fontSize: 100
-    }
-
     let artist = this.props.artist || []
     let songs = this.props.songs || []
     let inGameData = this.props.inGameData || {}
