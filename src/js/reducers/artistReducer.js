@@ -1,10 +1,12 @@
 /* File Name: artistReducer.js                                      *
  * Description: Redux reducer for the artist                        */
 
+import ArtistActionType from '../actionTypes/artistActionType'
+
 export default function reducer(state={
-    fetching: false,
     fetched: false,
     artist: [
+        // AM - might not need object in here. Remove at some point and see what happens
         {
             artist: null,
             artistId: null
@@ -14,23 +16,15 @@ export default function reducer(state={
 }, action) {
 
     switch(action.type) {
-        case "FETCH_ARTIST": {
+        case ArtistActionType.FETCH_ARTIST_SUCCESS: {
             return {...state,
-                fetching: true
-            }
-        }
-
-        case "FETCH_ARTIST_SUCCESS": {
-            return {...state,
-                fetching: false,
                 fetched: true,
                 artist: action.payload
             }
         }
 
-        case "FETCH_ARTIST_ERROR": {
+        case ArtistActionType.FETCH_ARTIST_ERROR: {
             return {...state,
-                fetching: false,
                 error: action.payload
             }
         }

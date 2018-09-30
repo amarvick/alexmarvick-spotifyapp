@@ -14,18 +14,20 @@ import Error from './error'
 import { organizeSongUriAndNames } from '../actions/inGameActions'
 import { onAnswerSelect } from '../actions/inGameActions'
 
-connect((store) => {
-  return {
-    artist: store.artist.artist,
-    songs: store.songs.songs,
-    inGameData: store.inGameData.inGameData,
-    loading: store.inGameData.loading,
-    userError: store.user.error,
-    artistError: store.artist.error,
-    songsError: store.songs.error,
-    inGameDataError: store.inGameData.error
-  }
-})
+// AM - Check other components; connect functions may not be necessary
+
+// connect((store) => {
+//   return {
+//     artist: store.artist.artist,
+//     songs: store.songs.songs,
+//     inGameData: store.inGameData.inGameData,
+//     loading: store.inGameData.loading,
+//     userError: store.user.error,
+//     artistError: store.artist.error,
+//     songsError: store.songs.error,
+//     inGameDataError: store.inGameData.error
+//   }
+// })
 
 class Premium extends Component {
   constructor(props) {
@@ -41,16 +43,18 @@ class Premium extends Component {
   }
 
   // Determines if answer was correct or not, and whether to proceed to next question or be done.
+  // Use mapDispatchToProps. See example
   onAnswerSelect(isCorrect) {
     this.props.dispatch(onAnswerSelect(isCorrect, this.props.inGameData.questionNo, this.props.inGameData.noOfCorrect, this.props.accesstoken))
   }
 
+  // AM - a lot of stuff in here! May consider componentizing?
   render(props) {
     let style = {
       fontSize: 100
     }
 
-    let artist = []
+    // let artist = []
     let songs = []
     let inGameData = {}
     let loading
@@ -61,9 +65,11 @@ class Premium extends Component {
     let loadingView
     let errorView
 
-    if (this.props.artist) {
-      artist = this.props.artist
-    }
+    let artist = this.props.artist || []; // AM - try this format for the other contents
+
+    // if (this.props.artist) {
+    //   artist = this.props.artist
+    // }
 
     if (this.props.songs) {
       songs = this.props.songs
@@ -74,7 +80,7 @@ class Premium extends Component {
       loading = this.props.loading
     }
 
-    // In case an error occurs, will populate in error message.
+    // In case an error occurs, will populate in error message. Put this in to a function
     if (!errors) {
       if (this.props.userError) {
         console.log(this.props.userError)
@@ -90,7 +96,7 @@ class Premium extends Component {
         error = String(this.props.inGameDataError)
         errors = true
       }
-    }
+    } // If error, return error view
 
     // When data is retrieving...
     loadingView = (
@@ -130,6 +136,9 @@ class Premium extends Component {
       }
     } 
     
+    // if (errors) { return (<div>errorTemplate</div>) } else { return } format will be better. Simplify this, use more components!
+    // Loading, error, game component. Game component can have the four options; game difficulty, greeting, in-game questions, results...
+
     return (
       <div className='Premium'>
         { !errors ? (
@@ -139,11 +148,9 @@ class Premium extends Component {
             <div>
               {/* Display the difficulty screen - the main one */}
               { !inGameData.gameInProgress && !inGameData.resultsReady && inGameData.gameDifficulty == null &&
-                <div>
                   <GameDifficulty
                     username = { this.props.loggedInUserId }
                   />
-                </div>
               }
 
               {/* Display the instructions OR the in game view */}
@@ -152,7 +159,9 @@ class Premium extends Component {
                   <ModalGreeting
                     username = { this.props.loggedInUserId }
                   />
-                  <button type="button" className="btn btn-primary" onClick={() => this.props.dispatch(organizeSongUriAndNames(songs, this.props.accesstoken, this.props.loggedInUserId, artist[0].name))}> 
+
+                  {/* AM - Put this button in the ModalGreeting...  */}
+                  <button type="button" className="btn btn-primary" onClick={() => this.props.organizeSongUriAndNames(songs, this.props.accesstoken, this.props.loggedInUserId, artist[0].name)}> 
                     PLAY NOW!
                   </button>
 
@@ -172,7 +181,8 @@ class Premium extends Component {
 // Mapping dispatch actions to the props
 const mapDispatchToProps = (dispatch) => ({
   dispatch: dispatch,
-  startup: () => dispatch(StartupActions.startup())
+  startup: () => dispatch(StartupActions.startup()),
+  organizeSongUriAndNames: (songs, accesstoken, loggedInUserId, artistName) => dispatch(organizeSongUriAndNames(songs, accesstoken, loggedInUserId, artistName)) // See line 155
 })
 
 // Maps the state in to props (for displaying on the front end)
@@ -190,3 +200,5 @@ const mapStateToProps = (state) => ({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Premium)
+
+//mapStateToProps - you have a bunch of stuff on Redux that you want to put in to props for the component

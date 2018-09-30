@@ -1,8 +1,9 @@
 /* File Name: userReducer.js                                        *
  * Description: Redux reducer for the user                          */
 
+import UserActionTypes from '../actionTypes/userActionTypes'
+
 export default function reducer(state={
-    fetching: false,
     fetched: false,
     user: {
         userId: null,
@@ -12,23 +13,15 @@ export default function reducer(state={
 }, action) {
 
     switch(action.type) {
-        case "FETCH_USER": {
+        case UserActionTypes.FETCH_USER_SUCCESS: {
             return {...state,
-                fetching: true
-            }
-        }
-
-        case "FETCH_USER_SUCCESS": {
-            return {...state,
-                fetching: false,
                 fetched: true,
                 user: action.payload
             }
         }
 
-        case "FETCH_USER_ERROR": {
+        case UserActionTypes.FETCH_USER_ERROR: {
             return {...state,
-                fetching: false,
                 error: action.payload
             }
         }

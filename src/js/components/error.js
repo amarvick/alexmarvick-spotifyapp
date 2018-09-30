@@ -21,7 +21,9 @@ class Error extends Component {
 
         Error: { this.props.errorMessage }
 
-        <p className="lead"> Please try logging in again or refreshing the page. If the problem still persists, please reach out amarvick94@gmail.com</p>
+        <p className="lead">
+          Please try logging in again or refreshing the page. If the problem still persists, please reach out amarvick94@gmail.com
+        </p>
       </div>
 
     )

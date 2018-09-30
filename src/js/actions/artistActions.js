@@ -6,6 +6,8 @@ import Spotify from 'spotify-web-api-js'
 import { fetchSongs } from './songsActions'
 import { loadingComplete } from './inGameActions'
 
+import ArtistActionType from '../actionTypes/artistActionType'
+
 const spotifyApi = new Spotify()
 
 // Retrieve Artist, then songs immediately after
@@ -15,6 +17,8 @@ export function fetchArtistData(difficulty) {
         .then((response) => {
             let thePayload = []
 
+            // AM - put a flag here in case no artists return/user only has one artist and tries to do medium/hard setting
+
             if (difficulty === 'Easy') {
                 thePayload.push(response.items[0])
             } else if (difficulty === 'Medium') {
@@ -22,10 +26,12 @@ export function fetchArtistData(difficulty) {
                 thePayload.push(response.items[randomInt])
             } else if (difficulty === 'Hard') {
                 thePayload.push(response.items)
+            } else {
+                throw 'Invalid Difficulty' // AM - :)
             }
 
             dispatch({
-                type: "FETCH_ARTIST_SUCCESS",
+                type: ArtistActionType.FETCH_ARTIST_SUCCESS,
                 payload: thePayload
             })
             
@@ -38,7 +44,7 @@ export function fetchArtistData(difficulty) {
 
         .catch((error) => {
             dispatch({
-                type: "FETCH_ARTIST_ERROR",
+                type: ArtistActionType.FETCH_ARTIST_ERROR,
                 payload: error
             })
             dispatch(loadingComplete())

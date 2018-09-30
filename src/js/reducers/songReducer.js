@@ -1,8 +1,9 @@
 /* File Name: songReducer.js                                        *
  * Description: Redux reducer for the songs                         */
 
+import SongsActionTypes from '../actionTypes/songsActionTypes'
+
 export default function reducer(state={
-    fetching: false,
     fetched: false,
     songs: [
         {
@@ -14,23 +15,15 @@ export default function reducer(state={
 }, action) {
 
     switch(action.type) {
-        case "FETCH_SONGS": {
+        case SongsActionTypes.FETCH_SONGS_SUCCESS: {
             return {...state,
-                fetching: true
-            }
-        }
-
-        case "FETCH_SONGS_SUCCESS": {
-            return {...state,
-                fetching: false,
                 fetched: true,
                 songs: action.payload
             }
         }
 
-        case "FETCH_SONGS_ERROR": {
+        case SongsActionTypes.FETCH_SONGS_ERROR: {
             return {...state,
-                fetching: false,
                 error: action.payload
             }
         }

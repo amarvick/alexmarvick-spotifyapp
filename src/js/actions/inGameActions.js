@@ -24,7 +24,7 @@ export function selectDifficulty(difficulty) {
             type: "INGAMEDATA_GAME_DIFFICULTY",
             payload: {
                 gameDifficulty: difficulty
-            }   
+            }
         })
 
         dispatch(fetchArtistData(difficulty))
@@ -33,7 +33,7 @@ export function selectDifficulty(difficulty) {
 
 // Retrieves song URIs and Names, which need to be in the same order for creating the playlist and having correct answers be in sync
 export function organizeSongUriAndNames(songs, accesstoken, userId, artistName) {
-    return function(dispatch) {
+    return function (dispatch) {
         dispatch(loadingInProgress())
 
         var theSongUriToName = []
@@ -47,7 +47,7 @@ export function organizeSongUriAndNames(songs, accesstoken, userId, artistName) 
         for (var i = 0; i < 10; i++) {
             theSongUriToName.push(songs[i].uri + '---' + songs[i].name)
         }
-        
+
         for (var j = 0; j < theSongUriToName.length; j++) {
             theSongUris.push(theSongUriToName[j].substr(0, theSongUriToName[j].indexOf('---')))
             theSongNames.push(theSongUriToName[j].substr(theSongUriToName[j].indexOf('---') + 3, theSongUriToName[j].length - 1))
@@ -61,7 +61,7 @@ export function organizeSongUriAndNames(songs, accesstoken, userId, artistName) 
                     songUris: theSongUris,
                     songNames: theSongNames
                 }
-            }   
+            }
         })
 
         // accesstoken, userId, artistName
@@ -71,7 +71,7 @@ export function organizeSongUriAndNames(songs, accesstoken, userId, artistName) 
 
 // Generates each question
 export function generateQuestions(songNames, accesstoken, userId, songUris, artistName) {
-    return function(dispatch) {
+    return function (dispatch) {
         var questions = []
 
         for (var i = 0; i < 10; i++) {
@@ -86,14 +86,14 @@ export function generateQuestions(songNames, accesstoken, userId, songUris, arti
             // Add remaining three possible selections
             for (var j = 0; j < 3; j++) {
                 isQuestionInserted = false
-                while(!isQuestionInserted) {
+                while (!isQuestionInserted) {
                     var index = Math.floor(Math.random() * 9)
-                    
+
                     if (!noQuestionInserted.includes(index)) {
                         noQuestionInserted.push(index)
                         multChoiceOpts.push(songNames[index])
                         isQuestionInserted = true
-                    } 
+                    }
                 }
             }
             shuffleArray(multChoiceOpts)
@@ -114,27 +114,27 @@ export function generateQuestions(songNames, accesstoken, userId, songUris, arti
 
 // Starts game
 export function startGame(accesstoken, userId, songUris, artistName) {
-    return function(dispatch) {
+    return function (dispatch) {
         removeShuffle(accesstoken)
         dispatch({
             type: "FETCH_INGAMEDATA_GAMEON"
         })
- 
+
         dispatch(postPlaylist(userId, songUris, artistName, accesstoken))
 
     }
 }
- 
+
 // Create and upload playlist
 // AM To do - May need to find better way of organizing everything that goes on? Because this posts the playlist, 
 // then does a multitude of other things... 'post playlist' may not be the best function name therefore? Not sure - brainstorm
 export function postPlaylist(userId, allSongs, artist, accesstoken) {
-    return function(dispatch) {
+    return function (dispatch) {
         // changes title of playlist depending on whether an artist's first letter is a vowel
         var playlistName;
         const vowels = ['A', 'E', 'I', 'O', 'U']
 
-        if(artist) {
+        if (artist) {
             if (vowels.includes(artist[0])) {
                 playlistName = 'HOW BIG OF AN ' + artist.toUpperCase() + ' FAN ARE YOU?'
             } else {
@@ -170,7 +170,7 @@ export function postPlaylist(userId, allSongs, artist, accesstoken) {
 
 // Add all tracks to the playlist
 export function addTracksToPlaylist(newPlaylistId, allSongs, contextUri, accesstoken, userId) {
-    return function(dispatch) {
+    return function (dispatch) {
         axios({
             url: 'https://api.spotify.com/v1/users/' + userId + '/playlists/' + newPlaylistId + '/tracks/',
             method: "POST",
@@ -182,21 +182,21 @@ export function addTracksToPlaylist(newPlaylistId, allSongs, contextUri, accesst
                 'Content-Type': 'application/json'
             }
         })
-        
-        .then((response) => {
-            console.log(response)
-            dispatch(playPlaylist(contextUri, accesstoken))
-        })
-        .catch((error) => {
-            alert(error)
-            console.log(error)
-        })
+
+            .then((response) => {
+                console.log(response)
+                dispatch(playPlaylist(contextUri, accesstoken))
+            })
+            .catch((error) => {
+                alert(error)
+                console.log(error)
+            })
     }
 }
 
 // Plays the playlist from the beginning
 export function playPlaylist(contextUri, accesstoken) {
-    return function(dispatch) {
+    return function (dispatch) {
         dispatch(loadingComplete())
         removeShuffle(accesstoken)
         axios({
@@ -238,7 +238,7 @@ export function removeShuffle(accesstoken) {
 
 // Determines if answer was correct or not, and whether to proceed to next question or be done.
 export function onAnswerSelect(isCorrect, questionNum, correctCount, accessToken) {
-    return function(dispatch) {
+    return function (dispatch) {
         if (isCorrect) {
             alert('CORRECT!');
             dispatch({
@@ -273,7 +273,7 @@ export function onAnswerSelect(isCorrect, questionNum, correctCount, accessToken
 
 // Plays next track
 export function playNextTrack(accesstoken) {
-    return function(dispatch) {
+    return function (dispatch) {
         axios({
             url: 'https://api.spotify.com/v1/me/player/next',
             method: "POST",
@@ -297,7 +297,7 @@ export function stopPlaylist(accesstoken) {
         url: 'https://api.spotify.com/v1/me/player/pause',
         method: "PUT",
         headers: {
-        'Authorization': 'Bearer ' + accesstoken
+            'Authorization': 'Bearer ' + accesstoken
         }
     })
         .then((response) => {
@@ -305,7 +305,7 @@ export function stopPlaylist(accesstoken) {
         })
         .catch((error) => {
             console.log(error)
-        })  
+        })
 }
 
 export function restartGame() {
@@ -315,7 +315,7 @@ export function restartGame() {
             payload: {
                 resultsReady: false,
                 gameDifficulty: ''
-            }   
+            }
         })
     }
 }
@@ -323,25 +323,25 @@ export function restartGame() {
 // Randomize array order (generated playlist, multiple choice questions, etc.)
 export function shuffleArray(tracksArray) {
     var currentIndex = tracksArray.length, temporaryValue, randomIndex
-  
+
     // While there remain elements to shuffle...
     while (0 !== currentIndex) {
-    
+
         // Pick a remaining element...
         randomIndex = Math.floor(Math.random() * currentIndex)
         currentIndex -= 1
-    
+
         // And swap it with the current element.
         temporaryValue = tracksArray[currentIndex]
         tracksArray[currentIndex] = tracksArray[randomIndex]
         tracksArray[randomIndex] = temporaryValue
     }
-  
+
     return tracksArray
-} 
+}
 
 export function loadingInProgress() {
-    return function(dispatch) {
+    return function (dispatch) {
         // Everything is loaded - can play playlist
         dispatch({
             type: "LOADING_INPROGRESS",
@@ -352,14 +352,18 @@ export function loadingInProgress() {
     }
 }
 
+// AM - Consider using redux-actions - google this
+// export const loadingComplete = createAction(LOADING_COMPLET, {loading: false});  SYNTAX MAY NOT BE CORRECT BUT SIMILAR
+
 export function loadingComplete() {
-    return function(dispatch) {
+    return function (dispatch) {
         // Everything is loaded - can play playlist
         dispatch({
-            type: "LOADING_COMPLETE",
-            payload: {
-                loading: false
-            }
+            type: "LOADING_COMPLETE"
+            // AM - may not need this if the payload is defined in inGameReducer.js. Test this to verify
+            // payload: {
+            //     loading: false
+            // }
         })
     }
 }
@@ -370,7 +374,7 @@ export function loadingComplete() {
 //     dispatch: dispatch,
 //     startup: () => dispatch(StartupActions.startup())
 // })
-  
+
 //   // Maps the state in to props (for displaying on the front end)
 // const mapStateToProps = (state) => ({
 //     nav: state.nav,
@@ -379,5 +383,5 @@ export function loadingComplete() {
 //     songs: state.songs.songs,
 //     inGameData: state.inGameData.inGameData
 //   })
-  
+
 // export default connect(mapStateToProps, mapDispatchToProps)

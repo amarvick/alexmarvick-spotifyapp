@@ -3,6 +3,12 @@ $turquoise-background: rgba(0, 135, 104, 0.7);
 $red-background: rgba(248, 68, 68, 0.7);
 $white: #bbbbbb;
 
+@mixin preGameProperties($backgroundColor) {
+  background-color: $backgroundColor;
+  height: 100vh;
+  padding: 25px;
+}
+
 @mixin gameProperties($backgroundColor) {
   background: $backgroundColor;
 
@@ -11,15 +17,15 @@ $white: #bbbbbb;
   padding: 25px;
 }
 
-@mixin preGameProperties($backgroundColor) {
-  background-color: $backgroundColor;
-  height: 100vh;
-  padding: 25px;
-}
-
 body {
   color: $white;
   text-align: center;
+
+  background-image: url("../images/Background.jpg");
+  background-size: cover;
+
+  margin: 0;
+  padding: 0;
 }
 
 ul {
@@ -40,23 +46,8 @@ ul {
 
 .questionTemplate {
   @include gameProperties($blue-background);
-
-  /*
-  button {
-    width: 300px;
-    height: 50px;
-  }; */
 }
 
 .resultsTemplate {
   @include gameProperties($turquoise-background);
 }
-
-/*
-#theGameView {
-  position: relative;
-  margin: auto;
-  width: 85%;
-  top: 15px;
-}
-*/

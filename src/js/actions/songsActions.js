@@ -4,6 +4,8 @@
 import Spotify from 'spotify-web-api-js'
 import { loadingComplete } from './inGameActions'
 
+import SongsActionTypes from '../actionTypes/songsActionTypes'
+
 const spotifyApi = new Spotify()
 
 export function fetchSongs(artists, LocCode) {
@@ -16,14 +18,14 @@ export function fetchSongs(artists, LocCode) {
                 console.log(allTracks)
 
                 dispatch({
-                    type: "FETCH_SONGS_SUCCESS",
+                    type: SongsActionTypes.FETCH_SONGS_SUCCESS,
                     payload: allTracks
                 })
             })
 
             .catch((error) => {
                 dispatch({
-                    type: "FETCH_SONGS_ERROR",
+                    type: SongsActionTypes.FETCH_SONGS_ERROR,
                     payload: error
                 })
                 dispatch(loadingComplete())

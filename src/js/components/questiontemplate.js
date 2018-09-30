@@ -1,4 +1,4 @@
-/* File Name: questiontemplate.js                                   *
+/* File Name: questiontemplate.js  AM - make this 'questionTemplate *
  * Description: The template for each individual question           */
 
 import React, { Component } from 'react'
