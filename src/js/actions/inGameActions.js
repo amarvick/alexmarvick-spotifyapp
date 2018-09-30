@@ -4,24 +4,22 @@
  *              which get generated, if the user cheated, the       *
  *              question they are on, etc.                          */
 
+
+ 
 import axios from 'axios'
 // import { StartupActions } from 'react'
 // import { connect } from 'react-redux'
 
 import { fetchArtistData } from './artistActions'
 
-// connect((store) => {
-//     return {
-//         inGameData: store.inGameData.inGameData
-//     }
-// })
+import InGameActionTypes from '../actionTypes/inGameActionTypes'
 
 // Updates the game difficulty
 export function selectDifficulty(difficulty) {
     return function (dispatch) {
         dispatch(loadingInProgress())
         dispatch({
-            type: "INGAMEDATA_GAME_DIFFICULTY",
+            type: InGameActionTypes.SET_GAME_DIFFICULTY,
             payload: {
                 gameDifficulty: difficulty
             }
@@ -55,7 +53,7 @@ export function organizeSongUriAndNames(songs, accesstoken, userId, artistName) 
 
         // AM - later, combine these dispatch functions? Might not be doable. Also figure out why I'm setting questions state here instead of in function?
         dispatch({
-            type: "INGAMEDATA_UPDATE_FAV_ARTIST_SONGS_URIS",
+            type: InGameActionTypes.UPDATE_FAV_ARTIST_SONGS_URIS,
             payload: {
                 favoriteArtistsSongs: {
                     songUris: theSongUris,
@@ -101,7 +99,7 @@ export function generateQuestions(songNames, accesstoken, userId, songUris, arti
         }
 
         dispatch({
-            type: "FETCH_INGAMEDATA_GETQUESTIONS",
+            type: InGameActionTypes.GET_QUESTIONS,
             payload: {
                 questions: questions
             }
@@ -117,7 +115,7 @@ export function startGame(accesstoken, userId, songUris, artistName) {
     return function (dispatch) {
         removeShuffle(accesstoken)
         dispatch({
-            type: "FETCH_INGAMEDATA_GAMEON"
+            type: InGameActionTypes.TURN_GAMEON
         })
 
         dispatch(postPlaylist(userId, songUris, artistName, accesstoken))
@@ -242,7 +240,7 @@ export function onAnswerSelect(isCorrect, questionNum, correctCount, accessToken
         if (isCorrect) {
             alert('CORRECT!');
             dispatch({
-                type: "FETCH_INGAMEDATA_CORRECTANSWER",
+                type: InGameActionTypes.CORRECT_ANSWER,
                 payload: correctCount + 1
             })
         } else {
@@ -253,14 +251,14 @@ export function onAnswerSelect(isCorrect, questionNum, correctCount, accessToken
         if (questionNum < 9) {
             dispatch(loadingInProgress())
             dispatch({
-                type: 'FETCH_INGAMEDATA_NEXTQUESTION',
+                type: InGameActionTypes.NEXT_QUESTION,
                 payload: questionNum + 1
             })
             dispatch(playNextTrack(accessToken))
         } else {
             // AM - fill out payload
             dispatch({
-                type: 'FETCH_INGAMEDATA_RESULTSREADY',
+                type: InGameActionTypes.GENERATE_RESULTS,
                 payload: {
                     resultsReady: true,
                     gameInProgress: false
@@ -311,7 +309,7 @@ export function stopPlaylist(accesstoken) {
 export function restartGame() {
     return function (dispatch) {
         dispatch({
-            type: "FETCH_INGAMEDATA_RESTARTGAME",
+            type: InGameActionTypes.RESTART_GAME,
             payload: {
                 resultsReady: false,
                 gameDifficulty: ''
@@ -344,7 +342,7 @@ export function loadingInProgress() {
     return function (dispatch) {
         // Everything is loaded - can play playlist
         dispatch({
-            type: "LOADING_INPROGRESS",
+            type: InGameActionTypes.LOADING_INPROGRESS,
             payload: {
                 loading: true
             }
@@ -359,7 +357,7 @@ export function loadingComplete() {
     return function (dispatch) {
         // Everything is loaded - can play playlist
         dispatch({
-            type: "LOADING_COMPLETE"
+            type: InGameActionTypes.LOADING_COMPLETE
             // AM - may not need this if the payload is defined in inGameReducer.js. Test this to verify
             // payload: {
             //     loading: false

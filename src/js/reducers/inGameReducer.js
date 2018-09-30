@@ -1,6 +1,8 @@
 /* File Name: inGameReducer.js                                      *
  * Description: Redux reducer for the in-game activity              */
 
+import InGameActionTypes from '../actionTypes/inGameActionTypes'
+
 export default function reducer(state={
     inGameData: {
         noOfCorrect: 0,
@@ -21,19 +23,19 @@ export default function reducer(state={
 }, action) {
 
     switch(action.type) {
-        case "LOADING_INPROGRESS": {
+        case InGameActionTypes.LOADING_INPROGRESS: {
             return {...state,
                 loading: true
             }
         }
 
-        case "LOADING_COMPLETE": {
+        case InGameActionTypes.LOADING_COMPLETE: {
             return {...state,
                 loading: false
             }
         }
 
-        case "INGAMEDATA_GAME_DIFFICULTY": {
+        case InGameActionTypes.SET_GAME_DIFFICULTY: {
             return {...state,
                 inGameData: {
                     ...state.inGameData,
@@ -42,7 +44,7 @@ export default function reducer(state={
             }
         }
 
-        case "INGAMEDATA_UPDATE_FAV_ARTIST_SONGS_URIS": {
+        case InGameActionTypes.UPDATE_FAV_ARTIST_SONGS_URIS: {
             return {...state,
                 inGameData: {
                     ...state.inGameData,
@@ -51,7 +53,7 @@ export default function reducer(state={
             }
         }
 
-        case "FETCH_INGAMEDATA_GETQUESTIONS": {
+        case InGameActionTypes.GET_QUESTIONS: {
             return {...state,
                 inGameData:  {
                     ...state.inGameData,
@@ -60,7 +62,7 @@ export default function reducer(state={
             }
         }
 
-        case "FETCH_INGAMEDATA_GAMEON": {
+        case InGameActionTypes.TURN_GAMEON: {
             return {...state,
                 inGameData: {
                     ...state.inGameData,
@@ -71,7 +73,7 @@ export default function reducer(state={
             }
         }
 
-        case "FETCH_INGAMEDATA_RESULTSREADY": {
+        case InGameActionTypes.GENERATE_RESULTS: {
             return {...state,
                 inGameData: {
                     ...state.inGameData,
@@ -81,7 +83,7 @@ export default function reducer(state={
             }
         }
 
-        case "FETCH_INGAMEDATA_RESTARTGAME": {
+        case InGameActionTypes.RESTART_GAME: {
             return {...state,
                 inGameData: {
                     ...state.inGameData,
@@ -98,7 +100,7 @@ export default function reducer(state={
             }
         }
 
-        case "FETCH_INGAMEDATA_NEXTQUESTION": {
+        case InGameActionTypes.NEXT_QUESTION: {
             return {...state,
                 inGameData: {
                     ...state.inGameData,
@@ -107,7 +109,7 @@ export default function reducer(state={
             }
         }
 
-        case "FETCH_INGAMEDATA_CORRECTANSWER": {
+        case InGameActionTypes.CORRECT_ANSWER: {
             return {...state,
                 inGameData: {
                     ...state.inGameData,
@@ -116,7 +118,7 @@ export default function reducer(state={
             }
         }
 
-        case "FETCH_INGAMEDATA_USERCHEATED": {
+        case InGameActionTypes.USER_CHEATED: {
             return {...state,
                 inGameData: {
                     ...state.inGameData,
@@ -125,13 +127,13 @@ export default function reducer(state={
             }
         }
 
-        case "FETCH_INGAMEDATA_OUTPUTSONGS": {
+        case InGameActionTypes.OUTPUT_SONGS: {
             return {...state,
                 inGameData: action.payload
             }
         }
 
-        case "FETCH_INGAMEDATA_ERROR": {
+        case InGameActionTypes.INGAME_ERROR: {
             return {...state,
                 error: action.payload
             }
