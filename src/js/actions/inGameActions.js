@@ -29,8 +29,23 @@ export function selectDifficulty(difficulty) {
     }
 }
 
+export function setupGame(songs, accesstoken, userId, artistName) {
+    // const songs = this.songs
+    // const accesstoken = this.accesstoken
+    // const userId = this.userId
+    // const artistName = this.artistName
+
+    // dispatch(organizeSongUriAndNames(songs, accesstoken, userId, artistName))
+    // dispatch(generateQuestions(theSongNames, accesstoken, userId, theSongUris, artistName))
+    // dispatch(startGame(accesstoken, userId, songUris, artistName))
+    // dispatch(postPlaylist(userId, songUris, artistName, accesstoken))
+    // dispatch(addTracksToPlaylist(newPlaylistId, allSongs, contextUri, accesstoken, userId))
+    // dispatch(removeShuffle(accesstoken))
+    // dispatch(playPlaylist(contextUri, accesstoken))
+}
+
 // Retrieves song URIs and Names, which need to be in the same order for creating the playlist and having correct answers be in sync
-export function organizeSongUriAndNames(songs, accesstoken, userId, artistName) {
+export function organizeSongUriAndNames(songs, accesstoken, userId, artistName) { // songs
     return function (dispatch) {
         dispatch(loadingInProgress())
 
@@ -115,7 +130,7 @@ export function startGame(accesstoken, userId, songUris, artistName) {
     return function (dispatch) {
         removeShuffle(accesstoken)
         dispatch({
-            type: InGameActionTypes.TURN_GAMEON
+            type: InGameActionTypes.TURN_GAME_ON
         })
 
         dispatch(postPlaylist(userId, songUris, artistName, accesstoken))
@@ -258,11 +273,7 @@ export function onAnswerSelect(isCorrect, questionNum, correctCount, accessToken
         } else {
             // AM - fill out payload
             dispatch({
-                type: InGameActionTypes.GENERATE_RESULTS,
-                payload: {
-                    resultsReady: true,
-                    gameInProgress: false
-                }
+                type: InGameActionTypes.GENERATE_RESULTS
             })
             stopPlaylist(accessToken)
         }
@@ -310,10 +321,6 @@ export function restartGame() {
     return function (dispatch) {
         dispatch({
             type: InGameActionTypes.RESTART_GAME,
-            payload: {
-                resultsReady: false,
-                gameDifficulty: ''
-            }
         })
     }
 }
@@ -338,6 +345,7 @@ export function shuffleArray(tracksArray) {
     return tracksArray
 }
 
+// Any asynchronous data changes are in progress
 export function loadingInProgress() {
     return function (dispatch) {
         // Everything is loaded - can play playlist
@@ -353,15 +361,11 @@ export function loadingInProgress() {
 // AM - Consider using redux-actions - google this
 // export const loadingComplete = createAction(LOADING_COMPLET, {loading: false});  SYNTAX MAY NOT BE CORRECT BUT SIMILAR
 
+// Any asynchronous data changes have finished
 export function loadingComplete() {
     return function (dispatch) {
-        // Everything is loaded - can play playlist
         dispatch({
             type: InGameActionTypes.LOADING_COMPLETE
-            // AM - may not need this if the payload is defined in inGameReducer.js. Test this to verify
-            // payload: {
-            //     loading: false
-            // }
         })
     }
 }

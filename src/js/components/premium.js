@@ -14,21 +14,6 @@ import Error from './error'
 import { organizeSongUriAndNames } from '../actions/inGameActions'
 import { onAnswerSelect } from '../actions/inGameActions'
 
-// AM - Check other components; connect functions may not be necessary
-
-// connect((store) => {
-//   return {
-//     artist: store.artist.artist,
-//     songs: store.songs.songs,
-//     inGameData: store.inGameData.inGameData,
-//     loading: store.inGameData.loading,
-//     userError: store.user.error,
-//     artistError: store.artist.error,
-//     songsError: store.songs.error,
-//     inGameDataError: store.inGameData.error
-//   }
-// })
-
 class Premium extends Component {
   constructor(props) {
     super(props)
@@ -54,10 +39,10 @@ class Premium extends Component {
       fontSize: 100
     }
 
-    // let artist = []
-    let songs = []
-    let inGameData = {}
-    let loading
+    let artist = this.props.artist || []
+    let songs = this.props.songs || []
+    let inGameData = this.props.inGameData || {}
+    let loading = this.props.loading || null
     let errors = false
     let error
 
@@ -65,20 +50,6 @@ class Premium extends Component {
     let loadingView
     let errorView
 
-    let artist = this.props.artist || []; // AM - try this format for the other contents
-
-    // if (this.props.artist) {
-    //   artist = this.props.artist
-    // }
-
-    if (this.props.songs) {
-      songs = this.props.songs
-    }
-
-    if (this.props.inGameData) {
-      inGameData = this.props.inGameData
-      loading = this.props.loading
-    }
 
     // In case an error occurs, will populate in error message. Put this in to a function
     if (!errors) {

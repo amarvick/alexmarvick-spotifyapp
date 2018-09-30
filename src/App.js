@@ -17,12 +17,6 @@ import { fetchUser } from './js/actions/userActions'
 
 const spotifyApi = new Spotify();
 
-connect((store) => {
-  return {
-    user: store.user.user,
-  };
-})
-
 class App extends Component {
   constructor() {
     super();

@@ -5,13 +5,7 @@ import ArtistActionType from '../actionTypes/artistActionType'
 
 export default function reducer(state={
     fetched: false,
-    artist: [
-        // AM - might not need object in here. Remove at some point and see what happens
-        {
-            artist: null,
-            artistId: null
-        }
-    ],
+    artist: [],
     error: null,
 }, action) {
 

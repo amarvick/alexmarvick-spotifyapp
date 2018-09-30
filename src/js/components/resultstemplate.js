@@ -7,12 +7,6 @@ import { connect } from 'react-redux'
 
 import { restartGame } from '../actions/inGameActions'
 
-connect((store) => {
-  return {
-      inGameData: store.inGameData.inGameData
-  }
-})
-
 class ResultsTemplate extends Component {
   constructor(props) {
     super(props)

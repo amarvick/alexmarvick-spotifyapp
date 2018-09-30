@@ -8,12 +8,6 @@ import { connect } from 'react-redux'
 import TheModal from './modal'
 
 import { selectDifficulty } from '../actions/inGameActions'
- 
-connect((store) => {
-    return {
-        inGameData: store.inGameData.inGameData
-    }
-})
 
 class GameDifficulty extends Component {
     constructor(props){

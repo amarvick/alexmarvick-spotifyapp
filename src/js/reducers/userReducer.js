@@ -5,10 +5,7 @@ import UserActionTypes from '../actionTypes/userActionTypes'
 
 export default function reducer(state={
     fetched: false,
-    user: {
-        userId: null,
-        userProduct: null
-    },
+    user: {},
     error: null,
 }, action) {
 

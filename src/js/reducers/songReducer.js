@@ -5,12 +5,7 @@ import SongsActionTypes from '../actionTypes/songsActionTypes'
 
 export default function reducer(state={
     fetched: false,
-    songs: [
-        {
-            uri: null,
-            name: null
-        }
-    ],
+    songs: [],
     error: null,
 }, action) {
 

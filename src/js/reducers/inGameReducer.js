@@ -62,7 +62,7 @@ export default function reducer(state={
             }
         }
 
-        case InGameActionTypes.TURN_GAMEON: {
+        case InGameActionTypes.TURN_GAME_ON: {
             return {...state,
                 inGameData: {
                     ...state.inGameData,
