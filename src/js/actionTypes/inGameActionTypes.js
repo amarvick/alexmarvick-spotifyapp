@@ -1,3 +1,6 @@
+/* File Name: inGameActionType.js                                   *
+ * Description: Action Types for in Game Data                       */
+
 const InGameActionTypes = {
     LOADING_INPROGRESS: 'LOADING_INPROGRESS',
     LOADING_COMPLETE: 'LOADING_COMPLETE',

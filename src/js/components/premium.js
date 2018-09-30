@@ -6,8 +6,8 @@ import { ButtonToolbar, Button, Modal } from 'react-bootstrap'
 import { connect } from 'react-redux'
 
 import ModalGreeting from './modalgreeting'
-import QuestionTemplate from './questiontemplate'
-import ResultsTemplate from './resultstemplate'
+import QuestionTemplate from './questionTemplate'
+import ResultsTemplate from './resultsTemplate'
 import GameDifficulty from './gameDifficulty'
 import Error from './error'
 

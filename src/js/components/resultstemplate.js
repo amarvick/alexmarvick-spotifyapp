@@ -1,4 +1,4 @@
-/* File Name: resultstemplate.js                                    *
+/* File Name: resultsTemplate.js                                    *
  * Description: The template for post-game results                  */
 
 import React, { Component, StartupActions } from 'react'
