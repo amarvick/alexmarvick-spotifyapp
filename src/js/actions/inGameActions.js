@@ -153,7 +153,7 @@ export function createAndPlayPlaylist(userId, allSongs, artist, accesstoken) {
                 dispatch(addTracksToPlaylist(playlistId, allSongs, uri, accesstoken, userId))
             })
             .catch((error) => {
-                console.log(error)
+                dispatch(returnError('There was an issue uploading the playlist.'))
             })
     }
 }
@@ -178,8 +178,7 @@ export function addTracksToPlaylist(newPlaylistId, allSongs, contextUri, accesst
                 dispatch(playPlaylist(contextUri, accesstoken))
             })
             .catch((error) => {
-                alert(error)
-                console.log(error)
+                dispatch(returnError('There was an issue adding tracks to the playlist'))
             })
     }
 }
@@ -205,7 +204,7 @@ export function playPlaylist(contextUri, accesstoken) {
                 dispatch(loadingComplete())
             })
             .catch((error) => {
-                console.log(error)
+                dispatch(returnError('Issue playing the playlist'))
             })
 
     }
@@ -213,19 +212,21 @@ export function playPlaylist(contextUri, accesstoken) {
 
 // Shuffle needs to be removed or the questions and playlist will be out of sync
 export function removeShuffle(accesstoken) {
-    axios({
-        url: 'https://api.spotify.com/v1/me/player/shuffle?state=false',
-        method: "PUT",
-        headers: {
-            'Authorization': 'Bearer ' + accesstoken
-        }
-    })
-        .then((response) => {
-            console.log(response)
+    return function (dispatch) {
+        axios({
+            url: 'https://api.spotify.com/v1/me/player/shuffle?state=false',
+            method: "PUT",
+            headers: {
+                'Authorization': 'Bearer ' + accesstoken
+            }
         })
-        .catch((error) => {
-            console.log(error)
-        })
+            .then((response) => {
+                console.log(response)
+            })
+            .catch((error) => {
+                dispatch(returnError('Issue with removing the shuffle'))
+            })
+    }
 }
 
 // Determines if answer was correct or not, and whether to proceed to next question or be done. Pass in answer?
@@ -274,26 +275,28 @@ export function playNextTrack(accesstoken) {
                 dispatch(loadingComplete())
             })
             .catch((error) => {
-                console.log(error)
+                dispatch(returnError('There was an issue playing the next track.'))
             })
     }
 }
 
 // Stops playlist when game is finished
 export function stopPlaylist(accesstoken) {
-    axios({
-        url: 'https://api.spotify.com/v1/me/player/pause',
-        method: "PUT",
-        headers: {
-            'Authorization': 'Bearer ' + accesstoken
-        }
-    })
-        .then((response) => {
-            console.log(response)
+    return function (dispatch) {
+        axios({
+            url: 'https://api.spotify.com/v1/me/player/pause',
+            method: "PUT",
+            headers: {
+                'Authorization': 'Bearer ' + accesstoken
+            }
         })
-        .catch((error) => {
-            console.log(error)
-        })
+            .then((response) => {
+                console.log(response)
+            })
+            .catch((error) => {
+                dispatch(returnError('There was an issue stopping the playlist.'))
+            })
+    }
 }
 
 export function restartGame() {
@@ -345,6 +348,15 @@ export function loadingComplete() {
     return function (dispatch) {
         dispatch({
             type: InGameActionTypes.LOADING_COMPLETE
+        })
+    }
+}
+
+export function returnError(errorMessage) {
+    return function (dispatch) {
+        dispatch({
+            type: InGameActionTypes.INGAME_ERROR,
+            payload: errorMessage
         })
     }
 }
