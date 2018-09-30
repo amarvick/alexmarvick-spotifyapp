@@ -49,12 +49,13 @@ class Premium extends Component {
       errors = true
     }
 
+    // Game view (If there are no errors). If screen is loading, display loading screen; else, anything else can display depending on game state
     if (loading) {
-      // Loading Screen
       theGameView = (
         <Loading/>
       )
     } else {
+      // If there is no game difficulty selected, the screen will ask for a difficulty level
       if (inGameData.gameDifficulty == null) {
         theGameView = (
           <GameDifficulty
@@ -62,7 +63,9 @@ class Premium extends Component {
           />
         )
       } else {
+        // If no questions are generated yet but a difficulty is selected, prompt instructions screen. Else, in-game screen OR results
         if (inGameData.questions.questions != null && inGameData.questions.questions.length > 0) {
+          // If results aren't ready yet, go through questions; otherwise, results screen will display.
           if (!inGameData.resultsReady && !inGameData.didUserCheat) {
             theGameView = ( 
               <QuestionTemplate 
@@ -93,7 +96,7 @@ class Premium extends Component {
       }
     }
 
-    // If an error happens at any point. Will want to edit this so the error is specific
+    // If an error happens at any point, display error screen; else, display game view. Will want to edit this so the error is specific
     if (errors) {
       return (      
         <Error
