@@ -17,17 +17,26 @@ export function fetchArtistData(difficulty) {
         .then((response) => {
             let thePayload = []
 
-            // AM - put a flag here in case no artists return/user only has one artist and tries to do medium/hard setting
+            // Artists must be returned. AM - may not need this because if nothing was returned it should catch already. Ask.
+            if (response.items.length === 0) {
+                throw 'You don\'t have any favorite artists!'
+            }
+
+            // In medium/hard setting, user needs to have more than one favorite artist
+            if ((difficulty === 'Medium' || difficulty === 'Hard') && response.items.length < 2) {
+                throw 'You don\'t have enough favorite artists to do these settings :( Please refresh and do easy mode, or listen to more artists!'
+            } 
 
             if (difficulty === 'Easy') {
                 thePayload.push(response.items[0])
             } else if (difficulty === 'Medium') {
-                var randomInt = Math.floor(Math.random() * response.items.length) // AM - may have to make 'ceil' so it doesn't pick the #1 artist
+                // In medium setting, you shouldn't be able to get your number 1 artist
+                var randomInt = Math.ceil(Math.random() * (response.items.length - 1))
                 thePayload.push(response.items[randomInt])
             } else if (difficulty === 'Hard') {
                 thePayload.push(response.items)
             } else {
-                throw 'Invalid Difficulty' // AM - :)
+                throw 'Invalid Difficulty'
             }
 
             dispatch({
@@ -35,6 +44,7 @@ export function fetchArtistData(difficulty) {
                 payload: thePayload
             })
             
+            // AM - very low priority. Check user to see if they have support locations that you can pass in instead of just a quote that says 'US'. May look better codewise
             if (difficulty === 'Hard') {
                 dispatch(fetchSongs(thePayload[0], 'US'))
             } else {

@@ -1,14 +1,20 @@
-/* File Name: modalgreeting.js                                      *
+/* File Name: modalGreeting.js                                      *
  * Description: Welcome screen/game instructions for premium users  */
 
-import React, { Component } from 'react'
+import React, { Component, StartupActions } from 'react'
+
+import { setupGame } from '../actions/inGameActions'
+import { connect } from 'react-redux'
 
 class ModalGreeting extends Component {
   constructor(props){
     super(props)
 
     this.state = {
-      username: ''
+      username: '',
+      songs: [],
+      accesstoken: '',
+      artistName: ''
     }
   }
   render() {
@@ -33,8 +39,19 @@ class ModalGreeting extends Component {
         <p className="lead">
           Once you are finished, you will receive your results. Good luck!
         </p>
+
+        <button type="button" className="btn btn-primary" onClick={() => this.props.dispatch(setupGame(this.props.songs, this.props.accesstoken, this.props.username, this.props.artistName))}> 
+          PLAY NOW!
+        </button>
       </div>
     )
   }
 }
-export default ModalGreeting
+
+const mapDispatchToProps = (dispatch) => ({
+  dispatch: dispatch,
+  startup: () => dispatch(StartupActions.startup()),
+  setupGame: (songs, accesstoken, username, artistName) => dispatch(setupGame(songs, accesstoken, username, artistName))
+})
+
+export default connect(mapDispatchToProps)(ModalGreeting)

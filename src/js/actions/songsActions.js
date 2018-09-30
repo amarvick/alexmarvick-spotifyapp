@@ -31,7 +31,8 @@ export function fetchSongs(artists, LocCode) {
                 dispatch(loadingComplete())
             })
 
-            dispatch(loadingComplete())
+        
         }
+        dispatch(loadingComplete())
     }
 }

@@ -5,7 +5,7 @@ import React, { Component, StartupActions } from 'react'
 import { ButtonToolbar, Button, Modal } from 'react-bootstrap'
 import { connect } from 'react-redux'
 
-import ModalGreeting from './modalgreeting'
+import ModalGreeting from './modalGreeting'
 import QuestionTemplate from './questionTemplate'
 import ResultsTemplate from './resultsTemplate'
 import GameDifficulty from './gameDifficulty'
@@ -20,7 +20,7 @@ class Premium extends Component {
 
     this.state = { 
       accesstoken: '',
-      loggedInUserId: ''
+      username: ''
     }
     
     // Functions needed to update the state when passing props in to question template
@@ -28,10 +28,26 @@ class Premium extends Component {
   }
 
   // Determines if answer was correct or not, and whether to proceed to next question or be done.
-  // Use mapDispatchToProps. See example
   onAnswerSelect(isCorrect) {
     this.props.dispatch(onAnswerSelect(isCorrect, this.props.inGameData.questionNo, this.props.inGameData.noOfCorrect, this.props.accesstoken))
   }
+
+  // checkForErrors() {
+  //   if (this.props.userError) {
+  //     console.log(this.props.userError)
+  //     error = String(this.props.userError)
+  //     errors = true
+  //   } else if (this.props.artistError) {
+  //     error = String(this.props.artistError)
+  //     errors = true
+  //   } else if (this.props.songsError) {
+  //     error = String(this.props.songsError)
+  //     errors = true
+  //   } else if (this.props.inGameDataError) {
+  //     error = String(this.props.inGameDataError)
+  //     errors = true
+  //   }
+  // }
 
   // AM - a lot of stuff in here! May consider componentizing?
   render(props) {
@@ -47,8 +63,7 @@ class Premium extends Component {
     let error
 
     let theGameView
-    let loadingView
-    let errorView
+    // let loadingView
 
     // In case an error occurs, will populate in error message. Put this in to a function
     if (!errors) {
@@ -68,22 +83,10 @@ class Premium extends Component {
       }
     } // If error, return error view
 
-    // When data is retrieving...
-    loadingView = (
-      <div style = {style}>
-        <i className="fa fa-circle-o-notch fa-spin"/><br/>
-        LOADING...
-      </div>
-    )
+    // // When data is retrieving...
+    // loadingView = (
 
-    // If an error happens at any point. Will want to edit this so the error is specific
-    errorView = (
-      <div>
-        <Error
-          errorMessage = { error }
-        />
-      </div>
-    )
+    // )
 
     // AM todo - see if you can combine theGameView results together
     if (inGameData.questions.questions != null && inGameData.questions.questions.length > 0) {
@@ -105,45 +108,70 @@ class Premium extends Component {
         )
       }
     } 
+
+
+    //   if (inGameData.gameDifficulty == null) {
+    //     // Game Difficulty Screen
+    //   } else {
+    //     // Instructions Screen
+    //   }
+  
+
+    // if (inGameData.gameInProgress && !inGameData.resultsReady) {
+    //   //In Progress Screen
+    // }
     
     // if (errors) { return (<div>errorTemplate</div>) } else { return } format will be better. Simplify this, use more components!
     // Loading, error, game component. Game component can have the four options; game difficulty, greeting, in-game questions, results...
 
-    return (
-      <div className='Premium'>
-        { !errors ? (
-          <div>
+    // If an error happens at any point. Will want to edit this so the error is specific
+    if (errors) {
+      return (      
+        <Error
+          errorMessage = { error }
+        />
+      )
+    } else if (loading) {
+      return (
+        <div style = {style}>
+          <i className="fa fa-circle-o-notch fa-spin"/><br/>
+          LOADING...
+        </div>
+      )
+    } else {
+      return (
+        <div className='Premium'>
           {/* Display screens based on whether data is loading */}
-          { !loading ? (
-            <div>
-              {/* Display the difficulty screen - the main one */}
-              { !inGameData.gameInProgress && !inGameData.resultsReady && inGameData.gameDifficulty == null &&
-                  <GameDifficulty
-                    username = { this.props.loggedInUserId }
-                  />
-              }
+          <div>
+            {/* Display the difficulty screen - the main one */}
+            { !inGameData.gameInProgress && !inGameData.resultsReady && inGameData.gameDifficulty == null &&
+                <GameDifficulty
+                  username = { this.props.username }
+                />
+            }
 
-              {/* Display the instructions OR the in game view */}
-              { !inGameData.gameInProgress && !inGameData.resultsReady && inGameData.gameDifficulty ? (
-                <div>
-                  <ModalGreeting
-                    username = { this.props.loggedInUserId }
-                  />
+            {/* Display the instructions OR the in game view */}
+            { !inGameData.gameInProgress && !inGameData.resultsReady && inGameData.gameDifficulty ? (
+              <div>
+                <ModalGreeting
+                  username = { this.props.username }
+                  songs = { songs }
+                  accesstoken = { this.props.accesstoken }
+                  artistName = { artist[0].name }
+                />
 
-                  {/* AM - Put this button in the ModalGreeting...  */}
-                  <button type="button" className="btn btn-primary" onClick={() => this.props.setupGame(songs, this.props.accesstoken, this.props.loggedInUserId, artist[0].name)}> 
-                    PLAY NOW!
-                  </button>
+                {/* AM - Put this button in the ModalGreeting... 
+                <button type="button" className="btn btn-primary" onClick={() => this.props.setupGame(songs, this.props.accesstoken, this.props.username, artist[0].name)}> 
+                  PLAY NOW!
+                </button> */}
 
-                  <br/>
-                </div> ) : theGameView 
-              }
-            </div> ) : loadingView 
-          }
-        </div>) : errorView
-        }
-      </div>
-    )
+                <br/>
+              </div> ) : theGameView 
+            }
+          </div>
+        </div>
+      )
+    }
   }
 }
 
@@ -152,7 +180,7 @@ class Premium extends Component {
 const mapDispatchToProps = (dispatch) => ({
   dispatch: dispatch,
   startup: () => dispatch(StartupActions.startup()),
-  setupGame: (songs, accesstoken, loggedInUserId, artistName) => dispatch(setupGame(songs, accesstoken, loggedInUserId, artistName)) // See line 155
+  setupGame: (songs, accesstoken, username, artistName) => dispatch(setupGame(songs, accesstoken, username, artistName)) // See line 155
 })
 
 // Maps the state in to props (for displaying on the front end)

@@ -31,7 +31,6 @@ export function selectDifficulty(difficulty) {
 export function setupGame(songs, accesstoken, userId, artistName) {
     return function (dispatch) {
         dispatch(loadingInProgress())
-
         var theSongUris = []
         var theSongNames = []
 
@@ -49,7 +48,7 @@ export function setupGame(songs, accesstoken, userId, artistName) {
                 }
             }
         })
-
+        
         dispatch(generateQuestions(theSongNames))
         dispatch(createAndPlayPlaylist(userId, theSongUris, artistName, accesstoken))
     }
@@ -60,7 +59,7 @@ export function getSongUris(songs) {
     return function (dispatch) {
         var theSongUris = []
 
-        for (var i = 0; i < songs.length; i++) {
+        for (var i = 0; i < 10; i++) {
             theSongUris.push(songs[i].uri)
         }
 
@@ -72,7 +71,7 @@ export function getSongNames(songs) {
     return function (dispatch) {
         var theSongNames = []
 
-        for (var i = 0; i < songs.length; i++) {
+        for (var i = 0; i < 10; i++) {
             theSongNames.push(songs[i].name)
         }
 
@@ -155,7 +154,6 @@ export function createAndPlayPlaylist(userId, allSongs, artist, accesstoken) {
                 dispatch(addTracksToPlaylist(playlistId, allSongs, uri, accesstoken, userId))
             })
             .catch((error) => {
-                alert('ERROR CREATING PLAYLIST: ' + error)
                 console.log(error)
             })
     }
@@ -190,7 +188,6 @@ export function addTracksToPlaylist(newPlaylistId, allSongs, contextUri, accesst
 // Plays the playlist from the beginning
 export function playPlaylist(contextUri, accesstoken) {
     return function (dispatch) {
-        dispatch(loadingComplete())
         axios({
             url: 'https://api.spotify.com/v1/me/player/play',
             method: "PUT",
@@ -206,6 +203,7 @@ export function playPlaylist(contextUri, accesstoken) {
                 dispatch({
                     type: InGameActionTypes.TURN_GAME_ON
                 })
+                dispatch(loadingComplete())
             })
             .catch((error) => {
                 console.log(error)

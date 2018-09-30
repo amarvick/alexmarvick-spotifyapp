@@ -57,17 +57,17 @@ class App extends Component {
     // loggedInScreen determines what view the user will see if the user is logged in, based off of whether that user is a premium user.
     let loggedInScreen
 
-    // Make a component specifically for if the user token is invalid/expired?
+    // AM - Make a component specifically for if the user token is invalid/expired?
     if (user.product !== 'premium' && user.product !== '') {
       loggedInScreen = (
         <NonPremium 
-          loggedInUserId = { user.id }
+          username = { user.id }
         />
       )
     } else {
       loggedInScreen = (
         <Premium 
-          loggedInUserId = { user.id }
+          username = { user.id }
           accesstoken = { this.getHashParams().access_token }
         />
       )
@@ -81,8 +81,6 @@ class App extends Component {
         }
       </div>
     )
-    
-    
   }
 }
 
