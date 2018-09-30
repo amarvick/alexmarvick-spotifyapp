@@ -13,7 +13,8 @@ class ResultsTemplate extends Component {
 
     this.state = {
       correctCount: 0,
-      didUserCheat: false
+      didUserCheat: false,
+      cheatReasoning: ''
     }
   }
 
@@ -39,7 +40,8 @@ class ResultsTemplate extends Component {
       if (this.props.correctCount === 0) { 
         endOfGameMsg = (
           <div>
-            { zeroCorrect }
+            { zeroCorrect } <br/>
+            How did you cheat? { this.props.cheatReasoning }
           </div>
         )
       }
@@ -84,7 +86,6 @@ class ResultsTemplate extends Component {
 
         { endOfGameMsg }
 
-
         <button type="button" className="btn btn-success" onClick={ () => this.props.dispatch(restartGame()) }>Play Again?</button>
         <a className="btn btn-danger lead" target="_blank" rel="noopener noreferrer" href="https://github.com/amarvick/alexmarvick-spotifyapp" block>Leave (Redirect to Github)</a>
 
@@ -102,7 +103,6 @@ const mapDispatchToProps = (dispatch) => ({
 
 // Maps the state in to props (for displaying on the front end)
 const mapStateToProps = (state) => ({
-  nav: state.nav,
   inGameData: state.inGameData.inGameData
 })
 

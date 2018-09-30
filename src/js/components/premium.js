@@ -23,24 +23,15 @@ class Premium extends Component {
       accesstoken: '',
       username: ''
     }
-    
-    // Functions needed to update the state when passing props in to question template
-    this.onAnswerSelect = this.onAnswerSelect.bind(this)
   }
 
-  // Determines if answer was correct or not, and whether to proceed to next question or be done.
-  onAnswerSelect(isCorrect) {
-    this.props.dispatch(onAnswerSelect(isCorrect, this.props.inGameData.questionNo, this.props.inGameData.noOfCorrect, this.props.accesstoken))
-  }
-
-  // AM - a lot of stuff in here! May consider componentizing?
   render(props) {
     let artist = this.props.artist || []
     let songs = this.props.songs || []
     let inGameData = this.props.inGameData || {}
     let loading = this.props.loading || null
     let errors = false
-    let error = this.props.userError || this.props.artistError || this.props.songsError || this.props.inGameDataError || null
+    let error = this.props.userError || this.props.artistError || this.props.songsError || this.props.inGameDataError
 
     let theGameView
 
@@ -71,8 +62,9 @@ class Premium extends Component {
               <QuestionTemplate 
                 questionAnswers = { inGameData.questions.questions[inGameData.questionNo] }
                 correctResponse = { inGameData.favoriteArtistsSongs.favoriteArtistsSongs.songNames[inGameData.questionNo] }
-                questionNumber = { inGameData.questionNo + 1 }
-                onAnswerSelect = {this.onAnswerSelect}
+                questionNumber = { inGameData.questionNo }
+                accesstoken = { this.props.accesstoken }
+                noOfCorrect = { inGameData.noOfCorrect }
               />
             )
           } else {
@@ -80,6 +72,7 @@ class Premium extends Component {
               <ResultsTemplate
                 correctCount = { inGameData.noOfCorrect }
                 didUserCheat = { inGameData.didUserCheat }
+                cheatReasoning = { inGameData.cheatReasoning }
               />
             )
           }
@@ -118,12 +111,11 @@ class Premium extends Component {
 const mapDispatchToProps = (dispatch) => ({
   dispatch: dispatch,
   startup: () => dispatch(StartupActions.startup()),
-  setupGame: (songs, accesstoken, username, artistName) => dispatch(setupGame(songs, accesstoken, username, artistName)) // See line 155
+  setupGame: (songs, accesstoken, username, artistName) => dispatch(setupGame(songs, accesstoken, username, artistName))
 })
 
 // Maps the state in to props (for displaying on the front end)
 const mapStateToProps = (state) => ({
-  nav: state.nav,
   user: state.user.user,
   artist: state.artist.artist,
   songs: state.songs.songs,

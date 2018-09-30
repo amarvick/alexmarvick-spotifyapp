@@ -5,7 +5,6 @@
  *              question they are on, etc.                          */
 
 
- 
 import axios from 'axios'
 
 import { fetchArtistData } from './artistActions'
@@ -229,10 +228,11 @@ export function removeShuffle(accesstoken) {
         })
 }
 
-// Determines if answer was correct or not, and whether to proceed to next question or be done.
+// Determines if answer was correct or not, and whether to proceed to next question or be done. Pass in answer?
 export function onAnswerSelect(isCorrect, questionNum, correctCount, accessToken) {
     return function (dispatch) {
         if (isCorrect) {
+            // AM todo - don't use alert('correct'). Use an actual modal.
             alert('CORRECT!');
             dispatch({
                 type: InGameActionTypes.CORRECT_ANSWER,
@@ -251,7 +251,6 @@ export function onAnswerSelect(isCorrect, questionNum, correctCount, accessToken
             })
             dispatch(playNextTrack(accessToken))
         } else {
-            // AM - fill out payload
             dispatch({
                 type: InGameActionTypes.GENERATE_RESULTS
             })

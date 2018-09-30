@@ -93,7 +93,6 @@ const mapDispatchToProps = (dispatch) => ({
 
 // Maps the state in to props (for displaying on the front end)
 const mapStateToProps = (state) => ({
-  nav: state.nav,
   user: state.user.user
 })
 

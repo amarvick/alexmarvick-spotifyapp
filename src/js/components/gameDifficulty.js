@@ -16,7 +16,6 @@ class GameDifficulty extends Component {
         this.state = {
             username: ''
         }
-
     }
 
     render() {
@@ -38,7 +37,6 @@ class GameDifficulty extends Component {
                 </Button>
             </ButtonToolbar> 
           </div>
-
         </div>
       )
     }
@@ -53,7 +51,6 @@ const mapDispatchToProps = (dispatch) => ({
   
   // Maps the state in to props (for displaying on the front end)
 const mapStateToProps = (state) => ({
-    nav: state.nav,
     user: state.user.user,
     artist: state.artist.artist,
     songs: state.songs.songs,

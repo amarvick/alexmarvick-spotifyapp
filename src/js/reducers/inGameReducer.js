@@ -16,6 +16,7 @@ export default function reducer(state={
         gameInProgress: false,
         resultsReady: false,
         didUserCheat: false,
+        cheatReasoning: null,
         gameDifficulty: null
     },
     loading: false,
