@@ -50,7 +50,6 @@ class Premium extends Component {
     let loadingView
     let errorView
 
-
     // In case an error occurs, will populate in error message. Put this in to a function
     if (!errors) {
       if (this.props.userError) {

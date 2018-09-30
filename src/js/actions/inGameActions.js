@@ -30,18 +30,15 @@ export function selectDifficulty(difficulty) {
 }
 
 export function setupGame(songs, accesstoken, userId, artistName) {
-    // const songs = this.songs
-    // const accesstoken = this.accesstoken
-    // const userId = this.userId
-    // const artistName = this.artistName
-
-    // dispatch(organizeSongUriAndNames(songs, accesstoken, userId, artistName))
-    // dispatch(generateQuestions(theSongNames, accesstoken, userId, theSongUris, artistName))
-    // dispatch(startGame(accesstoken, userId, songUris, artistName))
-    // dispatch(postPlaylist(userId, songUris, artistName, accesstoken))
-    // dispatch(addTracksToPlaylist(newPlaylistId, allSongs, contextUri, accesstoken, userId))
-    // dispatch(removeShuffle(accesstoken))
-    // dispatch(playPlaylist(contextUri, accesstoken))
+    return function (dispatch) {
+        dispatch(organizeSongUriAndNames(songs, accesstoken, userId, artistName))
+        // dispatch(generateQuestions(theSongNames, accesstoken, userId, theSongUris, artistName))
+        // dispatch(startGame(accesstoken, userId, songUris, artistName))
+        // dispatch(postPlaylist(userId, songUris, artistName, accesstoken))
+        // dispatch(addTracksToPlaylist(newPlaylistId, allSongs, contextUri, accesstoken, userId))
+        // dispatch(removeShuffle(accesstoken))
+        // dispatch(playPlaylist(contextUri, accesstoken))
+    }
 }
 
 // Retrieves song URIs and Names, which need to be in the same order for creating the playlist and having correct answers be in sync
