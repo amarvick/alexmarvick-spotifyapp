@@ -11,7 +11,7 @@ import ResultsTemplate from './resultsTemplate'
 import GameDifficulty from './gameDifficulty'
 import Error from './error'
 
-import { organizeSongUriAndNames } from '../actions/inGameActions'
+import { setupGame } from '../actions/inGameActions'
 import { onAnswerSelect } from '../actions/inGameActions'
 
 class Premium extends Component {
@@ -131,7 +131,7 @@ class Premium extends Component {
                   />
 
                   {/* AM - Put this button in the ModalGreeting...  */}
-                  <button type="button" className="btn btn-primary" onClick={() => this.props.organizeSongUriAndNames(songs, this.props.accesstoken, this.props.loggedInUserId, artist[0].name)}> 
+                  <button type="button" className="btn btn-primary" onClick={() => this.props.setupGame(songs, this.props.accesstoken, this.props.loggedInUserId, artist[0].name)}> 
                     PLAY NOW!
                   </button>
 
@@ -152,7 +152,7 @@ class Premium extends Component {
 const mapDispatchToProps = (dispatch) => ({
   dispatch: dispatch,
   startup: () => dispatch(StartupActions.startup()),
-  organizeSongUriAndNames: (songs, accesstoken, loggedInUserId, artistName) => dispatch(organizeSongUriAndNames(songs, accesstoken, loggedInUserId, artistName)) // See line 155
+  setupGame: (songs, accesstoken, loggedInUserId, artistName) => dispatch(setupGame(songs, accesstoken, loggedInUserId, artistName)) // See line 155
 })
 
 // Maps the state in to props (for displaying on the front end)

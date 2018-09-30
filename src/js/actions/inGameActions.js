@@ -7,8 +7,6 @@
 
  
 import axios from 'axios'
-// import { StartupActions } from 'react'
-// import { connect } from 'react-redux'
 
 import { fetchArtistData } from './artistActions'
 
@@ -29,41 +27,19 @@ export function selectDifficulty(difficulty) {
     }
 }
 
+// Sets up game
 export function setupGame(songs, accesstoken, userId, artistName) {
-    return function (dispatch) {
-        dispatch(organizeSongUriAndNames(songs, accesstoken, userId, artistName))
-        // dispatch(generateQuestions(theSongNames, accesstoken, userId, theSongUris, artistName))
-        // dispatch(startGame(accesstoken, userId, songUris, artistName))
-        // dispatch(postPlaylist(userId, songUris, artistName, accesstoken))
-        // dispatch(addTracksToPlaylist(newPlaylistId, allSongs, contextUri, accesstoken, userId))
-        // dispatch(removeShuffle(accesstoken))
-        // dispatch(playPlaylist(contextUri, accesstoken))
-    }
-}
-
-// Retrieves song URIs and Names, which need to be in the same order for creating the playlist and having correct answers be in sync
-export function organizeSongUriAndNames(songs, accesstoken, userId, artistName) { // songs
     return function (dispatch) {
         dispatch(loadingInProgress())
 
-        var theSongUriToName = []
         var theSongUris = []
         var theSongNames = []
 
+        removeShuffle(accesstoken)
         shuffleArray(songs)
-
-        // Maps Song URI with Name so they are in the same order when generating playlist. AM - probably a better way of organizing; try a map
-        // for (var i = 0; i < songs.length; i++) {
-        for (var i = 0; i < 10; i++) {
-            theSongUriToName.push(songs[i].uri + '---' + songs[i].name)
-        }
-
-        for (var j = 0; j < theSongUriToName.length; j++) {
-            theSongUris.push(theSongUriToName[j].substr(0, theSongUriToName[j].indexOf('---')))
-            theSongNames.push(theSongUriToName[j].substr(theSongUriToName[j].indexOf('---') + 3, theSongUriToName[j].length - 1))
-        }
-
-        // AM - later, combine these dispatch functions? Might not be doable. Also figure out why I'm setting questions state here instead of in function?
+        
+        theSongUris = dispatch(getSongUris(songs))
+        theSongNames = dispatch(getSongNames(songs))
         dispatch({
             type: InGameActionTypes.UPDATE_FAV_ARTIST_SONGS_URIS,
             payload: {
@@ -74,13 +50,38 @@ export function organizeSongUriAndNames(songs, accesstoken, userId, artistName) 
             }
         })
 
-        // accesstoken, userId, artistName
-        dispatch(generateQuestions(theSongNames, accesstoken, userId, theSongUris, artistName))
+        dispatch(generateQuestions(theSongNames))
+        dispatch(createAndPlayPlaylist(userId, theSongUris, artistName, accesstoken))
+    }
+}
+
+// Following two functions retrieve song URIs and Names, which need to be in the same order for creating the playlist and having correct answers be in sync
+export function getSongUris(songs) {
+    return function (dispatch) {
+        var theSongUris = []
+
+        for (var i = 0; i < songs.length; i++) {
+            theSongUris.push(songs[i].uri)
+        }
+
+        return theSongUris
+    }
+}
+
+export function getSongNames(songs) {
+    return function (dispatch) {
+        var theSongNames = []
+
+        for (var i = 0; i < songs.length; i++) {
+            theSongNames.push(songs[i].name)
+        }
+
+        return theSongNames
     }
 }
 
 // Generates each question
-export function generateQuestions(songNames, accesstoken, userId, songUris, artistName) {
+export function generateQuestions(songNames) {
     return function (dispatch) {
         var questions = []
 
@@ -116,29 +117,11 @@ export function generateQuestions(songNames, accesstoken, userId, songUris, arti
                 questions: questions
             }
         })
-
-        // access token, userId, songUris, artistName
-        dispatch(startGame(accesstoken, userId, songUris, artistName))
-    }
-}
-
-// Starts game
-export function startGame(accesstoken, userId, songUris, artistName) {
-    return function (dispatch) {
-        removeShuffle(accesstoken)
-        dispatch({
-            type: InGameActionTypes.TURN_GAME_ON
-        })
-
-        dispatch(postPlaylist(userId, songUris, artistName, accesstoken))
-
     }
 }
 
 // Create and upload playlist
-// AM To do - May need to find better way of organizing everything that goes on? Because this posts the playlist, 
-// then does a multitude of other things... 'post playlist' may not be the best function name therefore? Not sure - brainstorm
-export function postPlaylist(userId, allSongs, artist, accesstoken) {
+export function createAndPlayPlaylist(userId, allSongs, artist, accesstoken) {
     return function (dispatch) {
         // changes title of playlist depending on whether an artist's first letter is a vowel
         var playlistName;
@@ -208,7 +191,6 @@ export function addTracksToPlaylist(newPlaylistId, allSongs, contextUri, accesst
 export function playPlaylist(contextUri, accesstoken) {
     return function (dispatch) {
         dispatch(loadingComplete())
-        removeShuffle(accesstoken)
         axios({
             url: 'https://api.spotify.com/v1/me/player/play',
             method: "PUT",
@@ -221,6 +203,9 @@ export function playPlaylist(contextUri, accesstoken) {
         })
             .then((response) => {
                 console.log(response)
+                dispatch({
+                    type: InGameActionTypes.TURN_GAME_ON
+                })
             })
             .catch((error) => {
                 console.log(error)
@@ -356,7 +341,7 @@ export function loadingInProgress() {
 }
 
 // AM - Consider using redux-actions - google this
-// export const loadingComplete = createAction(LOADING_COMPLET, {loading: false});  SYNTAX MAY NOT BE CORRECT BUT SIMILAR
+// export const loadingComplete = createAction(LOADING_COMPLETE, {loading: false});  SYNTAX MAY NOT BE CORRECT BUT SIMILAR
 
 // Any asynchronous data changes have finished
 export function loadingComplete() {
@@ -366,21 +351,3 @@ export function loadingComplete() {
         })
     }
 }
-
-// // wraps dispatch to create nicer functions to call within our component
-// // Mapping dispatch actions to the props
-// const mapDispatchToProps = (dispatch) => ({
-//     dispatch: dispatch,
-//     startup: () => dispatch(StartupActions.startup())
-// })
-
-//   // Maps the state in to props (for displaying on the front end)
-// const mapStateToProps = (state) => ({
-//     nav: state.nav,
-//     user: state.user.user,
-//     artist: state.artist.artist,
-//     songs: state.songs.songs,
-//     inGameData: state.inGameData.inGameData
-//   })
-
-// export default connect(mapStateToProps, mapDispatchToProps)
