@@ -10,7 +10,6 @@ import QuestionTemplate from './questionTemplate'
 import ResultsTemplate from './resultsTemplate'
 import GameDifficulty from './gameDifficulty'
 import Error from './error'
-import Loading from './loading'
 
 import { setupGame } from '../actions/inGameActions'
 import { onAnswerSelect } from '../actions/inGameActions'
@@ -29,7 +28,6 @@ class Premium extends Component {
     let artist = this.props.artist || []
     let songs = this.props.songs || []
     let inGameData = this.props.inGameData || {}
-    let loading = this.props.loading || null
     let errors = false
     let error = this.props.userError || this.props.artistError || this.props.songsError || this.props.inGameDataError
 
@@ -40,52 +38,45 @@ class Premium extends Component {
       errors = true
     }
 
-    // Game view (If there are no errors). If screen is loading, display loading screen; else, anything else can display depending on game state
-    if (loading) {
+    // If there is no game difficulty selected, the screen will ask for a difficulty level
+    if (inGameData.gameDifficulty == null) {
       theGameView = (
-        <Loading/>
+        <GameDifficulty
+          username = { this.props.username }
+        />
       )
     } else {
-      // If there is no game difficulty selected, the screen will ask for a difficulty level
-      if (inGameData.gameDifficulty == null) {
-        theGameView = (
-          <GameDifficulty
-            username = { this.props.username }
-          />
-        )
-      } else {
-        // If no questions are generated yet but a difficulty is selected, prompt instructions screen. Else, in-game screen OR results
-        if (inGameData.questions.questions != null && inGameData.questions.questions.length > 0) {
-          // If results aren't ready yet, go through questions; otherwise, results screen will display.
-          if (!inGameData.resultsReady && !inGameData.didUserCheat) {
-            theGameView = ( 
-              <QuestionTemplate 
-                questionAnswers = { inGameData.questions.questions[inGameData.questionNo] }
-                correctResponse = { inGameData.favoriteArtistsSongs.favoriteArtistsSongs.songNames[inGameData.questionNo] }
-                questionNumber = { inGameData.questionNo }
-                accesstoken = { this.props.accesstoken }
-                noOfCorrect = { inGameData.noOfCorrect }
-              />
-            )
-          } else {
-            theGameView = ( 
-              <ResultsTemplate
-                correctCount = { inGameData.noOfCorrect }
-                didUserCheat = { inGameData.didUserCheat }
-                cheatReasoning = { inGameData.cheatReasoning }
-              />
-            )
-          }
+      // If no questions are generated yet but a difficulty is selected, prompt instructions screen. Else, in-game screen OR results
+      if (inGameData.questions.questions != null && inGameData.questions.questions.length > 0) {
+        // If results aren't ready yet, go through questions; otherwise, results screen will display.
+        if (!inGameData.resultsReady && !inGameData.didUserCheat) {
+          theGameView = ( 
+            <QuestionTemplate 
+              questionAnswers = { inGameData.questions.questions[inGameData.questionNo] }
+              correctResponse = { inGameData.favoriteArtistsSongs.favoriteArtistsSongs.songNames[inGameData.questionNo] }
+              questionNumber = { inGameData.questionNo }
+              accesstoken = { this.props.accesstoken }
+              noOfCorrect = { inGameData.noOfCorrect }
+            />
+          )
         } else {
           theGameView = ( 
-            <ModalGreeting
-              username = { this.props.username }
-              songs = { songs }
-              accesstoken = { this.props.accesstoken }
-              artistName = { artist[0].name }
+            <ResultsTemplate
+              correctCount = { inGameData.noOfCorrect }
+              didUserCheat = { inGameData.didUserCheat }
+              cheatReasoning = { inGameData.cheatReasoning }
             />
           )
         }
+      } else {
+        theGameView = ( 
+          <ModalGreeting
+            username = { this.props.username }
+            songs = { songs }
+            accesstoken = { this.props.accesstoken }
+            artistName = { artist[0].name }
+          />
+        )
       }
     }
 
@@ -120,7 +111,6 @@ const mapStateToProps = (state) => ({
   artist: state.artist.artist,
   songs: state.songs.songs,
   inGameData: state.inGameData.inGameData,
-  loading: state.inGameData.loading,
   userError: state.user.error,
   artistError: state.artist.error,
   songsError: state.songs.error,

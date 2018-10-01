@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import NonPremium from './js/components/nonPremium';
 import Premium from './js/components/premium';
 import Login from './js/components/login';
+import Loading from './js/components/loading'
 
 import './stylesheets/App.scss';
 
@@ -48,39 +49,42 @@ class App extends Component {
   }
 
   render() {
-    let user = {}
-
-    if (this.props.user) {
-      user = this.props.user;
-    }
+    let user = this.props.user || {}
+    let loading = this.props.loading || null
 
     // loggedInScreen determines what view the user will see if the user is logged in, based off of whether that user is a premium user.
     let loggedInScreen
 
     // AM - Make a component specifically for if the user token is invalid/expired?
-    if (user.product !== 'premium' && user.product !== '') {
-      loggedInScreen = (
-        <NonPremium 
-          username = { user.id }
-        />
-      )
-    } else {
+    if (user.product === 'premium') {
       loggedInScreen = (
         <Premium 
           username = { user.id }
           accesstoken = { this.getHashParams().access_token }
         />
       )
+    } else {
+      loggedInScreen = (
+        <NonPremium 
+          username = { user.id }
+        />
+      )
     }
 
-    return (
-      <div className='App'>
-        { !this.state.loggedIn ? (
-            <Login/>
-          ) : loggedInScreen 
-        }
-      </div>
-    )
+    if (loading) {
+      return (
+        <Loading/>
+      )
+    } else {
+      return (
+        <div className='App'>
+          { !this.state.loggedIn ? (
+              <Login/>
+            ) : loggedInScreen 
+          }
+        </div>
+      )
+    }
   }
 }
 
@@ -93,7 +97,8 @@ const mapDispatchToProps = (dispatch) => ({
 
 // Maps the state in to props (for displaying on the front end)
 const mapStateToProps = (state) => ({
-  user: state.user.user
+  user: state.user.user,
+  loading: state.inGameData.loading
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
