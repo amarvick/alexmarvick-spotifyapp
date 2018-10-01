@@ -1,6 +1,7 @@
 $blue-background: rgba(0, 0, 100, 0.7);
 $turquoise-background: rgba(0, 135, 104, 0.7);
 $red-background: rgba(248, 68, 68, 0.7);
+$error-background: rgba(135, 12, 12, 0.8);
 $white: #bbbbbb;
 
 @mixin preGameProperties($backgroundColor) {
@@ -50,4 +51,8 @@ ul {
 
 .resultsTemplate {
   @include gameProperties($turquoise-background);
+}
+
+.errorTemplate {
+  @include gameProperties($error-background)
 }

@@ -97,7 +97,8 @@ export default function reducer(state={
                         songUris: [],
                         songNames: []
                     }
-                }
+                },
+                error: null
             }
         }
 

@@ -86,6 +86,8 @@ class ResultsTemplate extends Component {
 
         { endOfGameMsg }
 
+        Check here if you'd like to keep your playlist: <input type="checkbox" /> <br/>
+
         <button type="button" className="btn btn-success" onClick={ () => this.props.dispatch(restartGame()) }>Play Again?</button>
         <a className="btn btn-danger lead" target="_blank" rel="noopener noreferrer" href="https://github.com/amarvick/alexmarvick-spotifyapp" block>Leave (Redirect to Github)</a>
 
