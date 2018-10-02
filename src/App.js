@@ -55,7 +55,6 @@ class App extends Component {
     // loggedInScreen determines what view the user will see if the user is logged in, based off of whether that user is a premium user.
     let loggedInScreen
 
-    // AM - Make a component specifically for if the user token is invalid/expired?
     if (user.product === 'premium') {
       loggedInScreen = (
         <Premium 

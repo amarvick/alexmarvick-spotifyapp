@@ -3,6 +3,8 @@
 
 import React, { Component, StartupActions } from 'react'
 import { ButtonToolbar, Button } from 'react-bootstrap'
+import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table'
+import '../../../node_modules/react-bootstrap-table/css/react-bootstrap-table.css'
 import { connect } from 'react-redux'
 
 import { restartGame } from '../actions/inGameActions'
@@ -28,12 +30,16 @@ class ResultsTemplate extends Component {
     let sevenToNineCorrect = 'Pretty good! Lucky for you, there is still more of your favorite artist to explore!'
     let allCorrect = 'Wow! You really are a big fan of your favorite artist. Well done!'
 
+    let yourResponses = this.props.inGameData.yourResponses || null
+    let correctAnswers = this.props.inGameData.favoriteArtistsSongs.favoriteArtistsSongs.songNames || null
+
     let endOfGameMsg
     
     if (this.props.didCheat) {
       endOfGameMsg = (
         <div>
           { cheatMessage }
+          How did you cheat? { this.props.cheatReasoning }
         </div>
       )
     } else {
@@ -41,7 +47,8 @@ class ResultsTemplate extends Component {
         endOfGameMsg = (
           <div>
             { zeroCorrect } <br/>
-            How did you cheat? { this.props.cheatReasoning }
+            { yourResponses } <br/>
+            { correctAnswers } <br/>
           </div>
         )
       }
@@ -49,7 +56,9 @@ class ResultsTemplate extends Component {
       else if (this.props.correctCount >= 1 && this.props.correctCount <= 3) { 
         endOfGameMsg = (
           <div>
-            { oneToThreeCorrect }
+            { oneToThreeCorrect } <br/>
+            { yourResponses } <br/>
+            { correctAnswers } <br/>
           </div>
         )
       }
@@ -57,7 +66,9 @@ class ResultsTemplate extends Component {
       else if (this.props.correctCount >= 4 && this.props.correctCount <= 6) { 
         endOfGameMsg = (
           <div>
-            { fourToSixCorrect }
+            { fourToSixCorrect } <br/>
+            { yourResponses } <br/>
+            { correctAnswers } <br/>
           </div>
         )
       }
@@ -65,7 +76,9 @@ class ResultsTemplate extends Component {
       else if (this.props.correctCount >= 7 && this.props.correctCount <= 9) { 
         endOfGameMsg = (
           <div>
-            { sevenToNineCorrect }
+            { sevenToNineCorrect } <br/>
+            { yourResponses } <br/>
+            { correctAnswers } <br/>
           </div>
         )
       }
@@ -73,7 +86,9 @@ class ResultsTemplate extends Component {
       else if (this.props.correctCount === 10) { 
         endOfGameMsg = (
           <div>
-            { allCorrect }
+            { allCorrect } <br/>
+            { yourResponses } <br/>
+            { correctAnswers } <br/>
           </div>
         )
       }

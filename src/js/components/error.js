@@ -29,7 +29,7 @@ class Error extends Component {
         </p>
 
         <p className="lead">
-          If the above solution did not work, please try refreshing the page. If the problem still persists or if you need help, please reach out amarvick94@gmail.com. Thanks!
+          If the above solution did not work, please try refreshing the page. It's possible your access token expired. If the problem still persists or if you need help, please reach out amarvick94@gmail.com. Thanks!
         </p>
 
         <Button onClick={ () => this.props.dispatch(restartGame()) } block>

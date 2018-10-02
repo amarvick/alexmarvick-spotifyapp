@@ -129,9 +129,15 @@ export default function reducer(state={
             }
         }
 
-        case InGameActionTypes.OUTPUT_SONGS: {
+        case InGameActionTypes.ADD_TO_USER_RESPONSE_LOG: {
             return {...state,
-                inGameData: action.payload
+                inGameData: {
+                    ...state.inGameData,
+                    yourResponses: [
+                        ...state.inGameData.yourResponses,
+                        action.newItem
+                    ]
+                }
             }
         }
 

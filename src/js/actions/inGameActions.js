@@ -232,8 +232,13 @@ export function removeShuffle(accesstoken) {
 }
 
 // Determines if answer was correct or not, and whether to proceed to next question or be done. Pass in answer?
-export function onAnswerSelect(isCorrect, questionNum, correctCount, accessToken) {
+export function onAnswerSelect(isCorrect, questionNum, correctCount, accessToken, userResponse) {
     return function (dispatch) {
+        dispatch({
+            type: InGameActionTypes.ADD_TO_USER_RESPONSE_LOG,
+            newItem: userResponse
+        })
+
         if (isCorrect) {
             // AM todo - don't use alert('correct'). Use an actual modal.
             alert('CORRECT!');

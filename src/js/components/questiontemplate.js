@@ -31,8 +31,7 @@ class QuestionTemplate extends Component {
       isCorrect = false
     }
 
-    this.props.dispatch(onAnswerSelect(isCorrect, this.props.questionNumber, this.props.noOfCorrect, this.props.accesstoken))
-    
+    this.props.dispatch(onAnswerSelect(isCorrect, this.props.questionNumber, this.props.noOfCorrect, this.props.accesstoken, userResponse))
   }
 
   // The question template
