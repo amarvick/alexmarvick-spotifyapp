@@ -56,3 +56,8 @@ ul {
 .errorTemplate {
   @include gameProperties($error-background)
 }
+
+.resultsTable {
+  padding: 20px;
+  text-align: left;
+}

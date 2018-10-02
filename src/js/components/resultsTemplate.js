@@ -9,6 +9,8 @@ import { connect } from 'react-redux'
 
 import { restartGame } from '../actions/inGameActions'
 
+import ResultsTable from './resultsTable'
+
 class ResultsTemplate extends Component {
   constructor(props) {
     super(props)
@@ -47,8 +49,6 @@ class ResultsTemplate extends Component {
         endOfGameMsg = (
           <div>
             { zeroCorrect } <br/>
-            { yourResponses } <br/>
-            { correctAnswers } <br/>
           </div>
         )
       }
@@ -57,8 +57,6 @@ class ResultsTemplate extends Component {
         endOfGameMsg = (
           <div>
             { oneToThreeCorrect } <br/>
-            { yourResponses } <br/>
-            { correctAnswers } <br/>
           </div>
         )
       }
@@ -67,8 +65,6 @@ class ResultsTemplate extends Component {
         endOfGameMsg = (
           <div>
             { fourToSixCorrect } <br/>
-            { yourResponses } <br/>
-            { correctAnswers } <br/>
           </div>
         )
       }
@@ -77,8 +73,6 @@ class ResultsTemplate extends Component {
         endOfGameMsg = (
           <div>
             { sevenToNineCorrect } <br/>
-            { yourResponses } <br/>
-            { correctAnswers } <br/>
           </div>
         )
       }
@@ -87,8 +81,6 @@ class ResultsTemplate extends Component {
         endOfGameMsg = (
           <div>
             { allCorrect } <br/>
-            { yourResponses } <br/>
-            { correctAnswers } <br/>
           </div>
         )
       }
@@ -101,6 +93,12 @@ class ResultsTemplate extends Component {
 
         { endOfGameMsg }
 
+        <ResultsTable
+          yourResponses = { yourResponses }
+          questionAnswers = { correctAnswers }
+        />
+
+        {/* AM - this does nothing yet */}
         Check here if you'd like to keep your playlist: <input type="checkbox" /> <br/>
 
         <button type="button" className="btn btn-success" onClick={ () => this.props.dispatch(restartGame()) }>Play Again?</button>

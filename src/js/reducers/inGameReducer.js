@@ -7,7 +7,7 @@ export default function reducer(state={
     inGameData: {
         noOfCorrect: 0,
         questions: [],
-        yourResponses: [], // AM - need to work on this. Logs in user's responses
+        yourResponses: [], 
         favoriteArtistsSongs: {
             songUris: [],
             songNames: []
@@ -91,6 +91,7 @@ export default function reducer(state={
                     resultsReady: false,
                     gameDifficulty: null,
                     questions: [],
+                    yourResponses: [],
                     noOfCorrect: 0,
                     questionNo: 0,
                     favoriteArtistsSongs: {
