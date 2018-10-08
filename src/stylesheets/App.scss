@@ -18,12 +18,15 @@ $white: #bbbbbb;
   padding: 25px;
 }
 
+html {
+  height: 100%;
+}
+
 body {
-  color: $white;
+  // color: $white;
   text-align: center;
 
-  background-image: url("../images/Background.jpg");
-  background-size: cover;
+  background: linear-gradient(0deg, rgba(247,78,235,1) 0%, rgba(45,182,253,1) 100%);
 
   margin: 0;
   padding: 0;
@@ -37,6 +40,7 @@ ul {
 }
 
 // AM todo - make sure blue background goes away when clicking button to play game
+/*
 .Premium {
   @include preGameProperties($blue-background);
 }
@@ -44,6 +48,7 @@ ul {
 .NonPremium {
   @include preGameProperties($red-background);
 }
+*/
 
 .questionTemplate {
   @include gameProperties($blue-background);

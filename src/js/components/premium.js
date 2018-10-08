@@ -11,8 +11,7 @@ import ResultsTemplate from './resultsTemplate'
 import GameDifficulty from './gameDifficulty'
 import Error from './error'
 
-import { setupGame } from '../actions/inGameActions'
-import { onAnswerSelect } from '../actions/inGameActions'
+import { restartGame } from '../actions/inGameActions'
 
 class Premium extends Component {
   constructor(props) {
@@ -23,6 +22,22 @@ class Premium extends Component {
       username: ''
     }
   }
+
+  // isConsoleOpen(gameDifficulty, resultsReady, gameInProgress) {
+  //   this.opened = true;
+  //   if (gameDifficulty == null) {
+  //     alert('WARNING! By having your console open, you will not be able to play the game. Please close it before you get to the next screen. If you have it on at any point during the game, you automatically lose.')
+  //   } else {
+  //     if (!resultsReady) {
+  //       if (!gameInProgress) {
+  //         alert('PLEASE TURN OFF YOUR CONSOLE! You will be redirected back to the home screen to start over. If you turn on the console at any point during the game, you automatically fail.')
+  //         this.props.dispatch(restartGame())
+  //       } else {
+  //         alert('You automatically lose! Cheater!')
+  //       }
+  //     }
+  //   }
+  // }
 
   render(props) {
     let artist = this.props.artist || []
@@ -80,6 +95,31 @@ class Premium extends Component {
       }
     }
 
+    // // below indicates that the console log is open. This is cheating and will result in an automatic loss
+    // var devtools = /./;
+    // devtools.toString = function() {
+    //   this.isConsoleOpen(inGameData.gameDifficulty, inGameData.resultsReady, inGameData.gameInProgress)
+    // }
+    // console.log('%c', devtools);
+
+    // var devtools = /./;
+    // devtools.toString = function() {
+    //   this.opened = true;
+    //   if (inGameData.gameDifficulty == null) {
+    //     alert('WARNING! By having your console open, you will not be able to play the game. Please close it before you get to the next screen. If you have it on at any point during the game, you automatically lose.')
+    //   } else {
+    //     if (!inGameData.resultsReady) {
+    //       if (!inGameData.gameInProgress) {
+    //         alert('PLEASE TURN OFF YOUR CONSOLE! You will be redirected back to the home screen to start over. If you turn on the console at any point during the game, you automatically fail.')
+    //         this.props.dispatch(restartGame())
+    //       } else {
+    //         alert('You automatically lose! Cheater!')
+    //       }
+    //     }
+    //   }
+    // }
+    // console.log('%c', devtools);
+
     // If an error happens at any point, display error screen; else, display game view. Will want to edit this so the error is specific
     if (errors) {
       return (      
@@ -102,7 +142,7 @@ class Premium extends Component {
 const mapDispatchToProps = (dispatch) => ({
   dispatch: dispatch,
   startup: () => dispatch(StartupActions.startup()),
-  setupGame: (songs, accesstoken, username, artistName) => dispatch(setupGame(songs, accesstoken, username, artistName))
+  restartGame: () => dispatch(restartGame())
 })
 
 // Maps the state in to props (for displaying on the front end)

@@ -3,10 +3,9 @@
 
 import React, { Component, StartupActions } from 'react'
 import { ButtonToolbar, Button, Modal } from 'react-bootstrap'
+import { connect } from 'react-redux'
 
 import { onAnswerSelect } from '../actions/inGameActions'
-
-import { connect } from 'react-redux'
 
 class QuestionTemplate extends Component {
   constructor(props) {

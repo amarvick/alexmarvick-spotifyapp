@@ -39,8 +39,7 @@ class ModalGreeting extends Component {
         <p className="lead">
           Once you are finished, you will receive your results. Good luck!
         </p>
-
-        <button type="button" className="btn btn-primary" onClick={() => this.props.dispatch(setupGame(this.props.songs, this.props.accesstoken, this.props.username, this.props.artistName))}> 
+        <button type="button" className="btn btn-primary" onClick={() => this.props.dispatch(setupGame(this.props.songs, this.props.accesstoken, this.props.username, this.props.artistName, this.state.checked))}> 
           PLAY NOW!
         </button>
       </div>
