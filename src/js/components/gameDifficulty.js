@@ -2,10 +2,9 @@
  * Description: Welcome screen/game instructions for premium users  */
 
 import React, { Component, StartupActions } from 'react'
-import { ButtonToolbar, Button } from 'react-bootstrap'
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 import { connect } from 'react-redux'
-
-import TheModal from './modal'
 
 import { selectDifficulty } from '../actions/inGameActions'
 
@@ -21,22 +20,28 @@ class GameDifficulty extends Component {
     render() {
       return (
         <div className='Modal container'>
-          <h1 className="display-4">Welcome to Spotelligence!</h1>
-          <p className="lead">Hello, {this.props.username}! Thank you for taking the time to check out my game. How obsessed do you believe you are with your favorite artist's songs?</p>
-
-          <div>
-            <ButtonToolbar>  
-                <Button bsStyle="success" onClick={ () => this.props.dispatch(selectDifficulty('Easy')) } block>
+            <Typography variant="display1">
+                Welcome to Spotelligence!
+            </Typography>
+            <Typography variant="body1">
+                Hello, {this.props.username}! Thank you for taking the time to check out my game. How obsessed do you believe you are with your favorite artist's songs?
+            </Typography>
+            
+            <div>
+                <Button onClick={ () => this.props.dispatch(selectDifficulty('Easy')) }>
                     Artists? You mean 'artist'? (Easy)
                 </Button>
-                <Button bsStyle="warning" onClick={ () => this.props.dispatch(selectDifficulty('Medium')) } block>
+            </div>
+            <div>
+                <Button onClick={ () => this.props.dispatch(selectDifficulty('Medium')) }>
                     I think I'm mildly obsessed! (Medium)
                 </Button>
-                <Button bsStyle="danger" onClick={ () => this.props.dispatch(selectDifficulty('Hard')) } block>
+            </div>
+            <div>
+                <Button onClick={ () => this.props.dispatch(selectDifficulty('Hard')) }>
                     Extremely obsessed! (Difficult)
                 </Button>
-            </ButtonToolbar> 
-          </div>
+            </div>
         </div>
       )
     }

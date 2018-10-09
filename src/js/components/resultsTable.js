@@ -3,7 +3,12 @@
  *              answers                                             */
 
 import React, { Component, StartupActions } from 'react'
-import { ButtonToolbar, Button, Modal } from 'react-bootstrap'
+import Typography from '@material-ui/core/Typography';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 
 class ResultsTable extends Component {
   constructor(props) {
@@ -22,30 +27,31 @@ class ResultsTable extends Component {
     let red = { color: 'red' }
     let tableCenter = { width: '100%' }
 
+    // AM - Great solution! Review: https://codesandbox.io/s/yw30jrvq1v
     const tableBody = this.props.yourResponses.map((item, index) => {
         return (
-            <tr>
-                <td>{ item }</td>
-                <td>{ this.props.questionAnswers[index] }</td>
-                <td>{ item === this.props.questionAnswers[index] ? <span style={ green }>Correct</span> : <span style={ red }>Incorrect</span> }</td>
-            </tr>
+            <TableRow>
+                <TableCell>{ item }</TableCell>
+                <TableCell>{ this.props.questionAnswers[index] }</TableCell>
+                <TableCell>{ item === this.props.questionAnswers[index] ? <span style={ green }>Correct</span> : <span style={ red }>Incorrect</span> }</TableCell>
+            </TableRow>
         )
     })
 
     return (
       <div className = 'resultsTable align-center'>
-        <table style={ tableCenter }>
-            <thead>
-                <tr>
-                    <th>Your Response</th>
-                    <th>Correct Answer</th> 
-                    <th>Result</th>
-                </tr>
-            </thead>
-            <tbody>
+        <Table style={ tableCenter }>
+            <TableHead>
+                <TableRow>
+                    <TableCell>Your Response</TableCell>
+                    <TableCell>Correct Answer</TableCell> 
+                    <TableCell>Result</TableCell>
+                </TableRow>
+            </TableHead>
+            <TableBody>
                 { tableBody }
-            </tbody>
-        </table>
+            </TableBody>
+        </Table>
       </div>
     )
   }

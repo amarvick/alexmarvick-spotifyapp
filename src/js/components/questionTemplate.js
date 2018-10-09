@@ -2,10 +2,35 @@
  * Description: The template for each individual question           */
 
 import React, { Component, StartupActions } from 'react'
-import { ButtonToolbar, Button, Modal } from 'react-bootstrap'
 import { connect } from 'react-redux'
 
+import { withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import Modal from '@material-ui/core/Modal';
+
 import { onAnswerSelect } from '../actions/inGameActions'
+
+function getModalStyle() {
+  const top = 50
+  const left = 50
+
+  return {
+    top: `${top}%`,
+    left: `${left}%`,
+    transform: `translate(-${top}%, -${left}%)`,
+  };
+}
+
+const styles = theme => ({
+  paper: {
+    position: 'absolute',
+    width: theme.spacing.unit * 50,
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing.unit * 4,
+  },
+});
 
 class QuestionTemplate extends Component {
   constructor(props) {
@@ -16,9 +41,34 @@ class QuestionTemplate extends Component {
       correctResponse: '',
       questionNumber: 0,
       accesstoken: '',
-      noOfCorrect: 0
+      noOfCorrect: 0,
+      show: false,
+      userWasCorrect: false,
+      userResponse: ''
     }
   }
+
+  handleOpen = (isCorrect, userResponse) => {
+    if (isCorrect == true) {
+      this.setState({ userWasCorrect: true });
+    }
+
+    this.setState({ 
+      userResponse: userResponse,
+      open: true
+    });
+  };
+
+  handleClose = (isCorrect, userResponse) => {
+    this.setState({ open: false });
+    this.props.dispatch(onAnswerSelect(isCorrect, this.props.questionNumber, this.props.noOfCorrect, this.props.accesstoken, this.state.userResponse))
+
+    if (this.state.userWasCorrect) {
+      this.setState({ userWasCorrect: false });
+    }
+
+    this.setState({ userResponse: '' })
+  };
 
   // Validates answer and checks whether to proceed to the next question or produce score
   checkAnswer(userResponse) {
@@ -30,31 +80,63 @@ class QuestionTemplate extends Component {
       isCorrect = false
     }
 
-    this.props.dispatch(onAnswerSelect(isCorrect, this.props.questionNumber, this.props.noOfCorrect, this.props.accesstoken, userResponse))
+    this.handleOpen(isCorrect, userResponse);
   }
 
   // The question template
-  render(props) {    
+  render(props) {   
+    const { classes } = this.props; 
     let questionNo = this.props.questionNumber + 1
+
+    let responseResult
+
+    if (this.state.userWasCorrect) {
+      responseResult = 'Correct!'
+    } else {
+      responseResult = 'Incorrect...'
+    }
 
     return (
       <div className = 'questionTemplate'>
-        <h1 className="display-4">QUESTION { questionNo }: What song is this?</h1>
+        <Typography variant="display1">
+          QUESTION { questionNo }: What song is this?
+        </Typography>
 
-        <ButtonToolbar>
-          <Button data-toggle="modal" data-target="responsePrompt" onClick={ () => this.checkAnswer(this.props.questionAnswers[0]) } block> 
+        <div>
+          <Button data-toggle="modal" data-target="responsePrompt" onClick={ () => this.checkAnswer(this.props.questionAnswers[0]) }> 
             { this.props.questionAnswers[0] } 
           </Button>
-          <Button data-toggle="modal" data-target="responsePrompt" onClick={ () => this.checkAnswer(this.props.questionAnswers[1]) } block>
+        </div>
+        <div>
+          <Button data-toggle="modal" data-target="responsePrompt" onClick={ () => this.checkAnswer(this.props.questionAnswers[1]) }>
             { this.props.questionAnswers[1] }
           </Button>
-          <Button data-toggle="modal" data-target="responsePrompt" onClick={ () => this.checkAnswer(this.props.questionAnswers[2]) } block>
+        <div>
+        </div>
+          <Button data-toggle="modal" data-target="responsePrompt" onClick={ () => this.checkAnswer(this.props.questionAnswers[2]) }>
             { this.props.questionAnswers[2] }
           </Button>
-          <Button data-toggle="modal" data-target="responsePrompt" onClick={ () => this.checkAnswer(this.props.questionAnswers[3]) } block>
+        <div>
+        </div>
+          <Button data-toggle="modal" data-target="responsePrompt" onClick={ () => this.checkAnswer(this.props.questionAnswers[3]) }>
             { this.props.questionAnswers[3] }
           </Button>
-        </ButtonToolbar>
+        </div>
+
+        <Modal
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+          open={this.state.open}
+          onClose={this.handleClose}
+          disableBackdropClick={true}
+          >
+          <div style={getModalStyle()} className={classes.paper}>
+            { responseResult }
+            <Button onClick={() => this.handleClose(this.state.userWasCorrect)}>
+              Next
+            </Button>
+          </div>
+        </Modal> 
 
       </div>
 
@@ -68,6 +150,6 @@ const mapDispatchToProps = (dispatch) => ({
   onAnswerSelect: (isCorrect, questionNumber, noOfCorrect, accesstoken) => dispatch(onAnswerSelect(isCorrect, questionNumber, noOfCorrect, accesstoken))
 })
 
-export default connect(mapDispatchToProps)(QuestionTemplate)
+export default connect(mapDispatchToProps)(withStyles(styles)(QuestionTemplate));
 
 // export default QuestionTemplate

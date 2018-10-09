@@ -2,8 +2,11 @@
  * Description: Error message that would stop the user              */
 
 import React, { Component, StartupActions } from 'react'
-import { ButtonToolbar, Button } from 'react-bootstrap'
+
+import Button from '@material-ui/core/Button';
 import { connect } from 'react-redux'
+
+import Typography from '@material-ui/core/Typography';
 
 import { restartGame } from '../actions/inGameActions'
 
@@ -20,19 +23,19 @@ class Error extends Component {
   render(props) {    
     return (
       <div className = 'errorTemplate'>
-        <h1 className="display-4">
+        <Typography variant="display1">
           ERROR
-        </h1>
+        </Typography>
 
-        <p className="lead">
+        <Typography variant="body1">
           { this.props.errorMessage }
-        </p>
+        </Typography>
 
-        <p className="lead">
+        <Typography variant="body1">
           If the above solution did not work, please try refreshing the page. It's possible your access token expired. If the problem still persists or if you need help, please reach out amarvick94@gmail.com. Thanks!
-        </p>
+        </Typography>
 
-        <Button onClick={ () => this.props.dispatch(restartGame()) } block>
+        <Button onClick={ () => this.props.dispatch(restartGame()) }>
           Try again
         </Button>
       </div>

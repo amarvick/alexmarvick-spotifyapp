@@ -240,16 +240,11 @@ export function onAnswerSelect(isCorrect, questionNum, correctCount, accessToken
         })
 
         if (isCorrect) {
-            // AM todo - don't use alert('correct'). Use an actual modal.
-            alert('CORRECT!');
             dispatch({
                 type: InGameActionTypes.CORRECT_ANSWER,
                 payload: correctCount + 1
             })
-        } else {
-            alert('INCORRECT ANSWER :(')
         }
-
         // Changes to the next question OR you're finished and the results will be presented.
         if (questionNum < 9) {
             dispatch(loadingInProgress())

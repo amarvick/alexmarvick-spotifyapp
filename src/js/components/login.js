@@ -3,6 +3,9 @@
 
 import React, { Component } from 'react'
 
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+
 class Login extends Component {
 
   render() {
@@ -12,9 +15,15 @@ class Login extends Component {
 
     return (
       <div className='App container container-fluid'>
-        <h1 style = {style}>WELCOME TO SPOTELLIGENCE!</h1>
-        <p>PREMIUM USERS! Are you REALLY as big of a fan as your favorite music group?! Find out now!</p>
-        <a className="btn btn-success" href='http://localhost:8888/login'>Login to Spotify</a> {/* https://am-spotify-quiz-api.herokuapp.com/login */}
+        <Typography variant="display1" style = {style}>
+          WELCOME TO SPOTELLIGENCE!
+        </Typography>
+        <Typography variant="body1">
+          PREMIUM USERS! Are you REALLY as big of a fan as your favorite music group?! Find out now!
+        </Typography>
+        <Button className="btn btn-success" href='http://localhost:8888/login'>
+          Login to Spotify
+        </Button> {/* https://am-spotify-quiz-api.herokuapp.com/login */}
       </div>
     )
   }

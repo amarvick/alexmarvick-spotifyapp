@@ -48,7 +48,6 @@ ul {
 .NonPremium {
   @include preGameProperties($red-background);
 }
-*/
 
 .questionTemplate {
   @include gameProperties($blue-background);
@@ -58,11 +57,8 @@ ul {
   @include gameProperties($turquoise-background);
 }
 
+*/
+
 .errorTemplate {
   @include gameProperties($error-background)
-}
-
-.resultsTable {
-  padding: 20px;
-  text-align: left;
 }

@@ -2,7 +2,8 @@
  * Description: The template for post-game results                  */
 
 import React, { Component, StartupActions } from 'react'
-import { ButtonToolbar, Button } from 'react-bootstrap'
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import { connect } from 'react-redux'
 
 import { restartGame } from '../actions/inGameActions'
@@ -43,6 +44,7 @@ class ResultsTemplate extends Component {
         </div>
       )
     } else {
+      // AM - can probably compile this better
       if (this.props.correctCount === 0) { 
         endOfGameMsg = (
           <div>
@@ -87,17 +89,30 @@ class ResultsTemplate extends Component {
     // AM - redux may come in handy here. Output all results, then have a button clicked on that will return you to the main screen.
     return (
       <div className = 'resultsTemplate'>
-        <h1 className="display-4">RESULTS: { this.props.correctCount }/10</h1>
+        <Typography variant="display1">
+          RESULTS: { this.props.correctCount }/10
+        </Typography>
 
-        { endOfGameMsg }
+        <Typography variant="body1">
+          { endOfGameMsg }
+        </Typography>
 
         <ResultsTable
           yourResponses = { yourResponses }
           questionAnswers = { correctAnswers }
         />
 
-        <button type="button" className="btn btn-success" onClick={ () => this.props.dispatch(restartGame()) }>Play Again?</button>
-        <a className="btn btn-danger lead" target="_blank" rel="noopener noreferrer" href="https://github.com/amarvick/alexmarvick-spotifyapp" block>Leave (Redirect to Github)</a>
+        <div>
+          <Button onClick={ () => this.props.dispatch(restartGame()) }>
+            Play Again?
+          </Button>
+        </div>
+
+        <div>
+          <Button target="_blank" rel="noopener noreferrer" href="https://github.com/amarvick/alexmarvick-spotifyapp" block>
+            Leave (Redirect to Github)
+          </Button>
+        </div>
 
       </div>
     )

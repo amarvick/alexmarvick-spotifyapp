@@ -2,6 +2,7 @@
  * Description: Loading screen                                      */
 
 import React, { Component } from 'react'
+import Typography from '@material-ui/core/Typography';
 
 class Loading extends Component {
   constructor(props) {
@@ -17,7 +18,9 @@ class Loading extends Component {
     return (
       <div style={style}>
           <i className="fa fa-circle-o-notch fa-spin"/><br/>
-          LOADING...
+          <Typography variant="display4">
+            LOADING...
+          </Typography>
       </div>
     )
   }
