@@ -107,16 +107,19 @@ class QuestionTemplate extends Component {
             { this.props.questionAnswers[0] } 
           </Button>
         </div>
+
         <div>
           <Button data-toggle="modal" data-target="responsePrompt" onClick={ () => this.checkAnswer(this.props.questionAnswers[1]) }>
             { this.props.questionAnswers[1] }
           </Button>
         <div>
+        
         </div>
           <Button data-toggle="modal" data-target="responsePrompt" onClick={ () => this.checkAnswer(this.props.questionAnswers[2]) }>
             { this.props.questionAnswers[2] }
           </Button>
         <div>
+        
         </div>
           <Button data-toggle="modal" data-target="responsePrompt" onClick={ () => this.checkAnswer(this.props.questionAnswers[3]) }>
             { this.props.questionAnswers[3] }
@@ -131,7 +134,7 @@ class QuestionTemplate extends Component {
           disableBackdropClick={true}
           >
           <div style={getModalStyle()} className={classes.paper}>
-            { responseResult }
+            { responseResult }<br/>
             <Button onClick={() => this.handleClose(this.state.userWasCorrect)}>
               Next
             </Button>

@@ -42,8 +42,16 @@ ul {
   text-align: left;
 }
 
+button {
+  background-color: $white !important;
+  margin: 10px !important;
 
-button > span, p, h1 {
+  span {
+    color: black;
+  }
+}
+
+p, h1 {
   color: $white !important;
 }
 
