@@ -86,10 +86,10 @@ class Premium extends Component {
       } else {
         theGameView = ( 
           <ModalGreeting
-            username = { this.props.username }
+            username = { this.props.username || '' }
             songs = { songs }
             accesstoken = { this.props.accesstoken }
-            artistName = { artist[0].name }
+            artistName = { artist[0].name || '' } // AM - to fix
           />
         )
       }

@@ -28,17 +28,17 @@ class GameDifficulty extends Component {
             </Typography>
             
             <div>
-                <Button onClick={ () => this.props.dispatch(selectDifficulty('Easy')) }>
+                <Button id="btn-easy-difficulty" onClick={ () => this.props.dispatch(selectDifficulty('Easy')) }>
                     Artists? You mean 'artist'? (Easy)
                 </Button>
             </div>
             <div>
-                <Button onClick={ () => this.props.dispatch(selectDifficulty('Medium')) }>
+                <Button id="btn-medium-difficulty" onClick={ () => this.props.dispatch(selectDifficulty('Medium')) }>
                     I think I'm mildly obsessed! (Medium)
                 </Button>
             </div>
             <div>
-                <Button onClick={ () => this.props.dispatch(selectDifficulty('Hard')) }>
+                <Button id="btn-hard-difficulty" onClick={ () => this.props.dispatch(selectDifficulty('Hard')) }>
                     Extremely obsessed! (Difficult)
                 </Button>
             </div>

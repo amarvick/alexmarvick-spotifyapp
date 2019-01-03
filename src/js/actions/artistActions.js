@@ -55,7 +55,7 @@ export function fetchArtistData(difficulty) {
         .catch((error) => {
             dispatch({
                 type: ArtistActionType.FETCH_ARTIST_ERROR,
-                payload: error
+                payload: error.response
             })
             dispatch(loadingComplete())
         })

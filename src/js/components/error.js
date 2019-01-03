@@ -32,7 +32,7 @@ class Error extends Component {
         </Typography>
 
         <Typography variant="body1">
-          If the above solution did not work, please try refreshing the page. It's possible your access token expired. If the problem still persists or if you need help, please reach out amarvick94@gmail.com. Thanks!
+          If the above solution did not work (if listed), please try refreshing the page. It's possible your access token expired. If the problem still persists or if you need help, please reach out amarvick94@gmail.com. Thanks!
         </Typography>
 
         <Button onClick={ () => this.props.dispatch(restartGame()) }>

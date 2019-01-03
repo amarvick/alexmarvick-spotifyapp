@@ -1,9 +1,10 @@
 $blue-background: rgba(0, 0, 100, 0.7);
 $turquoise-background: rgba(0, 135, 104, 0.7);
 $red-background: rgba(248, 68, 68, 0.7);
-$green-background: rgba(0, 106, 0, 0.7);
+$teal-background: rgba(36, 104, 107, 0.7);
 $error-background: rgba(135, 12, 12, 0.8);
-$white: #bbbbbb;
+$dark-white: #a9a9a9;
+$white: #b8b8b8;
 
 @mixin preGameProperties($backgroundColor) {
   background: $backgroundColor;
@@ -13,18 +14,17 @@ $white: #bbbbbb;
 
 @mixin gameProperties($backgroundColor) {
   background: $backgroundColor;
-  border: 2px solid $white;
+  border: 2px solid $dark-white;
   border-radius: 5px;
   padding: 25px;
 }
 
 html {
   height: 100%;
-  color: $white !important;
 }
 
 body {
-  color: $white !important;
+  color: $dark-white !important;
   text-align: center;
 
   background-image: url("../images/Background.jpg");
@@ -51,8 +51,29 @@ button {
   }
 }
 
-p, h1 {
-  color: $white !important;
+p, h1, a {
+  color: $dark-white !important;
+}
+
+.btn-success {
+  position: relative;
+  top: 25px;
+  background-color: green !important;
+  span {
+    color:  !important;
+  }
+}
+
+#btn-easy-difficulty {
+  background-color: green !important;
+}
+
+#btn-medium-difficulty {
+  background-color: yellow !important;
+}
+
+#btn-hard-difficulty {
+  background-color: red !important;
 }
 
 .Modal > p {
@@ -60,7 +81,7 @@ p, h1 {
 }
 
 .Premium {
-  @include preGameProperties($green-background);
+  @include preGameProperties($teal-background);
 }
 
 .NonPremium {
@@ -77,4 +98,10 @@ p, h1 {
 
 .errorTemplate {
   @include gameProperties($error-background)
+}
+
+@media only screen and (max-width: 635px) {
+  h1 {
+    font-size: 35px !important;
+  }
 }
