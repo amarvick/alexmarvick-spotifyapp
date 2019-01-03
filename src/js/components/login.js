@@ -21,7 +21,7 @@ class Login extends Component {
         <Typography variant="body1">
           PREMIUM USERS! Are you REALLY as big of a fan as your favorite music group?! Find out now!
         </Typography>
-        <Button className="btn btn-success" href='http://localhost:8888/login'>
+        <Button className="btn btn-success" href='https://am-spotify-quiz-api.herokuapp.com/login'>
           Login to Spotify
         </Button> {/* https://am-spotify-quiz-api.herokuapp.com/login */}
       </div>
