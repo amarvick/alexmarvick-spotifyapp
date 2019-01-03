@@ -1,18 +1,18 @@
 $blue-background: rgba(0, 0, 100, 0.7);
 $turquoise-background: rgba(0, 135, 104, 0.7);
 $red-background: rgba(248, 68, 68, 0.7);
+$green-background: rgba(0, 106, 0, 0.7);
 $error-background: rgba(135, 12, 12, 0.8);
 $white: #bbbbbb;
 
 @mixin preGameProperties($backgroundColor) {
-  background-color: $backgroundColor;
+  background: $backgroundColor;
   height: 100vh;
   padding: 25px;
 }
 
 @mixin gameProperties($backgroundColor) {
   background: $backgroundColor;
-
   border: 2px solid $white;
   border-radius: 5px;
   padding: 25px;
@@ -20,13 +20,16 @@ $white: #bbbbbb;
 
 html {
   height: 100%;
+  color: $white !important;
 }
 
 body {
-  // color: $white;
+  color: $white !important;
   text-align: center;
 
-  background: linear-gradient(0deg, rgba(247,78,235,1) 0%, rgba(45,182,253,1) 100%);
+  background-image: url("../images/Background.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
 
   margin: 0;
   padding: 0;
@@ -39,10 +42,17 @@ ul {
   text-align: left;
 }
 
-// AM todo - make sure blue background goes away when clicking button to play game
-/*
+
+button > span, p, h1 {
+  color: $white !important;
+}
+
+.Modal > p {
+  color: black;
+}
+
 .Premium {
-  @include preGameProperties($blue-background);
+  @include preGameProperties($green-background);
 }
 
 .NonPremium {
@@ -56,8 +66,6 @@ ul {
 .resultsTemplate {
   @include gameProperties($turquoise-background);
 }
-
-*/
 
 .errorTemplate {
   @include gameProperties($error-background)
