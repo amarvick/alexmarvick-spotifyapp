@@ -31,9 +31,9 @@ class ResultsTable extends Component {
     const tableBody = this.props.yourResponses.map((item, index) => {
         return (
             <TableRow>
-                <TableCell>{ item }</TableCell>
-                <TableCell>{ this.props.questionAnswers[index] }</TableCell>
-                <TableCell>{ item === this.props.questionAnswers[index] ? <span style={ green }>Correct</span> : <span style={ red }>Incorrect</span> }</TableCell>
+                <TableCell className="cellResult">{ item }</TableCell>
+                <TableCell className="cellResult">{ this.props.questionAnswers[index] }</TableCell>
+                <TableCell className="cellResult">{ item === this.props.questionAnswers[index] ? <span style={ green }>Correct</span> : <span style={ red }>Incorrect</span> }</TableCell>
             </TableRow>
         )
     })
@@ -43,9 +43,9 @@ class ResultsTable extends Component {
         <Table style={ tableCenter }>
             <TableHead>
                 <TableRow>
-                    <TableCell>Your Response</TableCell>
-                    <TableCell>Correct Answer</TableCell> 
-                    <TableCell>Result</TableCell>
+                    <TableCell className="cellResult">Your Response</TableCell>
+                    <TableCell className="cellResult">Correct Answer</TableCell> 
+                    <TableCell className="cellResult">Result</TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>
