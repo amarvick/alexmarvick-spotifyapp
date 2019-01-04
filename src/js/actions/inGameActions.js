@@ -11,6 +11,8 @@ import { fetchArtistData } from './artistActions'
 
 import InGameActionTypes from '../actionTypes/inGameActionTypes'
 
+var errorSpotifyNotOpen = "An issue occurred with the playlist. It\'s likely you do not have Spotify opened up on your computer. Please make sure it is open, play any song for a second, pause, and try again."
+
 // Updates the game difficulty
 export function selectDifficulty(difficulty) {
     return function (dispatch) {
@@ -206,7 +208,7 @@ export function playPlaylist(contextUri, accesstoken) {
                 dispatch(loadingComplete())
             })
             .catch((error) => {
-                dispatch(returnError('An issue occurred with the playlist. It\'s likely you do not have Spotify opened up on your computer. Please make sure it is open, play any song for a second, pause, and try again.'))
+                dispatch(returnError(errorSpotifyNotOpen))
                 dispatch(loadingComplete())
             })
     }
@@ -226,7 +228,7 @@ export function removeShuffle(accesstoken) {
                 console.log(response)
             })
             .catch((error) => {
-                dispatch(returnError('An issue occurred with the playlist. It\'s likely you do not have Spotify opened up on your computer. Please make sure it is open, play any song for a second, pause, and try again.'))
+                dispatch(returnError(errorSpotifyNotOpen))
             })
     }
 }
@@ -277,7 +279,7 @@ export function playNextTrack(accesstoken) {
                 dispatch(loadingComplete())
             })
             .catch((error) => {
-                dispatch(returnError('An issue occurred with the playlist. It\'s likely you do not have Spotify opened up on your computer. Please make sure it is open, play any song for a second, pause, and try again.'))
+                dispatch(returnError(errorSpotifyNotOpen))
                 dispatch(loadingComplete())
             })
     }
@@ -297,7 +299,7 @@ export function stopPlaylist(accesstoken) {
                 console.log(response)
             })
             .catch((error) => {
-                dispatch(returnError('An issue occurred with the playlist. It\'s likely you do not have Spotify opened up on your computer. Please make sure it is open, play any song for a second, pause, and try again.'))
+                dispatch(returnError(errorSpotifyNotOpen))
                 dispatch(loadingComplete())
             })
     }
