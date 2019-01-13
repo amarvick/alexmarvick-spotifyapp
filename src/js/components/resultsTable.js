@@ -18,12 +18,28 @@ class ResultsTable extends Component {
     let red = { color: 'red' }
     let tableCenter = { width: '100%' }
 
-    const tableBody = this.props.yourResponses.map((item, index) => {
+    const tableBody = this.props.yourResponses.map((yourResponse, index) => {
         return (
             <TableRow>
-                <TableCell className="cellResult">{ item }</TableCell>
-                <TableCell className="cellResult">{ this.props.questionAnswers[index] }</TableCell>
-                <TableCell className="cellResult">{ item === this.props.questionAnswers[index] ? <span style={ green }>Correct</span> : <span style={ red }>Incorrect</span> }</TableCell>
+                <TableCell className="cellResult">
+                    { yourResponse }
+                </TableCell>
+
+                <TableCell className="cellResult">
+                    { this.props.questionAnswers[index] }
+                </TableCell>
+                
+                <TableCell className="cellResult">
+                    { yourResponse === this.props.questionAnswers[index] ? 
+                        <span style={ green }>
+                            Correct
+                        </span> : 
+                        
+                        <span style={ red }>
+                            Incorrect
+                        </span> 
+                    }
+                </TableCell>
             </TableRow>
         )
     })

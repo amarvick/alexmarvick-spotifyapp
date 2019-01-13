@@ -10,16 +10,6 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
 class ModalGreeting extends Component {
-  constructor(props){
-    super(props)
-
-    this.state = {
-      username: '',
-      songs: [],
-      accesstoken: '',
-      artistName: ''
-    }
-  }
   render() {
     const padding = {
       paddingBottom: 15
@@ -45,7 +35,7 @@ class ModalGreeting extends Component {
           Once you are finished, you will receive your results. Good luck!
         </Typography>
         
-        <Button onClick={() => this.props.dispatch(setupGame(this.props.songs, this.props.accesstoken, this.props.username, this.props.artistName, this.state.checked))}> 
+        <Button onClick={() => this.props.dispatch(setupGame(this.props.songs, this.props.accesstoken, this.props.username, this.props.artistName))}> 
           PLAY NOW!
         </Button>
       </div>

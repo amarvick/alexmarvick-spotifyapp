@@ -9,13 +9,6 @@ import { connect } from 'react-redux'
 import { selectDifficulty } from '../actions/inGameActions'
 
 class GameDifficulty extends Component {
-    constructor(props){
-        super(props)
- 
-        this.state = {
-            username: ''
-        }
-    }
 
     render() {
       return (
@@ -23,6 +16,7 @@ class GameDifficulty extends Component {
             <Typography variant="display1">
                 Welcome to Spotelligence!
             </Typography>
+            
             <Typography variant="body1">
                 Hello, {this.props.username}! Thank you for taking the time to check out my game. How obsessed do you believe you are with your favorite artist's songs?
             </Typography>

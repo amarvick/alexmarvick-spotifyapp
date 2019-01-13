@@ -11,13 +11,6 @@ import Typography from '@material-ui/core/Typography';
 import { restartGame } from '../actions/inGameActions'
 
 class Error extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      errorMessage: null
-    }
-  }
 
   // The question template
   render(props) {    

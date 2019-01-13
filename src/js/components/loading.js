@@ -5,11 +5,6 @@ import React, { Component } from 'react'
 import Typography from '@material-ui/core/Typography';
 
 class Loading extends Component {
-  constructor(props) {
-    super(props)
-  }
-
-  // The question template
   render(props) {   
     let style = {
       fontSize: 100
