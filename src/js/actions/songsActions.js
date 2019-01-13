@@ -12,7 +12,7 @@ export function fetchSongs(artists, LocCode) {
     var allTracks = []
     return function(dispatch) {
         for (var i = 0; i < artists.length; i++) {
-            spotifyApi.getArtistTopTracks(artists[i].id, LocCode) // AM - Testing error feature!!! Change '1' back to 'i'
+            spotifyApi.getArtistTopTracks(artists[i].id, LocCode)
             .then((response) => {
                 allTracks = allTracks.concat(response.tracks)
                 console.log(allTracks)

@@ -9,8 +9,6 @@ import UserActionTypes from '../actionTypes/userActionTypes'
 
 const spotifyApi = new Spotify()
 
-// AM - for dispatch functions that have type/payload (16/17, 23/24), consider passing these in to function. See line 26, dispatch(loadingComplete())
-
 export function fetchUser() {
     return function(dispatch) {
         dispatch(loadingInProgress())

@@ -28,12 +28,14 @@ export function fetchArtistData(difficulty) {
             } 
 
             if (difficulty === 'Easy') {
+                // In easy setting, get your favorite artist
                 thePayload.push(response.items[0])
             } else if (difficulty === 'Medium') {
                 // In medium setting, you shouldn't be able to get your number 1 artist
                 var randomInt = Math.ceil(Math.random() * (response.items.length - 1))
                 thePayload.push(response.items[randomInt])
             } else if (difficulty === 'Hard') {
+                // In difficult setting, get a compilation of all of your favorite artists
                 thePayload.push(response.items)
             } else {
                 throw 'Invalid Difficulty'

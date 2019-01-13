@@ -1,4 +1,4 @@
-/* File Name: questionTemplate.js  AM - make this 'questionTemplate *
+/* File Name: questionTemplate.js                                   *
  * Description: The template for each individual question           */
 
 import React, { Component, StartupActions } from 'react'
@@ -37,12 +37,6 @@ class QuestionTemplate extends Component {
     super(props)
 
     this.state = {
-      questionAnswers: new Array(4),
-      correctResponse: '',
-      questionNumber: 0,
-      accesstoken: '',
-      noOfCorrect: 0,
-      show: false,
       userWasCorrect: false,
       userResponse: ''
     }

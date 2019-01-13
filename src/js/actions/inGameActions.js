@@ -150,7 +150,7 @@ export function createAndPlayPlaylist(userId, allSongs, artist, accesstoken) {
             }
         })
             .then((response) => {
-                var playlistId = response.data.id // AM - ask user if they want to keep the playlist. Maybe put this in 'inGameData' or 'songs' reducer? Decide
+                var playlistId = response.data.id 
                 var uri = response.data.uri
                 dispatch(addTracksToPlaylist(playlistId, allSongs, uri, accesstoken, userId))
             })
