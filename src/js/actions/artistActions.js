@@ -19,7 +19,7 @@ export function fetchArtistData(difficulty) {
 
             // Artists must be returned. AM - may not need this because if nothing was returned it should catch already. Ask.
             if (response.items.length === 0) {
-                throw 'You don\'t have any favorite artists!'
+                throw 'You don\'t have any favorite artists! LISTEN UP!'
             }
 
             // In medium/hard setting, user needs to have more than one favorite artist

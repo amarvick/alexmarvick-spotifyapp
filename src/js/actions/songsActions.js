@@ -31,7 +31,15 @@ export function fetchSongs(artists, LocCode) {
                 dispatch(loadingComplete())
             })
 
-        
+        // AM - make sure songs upload in bulk instead of through a loop. Ask in next code review
+        // retrieve from reducer
+        // if (!error) {
+        //     dispatch({
+        //         type: SongsActionTypes.FETCH_SONGS_SUCCESS,
+        //         payload: allTracks
+        //     })
+        // }
+
         }
         dispatch(loadingComplete())
     }

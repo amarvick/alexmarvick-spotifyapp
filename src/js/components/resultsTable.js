@@ -2,8 +2,7 @@
  * Description: The table containing user's responses vs actual     *
  *              answers                                             */
 
-import React, { Component, StartupActions } from 'react'
-import Typography from '@material-ui/core/Typography';
+import React, { Component } from 'react'
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';

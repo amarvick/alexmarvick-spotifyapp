@@ -2,7 +2,6 @@
  * Description: The game display. For premium users only            */
 
 import React, { Component, StartupActions } from 'react'
-import Button from '@material-ui/core/Button';
 import { connect } from 'react-redux'
 
 import ModalGreeting from './modalGreeting'

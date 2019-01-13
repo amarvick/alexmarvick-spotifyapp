@@ -43,7 +43,7 @@ class QuestionTemplate extends Component {
   }
 
   handleOpen = (isCorrect, userResponse) => {
-    if (isCorrect == true) {
+    if (isCorrect === true) {
       this.setState({ userWasCorrect: true });
     }
 

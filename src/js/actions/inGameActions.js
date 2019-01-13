@@ -11,7 +11,7 @@ import { fetchArtistData } from './artistActions'
 
 import InGameActionTypes from '../actionTypes/inGameActionTypes'
 
-var errorSpotifyNotOpen = "An issue occurred with the playlist. It\'s likely you do not have Spotify opened up on your computer. Please make sure it is open, play any song for a second, pause, and try again."
+var errorSpotifyNotOpen = "An issue occurred with the playlist. It's likely you do not have Spotify opened up on your computer. Please make sure it is open, play any song for a second, pause, and try again."
 
 // Updates the game difficulty
 export function selectDifficulty(difficulty) {

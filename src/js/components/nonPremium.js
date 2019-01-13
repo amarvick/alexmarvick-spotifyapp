@@ -13,9 +13,17 @@ class NonPremium extends Component {
   render() {
     return (
       <div className='NonPremium'>
-        <h4 className="display-4">Sorry, either you are not a Premium User or your Access Token has expired or is invalid. If the latter is the case, please <a href="https://am-spotify-quiz.herokuapp.com/">sign in</a> again; otherwise <a href="https://www.spotify.com/us/premium/?checkout=false">sign up for Premium</a> to use!</h4>
-         <p>-Alex Marvick</p>
-         <p>Github: @amarvick</p>
+        <h4 className="display-4">
+          Sorry, either you are not a Premium User or your Access Token has expired or is invalid. If the latter is the case, please <a href="https://am-spotify-quiz.herokuapp.com/">sign in</a> again; otherwise <a href="https://www.spotify.com/us/premium/?checkout=false">sign up for Premium</a> to use!
+        </h4>
+         
+        <Typography>
+          -Alex Marvick
+        </Typography>
+        
+        <Typography>
+          Github: @amarvick
+        </Typography>
       </div>
     )
   }
